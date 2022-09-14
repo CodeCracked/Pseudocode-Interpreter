@@ -6,8 +6,10 @@ import interpreter.core.lexer.Token;
 import interpreter.core.lexer.builders.*;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.Parser;
+import interpreter.core.runtime.RuntimeType;
 import interpreter.core.utils.Printing;
 import interpreter.impl.grammar.rules.GrammarRules;
+import interpreter.impl.runtime.RuntimeTypes;
 import interpreter.impl.tokens.KeywordLists;
 import interpreter.impl.tokens.TokenType;
 
@@ -31,6 +33,12 @@ public class Main
     private static Parser parser = new Parser(GrammarRules.PROGRAM, null);
     private static Interpreter interpreter = new Interpreter(lexer, parser)
     {
+        @Override
+        protected void registerTypes()
+        {
+            for (RuntimeType<?> type : RuntimeTypes.ALL_TYPES) RuntimeType.registerType(type);
+        }
+    
         @Override
         protected void onTokenize(List<Token> tokens)
         {

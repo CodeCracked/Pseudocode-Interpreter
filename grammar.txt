@@ -13,4 +13,4 @@ display_statement:  STATEMENT_KEYWORD(value: Display trailingSpaces: 1) atom NEW
 declare_statement:  STATEMENT_KEYWORD(value: Declare trailingSpaces: 1) TYPE_KEYWORD(trailingSpaces: 1) IDENTIFIER (OPERATOR(value: =) atom)?
 
 
-atom    : INTEGER_LITERAL | REAL_LITERAL | STRING_LITERAL
+atom    : INTEGER_LITERAL | REAL_LITERAL | STRING_LITERAL | IDENTIFIER

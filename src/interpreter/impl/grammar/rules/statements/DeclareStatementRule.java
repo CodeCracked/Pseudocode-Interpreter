@@ -6,6 +6,7 @@ import interpreter.core.parser.IGrammarRule;
 import interpreter.core.parser.ParseResult;
 import interpreter.core.parser.Parser;
 import interpreter.core.parser.nodes.AbstractNode;
+import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.impl.grammar.nodes.statements.DeclareStatementNode;
 import interpreter.impl.grammar.rules.GrammarRules;
 import interpreter.impl.tokens.TokenType;
@@ -52,6 +53,6 @@ public class DeclareStatementRule implements IGrammarRule
         result.registerAdvancement();
         parser.advance();
         
-        return result.success(new DeclareStatementNode(keyword, dataType, identifier, initialValue));
+        return result.success(new DeclareStatementNode(keyword, dataType, identifier, (AbstractValuedNode)initialValue));
     }
 }

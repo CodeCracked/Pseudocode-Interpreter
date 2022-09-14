@@ -43,6 +43,15 @@ public class Parser
         advance();
         
         ParseResult result = programRule.build(this);
+        if (result.error() != null) return result;
+        
+        result.node().createSymbolTable();
+        result.node().walk((parent, child) ->
+                {
+                    child.createSymbolTable();
+                    child.parent = parent;
+                });
+        
         // TODO: Check for trailing tokens
         //if (result.error() == null && currentToken.type() != TokenType.EOF) return result.failure(new MCLSyntaxError(source.getCodeLocation(currentToken.startPosition()),
         //        source.getCodeLocation(currentToken.endPosition()), "Expected 'namespace'"));

@@ -1,6 +1,7 @@
 package interpreter.core.parser.nodes;
 
 import interpreter.core.Interpreter;
+import interpreter.core.runtime.SymbolTable;
 import interpreter.core.source.SourcePosition;
 
 import java.nio.file.Path;
@@ -20,6 +21,9 @@ public abstract class AbstractNode
         this.startPosition = startPosition;
         this.endPosition = endPosition;
     }
+    
+    public void createSymbolTable() { }
+    public SymbolTable getSymbolTable() { return parent.getSymbolTable(); }
     
     public abstract void walk(BiConsumer<AbstractNode, AbstractNode> parentChildConsumer);
     public abstract void debugPrint(int depth);

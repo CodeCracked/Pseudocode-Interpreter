@@ -5,8 +5,8 @@ import interpreter.core.lexer.Token;
 import interpreter.core.parser.IGrammarRule;
 import interpreter.core.parser.ParseResult;
 import interpreter.core.parser.Parser;
-import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.impl.grammar.nodes.expressions.LiteralValueNode;
+import interpreter.impl.grammar.nodes.expressions.VariableAccessNode;
 import interpreter.impl.tokens.TokenType;
 
 public class AtomRule implements IGrammarRule
@@ -15,26 +15,25 @@ public class AtomRule implements IGrammarRule
     public ParseResult build(Parser parser)
     {
         ParseResult result = new ParseResult();
-        AbstractNode node = null;
         
-        // Literals
-        ParseResult literalResult = literal(parser);
-        if (literalResult.error() == null) node = result.register(literalResult);
-        
-        return result.success(node);
-    }
+        Token atom = parser.getCurrentToken();
     
-    private ParseResult literal(Parser parser)
-    {
-        ParseResult result = new ParseResult();
-        
-        Token literal = parser.getCurrentToken();
-        if (literal.type() == TokenType.STRING_LITERAL || literal.type() == TokenType.INTEGER_LITERAL || literal.type() == TokenType.REAL_LITERAL)
+        // Literals
+        if (atom.type() == TokenType.STRING_LITERAL || atom.type() == TokenType.INTEGER_LITERAL || atom.type() == TokenType.REAL_LITERAL)
         {
             result.registerAdvancement();
             parser.advance();
-            return result.success(new LiteralValueNode(literal));
+            return result.success(new LiteralValueNode(atom));
         }
-        else return result.failure(new SyntaxException(parser, "Expected literal value, found " + literal.type().name() + "!"));
+        
+        // Variable Identifiers
+        else if (atom.type() == TokenType.IDENTIFIER)
+        {
+            result.registerAdvancement();
+            parser.advance();
+            return result.success(new VariableAccessNode(atom));
+        }
+        
+        else return result.failure(new SyntaxException(parser, "Expected literal value!"));
     }
 }

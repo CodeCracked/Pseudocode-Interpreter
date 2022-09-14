@@ -1,2 +1,2 @@
-Display 10
-Display "Hello, World!"
+Declare Integer testVariable = 10
+Display testVariable

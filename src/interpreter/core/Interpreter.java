@@ -21,8 +21,10 @@ public class Interpreter
     {
         this.lexer = lexer;
         this.parser = parser;
+        registerTypes();
     }
     
+    protected void registerTypes() { }
     protected void onTokenize(List<Token> tokens) { }
     protected void onBuildAST(AbstractNode ast) { }
     

@@ -6,6 +6,7 @@ import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.utils.Printing;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class DisplayStatementNode extends AbstractNode
@@ -34,6 +35,7 @@ public class DisplayStatementNode extends AbstractNode
     @Override
     public void interpret(Interpreter interpreter)
     {
-        Printing.Output.println(message.getValue(interpreter));
+        Optional<?> messageValue = message.getValue(interpreter);
+        messageValue.ifPresent(Printing.Output::println);
     }
 }
