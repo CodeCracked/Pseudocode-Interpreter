@@ -1,7 +1,16 @@
 program:    block EOF
 
+
+
 block:      statement (statement)*
+
+
 
 statement:  display_statement
 
-display_statement:    STATEMENT_KEYWORD(content: Display trailingSpaces: 1) STRING_LITERAL NEWLINE
+display_statement:  STATEMENT_KEYWORD(value: Display trailingSpaces: 1) atom NEWLINE
+
+declare_statement:  STATEMENT_KEYWORD(value: Declare trailingSpaces: 1) TYPE_KEYWORD(trailingSpaces: 1) IDENTIFIER (OPERATOR(value: =) atom)?
+
+
+atom    : INTEGER_LITERAL | REAL_LITERAL | STRING_LITERAL

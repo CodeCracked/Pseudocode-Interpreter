@@ -28,6 +28,10 @@ public class Token
     public SourcePosition end() { return end; }
     public int trailingSpaces() { return trailingSpaces; }
     
+    public boolean isKeyword(Enum<?> keywordType, String keyword)
+    {
+        return this.type == keywordType && this.value == keyword;
+    }
     public boolean isKeyword(Enum<?> keywordType, String keyword, int trailingSpaces)
     {
         return this.type == keywordType && this.value == keyword && this.trailingSpaces == trailingSpaces;

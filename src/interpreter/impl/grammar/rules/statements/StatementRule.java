@@ -2,7 +2,7 @@ package interpreter.impl.grammar.rules.statements;
 
 import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
-import interpreter.core.parser.AbstractNode;
+import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.IGrammarRule;
 import interpreter.core.parser.ParseResult;
 import interpreter.core.parser.Parser;
@@ -27,6 +27,12 @@ public class StatementRule implements IGrammarRule
         {
             case "Display":
                 statementNode = result.register(GrammarRules.DISPLAY_STATEMENT.build(parser));
+                break;
+            case "Declare":
+                statementNode = result.register(GrammarRules.DECLARE_STATEMENT.build(parser));
+                break;
+            default:
+                result.failure(new SyntaxException(parser, "Trying to use " + keyword + " statement, but no grammar rule was defined! Please let Markus know so he can fix this issue."));
                 break;
         }
         

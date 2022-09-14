@@ -1,7 +1,7 @@
 package interpreter.impl.grammar.nodes;
 
 import interpreter.core.Interpreter;
-import interpreter.core.parser.AbstractNode;
+import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.utils.Printing;
 
 import java.util.function.BiConsumer;

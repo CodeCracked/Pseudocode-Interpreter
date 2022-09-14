@@ -1,2 +1,2 @@
+Display 10
 Display "Hello, World!"
-Display "Hello 2"

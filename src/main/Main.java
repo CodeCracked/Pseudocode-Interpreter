@@ -4,7 +4,7 @@ import interpreter.core.Interpreter;
 import interpreter.core.lexer.Lexer;
 import interpreter.core.lexer.Token;
 import interpreter.core.lexer.builders.*;
-import interpreter.core.parser.AbstractNode;
+import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.Parser;
 import interpreter.core.utils.Printing;
 import interpreter.impl.grammar.rules.GrammarRules;
@@ -21,6 +21,8 @@ public class Main
 {
     private static Lexer lexer = new Lexer(TokenType.EOF,
             new KeywordTokenBuilder(TokenType.STATEMENT_KEYWORD, 1, KeywordLists.statementKeywords),
+            new KeywordTokenBuilder(TokenType.TYPE_KEYWORD, 1, KeywordLists.typeKeywords),
+            new KeywordTokenBuilder(TokenType.OPERATOR, 2, KeywordLists.operatorKeywords),
             new IdentifierTokenBuilder(TokenType.IDENTIFIER),
             new StringLiteralTokenBuilder(TokenType.STRING_LITERAL),
             new NumberLiteralTokenBuilder(TokenType.INTEGER_LITERAL, TokenType.REAL_LITERAL),

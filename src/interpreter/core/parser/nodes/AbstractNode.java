@@ -1,4 +1,4 @@
-package interpreter.core.parser;
+package interpreter.core.parser.nodes;
 
 import interpreter.core.Interpreter;
 import interpreter.core.source.SourcePosition;

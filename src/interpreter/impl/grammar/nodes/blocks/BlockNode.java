@@ -1,7 +1,7 @@
 package interpreter.impl.grammar.nodes.blocks;
 
 import interpreter.core.Interpreter;
-import interpreter.core.parser.AbstractNode;
+import interpreter.core.parser.nodes.AbstractNode;
 
 import java.util.List;
 import java.util.function.BiConsumer;

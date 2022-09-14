@@ -2,7 +2,7 @@ package interpreter.core;
 
 import interpreter.core.lexer.Lexer;
 import interpreter.core.lexer.Token;
-import interpreter.core.parser.AbstractNode;
+import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.ParseResult;
 import interpreter.core.parser.Parser;
 import interpreter.core.source.SourceCollection;

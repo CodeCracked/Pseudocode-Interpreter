@@ -1,5 +1,7 @@
 package interpreter.core.parser;
 
+import interpreter.core.parser.nodes.AbstractNode;
+
 public class ParseResult
 {
     private AbstractNode node;

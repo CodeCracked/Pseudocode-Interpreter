@@ -1,6 +1,6 @@
 package interpreter.impl.grammar.rules.blocks;
 
-import interpreter.core.parser.AbstractNode;
+import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.IGrammarRule;
 import interpreter.core.parser.ParseResult;
 import interpreter.core.parser.Parser;
