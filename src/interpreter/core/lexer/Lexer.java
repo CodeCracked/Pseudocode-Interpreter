@@ -11,17 +11,20 @@ import java.util.List;
 
 public class Lexer
 {
+    private final Enum<?> eofToken;
     private final List<AbstractTokenBuilder> tokenBuilders;
     
-    public Lexer(AbstractTokenBuilder... builders)
+    public Lexer(Enum<?> eofToken, AbstractTokenBuilder... builders)
     {
+        this.eofToken = eofToken;
+        
         List<AbstractTokenBuilder> tokenBuilders = new ArrayList<>();
         Collections.addAll(tokenBuilders, builders);
         tokenBuilders.sort(Comparator.comparingInt(AbstractTokenBuilder::priority));
         this.tokenBuilders = Collections.unmodifiableList(tokenBuilders);
     }
     
-    public List<Token> tokenize(SourcePosition position, Enum<?> eofToken)
+    public List<Token> tokenize(SourcePosition position)
     {
         List<Token> tokens = new ArrayList<>();
         

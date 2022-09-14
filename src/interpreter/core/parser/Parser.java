@@ -8,9 +8,10 @@ import java.util.Stack;
 
 public class Parser
 {
-    private final List<Token> tokens;
     private final IGrammarRule programRule;
     private final Enum<?> indentTokenType;
+    
+    private List<Token> tokens;
     private int tokenIndex;
     private Token currentToken;
     private Token nextToken;
@@ -18,15 +19,10 @@ public class Parser
     
     private final Stack<Integer> revertStack;
     
-    public Parser(List<Token> tokens, IGrammarRule programRule, Enum<?> indentTokenType)
+    public Parser(IGrammarRule programRule, Enum<?> indentTokenType)
     {
-        this.tokens = tokens;
         this.programRule = programRule;
         this.indentTokenType = indentTokenType;
-        this.tokenIndex = -1;
-        this.currentIndent = 0;
-        advance();
-        
         this.revertStack = new Stack<>();
     }
     
@@ -38,8 +34,14 @@ public class Parser
         
         if (indentTokenType != null && currentToken != null && currentToken.type() == indentTokenType) this.currentIndent = (int)currentToken.value();
     }
-    public ParseResult parse()
+    public ParseResult parse(List<Token> tokens)
     {
+        this.tokens = tokens;
+        this.tokenIndex = -1;
+        this.currentIndent = 0;
+        this.revertStack.clear();
+        advance();
+        
         ParseResult result = programRule.build(this);
         // TODO: Check for trailing tokens
         //if (result.error() == null && currentToken.type() != TokenType.EOF) return result.failure(new MCLSyntaxError(source.getCodeLocation(currentToken.startPosition()),

@@ -1,5 +1,6 @@
 package interpreter.impl.grammar.nodes.statements;
 
+import interpreter.core.Interpreter;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.AbstractNode;
 import interpreter.core.utils.Printing;
@@ -23,5 +24,10 @@ public class DisplayStatementNode extends AbstractNode
     {
         Printing.Debug.print("  ".repeat(depth));
         Printing.Debug.printf("Display(%s)\n", value.value());
+    }
+    @Override
+    public void interpret(Interpreter interpreter)
+    {
+        Printing.Output.println(value.value());
     }
 }

@@ -1,5 +1,6 @@
 package interpreter.impl.grammar.nodes;
 
+import interpreter.core.Interpreter;
 import interpreter.core.parser.AbstractNode;
 import interpreter.core.utils.Printing;
 
@@ -27,5 +28,10 @@ public class ProgramNode extends AbstractNode
         Printing.Debug.print("  ".repeat(depth));
         Printing.Debug.println("PROGRAM");
         displayStatement.debugPrint(depth + 1);
+    }
+    @Override
+    public void interpret(Interpreter interpreter)
+    {
+        displayStatement.interpret(interpreter);
     }
 }

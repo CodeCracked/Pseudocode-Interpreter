@@ -1,5 +1,6 @@
 package interpreter.core.parser;
 
+import interpreter.core.Interpreter;
 import interpreter.core.source.SourcePosition;
 
 import java.nio.file.Path;
@@ -22,6 +23,7 @@ public abstract class AbstractNode
     
     public abstract void walk(BiConsumer<AbstractNode, AbstractNode> parentChildConsumer);
     public abstract void debugPrint(int depth);
+    public abstract void interpret(Interpreter interpreter);
     
     public SourcePosition start() { return this.startPosition; }
     public SourcePosition end() { return this.endPosition; }
