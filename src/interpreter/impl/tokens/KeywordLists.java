@@ -1,4 +1,4 @@
-package pseudocode.lexer.keywords;
+package interpreter.impl.tokens;
 
 import java.util.List;
 

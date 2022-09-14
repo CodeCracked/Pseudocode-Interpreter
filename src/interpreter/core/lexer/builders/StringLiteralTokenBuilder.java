@@ -1,11 +1,17 @@
-package pseudocode.lexer.builders;
+package interpreter.core.lexer.builders;
 
-import pseudocode.lexer.token.Token;
-import pseudocode.lexer.token.TokenType;
-import pseudocode.source.SourcePosition;
+import interpreter.core.lexer.Token;
+import interpreter.core.source.SourcePosition;
 
 public class StringLiteralTokenBuilder extends AbstractTokenBuilder
 {
+    private final Enum<?> type;
+    
+    public StringLiteralTokenBuilder(Enum<?> type)
+    {
+        this.type = type;
+    }
+    
     @Override
     public int priority()
     {
@@ -24,6 +30,6 @@ public class StringLiteralTokenBuilder extends AbstractTokenBuilder
         if (position.getCharacter() != '"') return null;
         position.advance();
         
-        return new Token(TokenType.STRING_LITERAL, contents.toString(), start, position);
+        return new Token(type, contents.toString(), start, position);
     }
 }

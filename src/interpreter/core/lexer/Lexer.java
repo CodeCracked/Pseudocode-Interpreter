@@ -1,11 +1,8 @@
-package pseudocode.lexer;
+package interpreter.core.lexer;
 
-import pseudocode.lexer.builders.*;
-import pseudocode.lexer.keywords.KeywordLists;
-import pseudocode.lexer.token.Token;
-import pseudocode.lexer.token.TokenType;
-import pseudocode.source.SourcePosition;
-import pseudocode.utils.Printing;
+import interpreter.core.lexer.builders.AbstractTokenBuilder;
+import interpreter.core.source.SourcePosition;
+import interpreter.core.utils.Printing;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,20 +13,15 @@ public class Lexer
 {
     private final List<AbstractTokenBuilder> tokenBuilders;
     
-    public Lexer()
+    public Lexer(AbstractTokenBuilder... builders)
     {
         List<AbstractTokenBuilder> tokenBuilders = new ArrayList<>();
-        
-        tokenBuilders.add(new KeywordTokenBuilder(TokenType.STATEMENT_KEYWORD, 1, KeywordLists.statementKeywords));
-        tokenBuilders.add(new IdentifierTokenBuilder());
-        tokenBuilders.add(new StringLiteralTokenBuilder());
-        tokenBuilders.add(new MatcherTokenBuilder(TokenType.NEWLINE, -1000, "\n", false));
-        
+        Collections.addAll(tokenBuilders, builders);
         tokenBuilders.sort(Comparator.comparingInt(AbstractTokenBuilder::priority));
         this.tokenBuilders = Collections.unmodifiableList(tokenBuilders);
     }
     
-    public List<Token> tokenize(SourcePosition position)
+    public List<Token> tokenize(SourcePosition position, Enum<?> eofToken)
     {
         List<Token> tokens = new ArrayList<>();
         
@@ -50,6 +42,7 @@ public class Lexer
             else tokens.add(token);
         }
         
+        if (eofToken != null) tokens.add(new Token(eofToken, null, position, position));
         return tokens;
     }
 }

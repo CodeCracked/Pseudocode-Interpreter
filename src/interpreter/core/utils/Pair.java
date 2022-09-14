@@ -1,4 +1,4 @@
-package pseudocode.utils;
+package interpreter.core.utils;
 
 import java.util.Objects;
 

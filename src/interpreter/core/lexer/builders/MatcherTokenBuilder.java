@@ -1,17 +1,16 @@
-package pseudocode.lexer.builders;
+package interpreter.core.lexer.builders;
 
-import pseudocode.lexer.token.Token;
-import pseudocode.lexer.token.TokenType;
-import pseudocode.source.SourcePosition;
+import interpreter.core.lexer.Token;
+import interpreter.core.source.SourcePosition;
 
 public class MatcherTokenBuilder extends AbstractTokenBuilder
 {
-    private final TokenType type;
+    private final Enum<?> type;
     private final int priority;
     private final String token;
     private final boolean storeContents;
     
-    public MatcherTokenBuilder(TokenType type, int priority, String token, boolean storeContents)
+    public MatcherTokenBuilder(Enum<?> type, int priority, String token, boolean storeContents)
     {
         this.type = type;
         this.priority = priority;

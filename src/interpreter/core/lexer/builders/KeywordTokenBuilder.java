@@ -1,8 +1,7 @@
-package pseudocode.lexer.builders;
+package interpreter.core.lexer.builders;
 
-import pseudocode.lexer.token.Token;
-import pseudocode.lexer.token.TokenType;
-import pseudocode.source.SourcePosition;
+import interpreter.core.lexer.Token;
+import interpreter.core.source.SourcePosition;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ public class KeywordTokenBuilder extends AbstractTokenBuilder
     private final int priority;
     private final MatcherTokenBuilder[] matchers;
     
-    public KeywordTokenBuilder(TokenType type, int priority, List<String> keywords)
+    public KeywordTokenBuilder(Enum<?> type, int priority, List<String> keywords)
     {
         this.priority = priority;
         this.matchers = new MatcherTokenBuilder[keywords.size()];

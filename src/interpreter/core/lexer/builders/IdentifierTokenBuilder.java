@@ -1,13 +1,19 @@
-package pseudocode.lexer.builders;
+package interpreter.core.lexer.builders;
 
-import pseudocode.lexer.token.Token;
-import pseudocode.lexer.token.TokenType;
-import pseudocode.source.SourcePosition;
+import interpreter.core.lexer.Token;
+import interpreter.core.source.SourcePosition;
 
 public class IdentifierTokenBuilder extends AbstractTokenBuilder
 {
     private static final String startingCharacters = "abcdefghijklmnopqrstuvwxyz";
     private static final String bodyCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    
+    private final Enum<?> type;
+    
+    public IdentifierTokenBuilder(Enum<?> type)
+    {
+        this.type = type;
+    }
     
     @Override
     public int priority()
@@ -27,7 +33,7 @@ public class IdentifierTokenBuilder extends AbstractTokenBuilder
             contentBuilder.append(position.getCharacter());
             
             while (position.advance() && bodyCharacters.indexOf(position.getCharacter()) >= 0) contentBuilder.append(position.getCharacter());
-            return new Token(TokenType.IDENTIFIER, contentBuilder.toString(), start, position);
+            return new Token(type, contentBuilder.toString(), start, position);
         }
     }
 }

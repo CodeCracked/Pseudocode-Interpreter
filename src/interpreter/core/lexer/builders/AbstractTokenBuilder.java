@@ -1,7 +1,7 @@
-package pseudocode.lexer.builders;
+package interpreter.core.lexer.builders;
 
-import pseudocode.lexer.token.Token;
-import pseudocode.source.SourcePosition;
+import interpreter.core.lexer.Token;
+import interpreter.core.source.SourcePosition;
 
 public abstract class AbstractTokenBuilder
 {

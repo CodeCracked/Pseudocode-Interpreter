@@ -1,7 +1,7 @@
-package pseudocode.source;
+package interpreter.core.source;
 
-import pseudocode.utils.Pair;
-import pseudocode.utils.Printing;
+import interpreter.core.utils.Pair;
+import interpreter.core.utils.Printing;
 
 import java.util.Objects;
 import java.util.Stack;
