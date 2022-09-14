@@ -1,6 +1,7 @@
 package interpreter.impl.grammar.nodes.statements;
 
 import interpreter.core.Interpreter;
+import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
@@ -8,9 +9,9 @@ import interpreter.core.runtime.RuntimeType;
 import interpreter.core.runtime.Symbol;
 import interpreter.core.runtime.VariableSymbol;
 import interpreter.core.utils.Printing;
+import interpreter.core.utils.Result;
 import interpreter.impl.runtime.SymbolType;
 
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class DeclareStatementNode extends AbstractNode
@@ -19,14 +20,20 @@ public class DeclareStatementNode extends AbstractNode
     private final String identifier;
     private final AbstractValuedNode initialValue;
     
-    public DeclareStatementNode(Token keyword, Token dataType, Token identifier, AbstractValuedNode initialValue)
+    private DeclareStatementNode(Token keyword, RuntimeType<?> dataType, Token identifier, AbstractValuedNode initialValue)
     {
         super(keyword.start(), initialValue != null ? initialValue.end() : identifier.end());
     
-        Optional<RuntimeType<?>> type = RuntimeType.getTypeFromKeyword(dataType.value().toString());
-        this.dataType = type.orElse(null);
+        this.dataType = dataType;
         this.identifier = (String)identifier.value();
         this.initialValue = initialValue;
+    }
+    
+    public static Result<DeclareStatementNode> create(Token keyword, Token dataType, Token identifier, AbstractValuedNode initialValue)
+    {
+        Result<RuntimeType<?>> type = RuntimeType.getTypeFromKeyword(dataType.value().toString());
+        if (type.error() != null) return Result.fail(type.error());
+        else return Result.of(new DeclareStatementNode(keyword, type.get(), identifier, initialValue));
     }
     
     @Override
@@ -58,9 +65,19 @@ public class DeclareStatementNode extends AbstractNode
         else Printing.Debug.println("None");
     }
     @Override
-    public void interpret(Interpreter interpreter)
+    public Result<Void> interpret(Interpreter interpreter)
     {
-        Symbol variable = new VariableSymbol(SymbolType.VARIABLE, identifier, dataType, initialValue != null ? initialValue.getValue(interpreter) : Optional.empty());
-        getSymbolTable().tryAddSymbol(variable);
+        VariableSymbol variable = new VariableSymbol(SymbolType.VARIABLE, identifier, dataType);
+        if (initialValue != null)
+        {
+            Result<Object> expressionResult = initialValue.getValue(interpreter);
+            if (expressionResult.error() != null) return Result.fail(expressionResult.error());
+            
+            Result<?> assignResult = variable.setValue(expressionResult.get());
+            if (assignResult.error() != null) return Result.fail(assignResult.error());
+        }
+        
+        if (getSymbolTable().tryAddSymbol(variable)) return Result.of(null);
+        else return Result.fail(new SyntaxException(this, "Variable '" + identifier + "' already exists! Did you mean to Set it instead of Declare it?"));
     }
 }

@@ -2,8 +2,7 @@ package interpreter.core.parser.nodes;
 
 import interpreter.core.Interpreter;
 import interpreter.core.source.SourcePosition;
-
-import java.util.Optional;
+import interpreter.core.utils.Result;
 
 public abstract class AbstractValuedNode extends AbstractTypedNode
 {
@@ -12,5 +11,5 @@ public abstract class AbstractValuedNode extends AbstractTypedNode
         super(startPosition, endPosition);
     }
     
-    public abstract Optional<?> getValue(Interpreter interpreter);
+    public abstract Result<Object> getValue(Interpreter interpreter);
 }

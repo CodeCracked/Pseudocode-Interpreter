@@ -1,6 +1,8 @@
 package interpreter.core.parser;
 
 import interpreter.core.lexer.Token;
+import interpreter.core.parser.nodes.AbstractNode;
+import interpreter.core.utils.Result;
 import interpreter.core.utils.Printing;
 
 import java.util.List;
@@ -34,7 +36,7 @@ public class Parser
         
         if (indentTokenType != null && currentToken != null && currentToken.type() == indentTokenType) this.currentIndent = (int)currentToken.value();
     }
-    public ParseResult parse(List<Token> tokens)
+    public Result<AbstractNode> parse(List<Token> tokens)
     {
         this.tokens = tokens;
         this.tokenIndex = -1;
@@ -42,11 +44,11 @@ public class Parser
         this.revertStack.clear();
         advance();
         
-        ParseResult result = programRule.build(this);
+        Result<AbstractNode> result = programRule.build(this);
         if (result.error() != null) return result;
         
-        result.node().createSymbolTable();
-        result.node().walk((parent, child) ->
+        result.get().createSymbolTable();
+        result.get().walk((parent, child) ->
                 {
                     child.createSymbolTable();
                     child.parent = parent;

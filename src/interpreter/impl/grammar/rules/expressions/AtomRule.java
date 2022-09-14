@@ -3,7 +3,8 @@ package interpreter.impl.grammar.rules.expressions;
 import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.IGrammarRule;
-import interpreter.core.parser.ParseResult;
+import interpreter.core.parser.nodes.AbstractNode;
+import interpreter.core.utils.Result;
 import interpreter.core.parser.Parser;
 import interpreter.impl.grammar.nodes.expressions.LiteralValueNode;
 import interpreter.impl.grammar.nodes.expressions.VariableAccessNode;
@@ -12,9 +13,9 @@ import interpreter.impl.tokens.TokenType;
 public class AtomRule implements IGrammarRule
 {
     @Override
-    public ParseResult build(Parser parser)
+    public Result<AbstractNode> build(Parser parser)
     {
-        ParseResult result = new ParseResult();
+        Result<AbstractNode> result = new Result<>();
         
         Token atom = parser.getCurrentToken();
     
@@ -23,7 +24,10 @@ public class AtomRule implements IGrammarRule
         {
             result.registerAdvancement();
             parser.advance();
-            return result.success(new LiteralValueNode(atom));
+            
+            Result<LiteralValueNode> literal = LiteralValueNode.create(atom);
+            if (literal.error() != null) return result.failure(literal.error());
+            else return result.success(literal.get());
         }
         
         // Variable Identifiers

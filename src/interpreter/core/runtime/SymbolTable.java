@@ -22,13 +22,14 @@ public class SymbolTable
             return true;
         }
     }
-    public Symbol getSymbol(Enum<?> type, String name)
+    public <T> T getSymbol(Enum<?> type, String name)
     {
         if (!symbolMap.containsKey(type)) return null;
         else
         {
             Map<String, Symbol> symbols = symbolMap.get(type);
-            return symbols.getOrDefault(name, null);
+            if (symbols.containsKey(name)) return (T)symbols.get(name);
+            else return null;
         }
     }
 }

@@ -1,6 +1,8 @@
 package interpreter.core.runtime;
 
-import java.util.Optional;
+import interpreter.core.exceptions.SyntaxException;
+import interpreter.core.parser.nodes.AbstractNode;
+import interpreter.core.utils.Result;
 
 public class VariableSymbol extends Symbol
 {
@@ -8,27 +10,30 @@ public class VariableSymbol extends Symbol
     private Object value;
     private boolean initialized;
     
-    public VariableSymbol(Enum<?> type, String name, RuntimeType<?> runtimeType, Optional<?> initialValue)
+    public VariableSymbol(Enum<?> type, String name, RuntimeType<?> runtimeType)
     {
         super(type, name);
         this.runtimeType = runtimeType;
-        this.value = initialValue.orElse(null);
-        this.initialized = initialValue.isPresent();
+        this.initialized = false;
     }
     
     public boolean isInitialized() { return initialized; }
     public RuntimeType<?> getRuntimeType() { return runtimeType; }
-    public Object getValue() { return value; }
     
-    public boolean setValue(Object value)
+    public Result<Object> getValue(AbstractNode caller)
     {
-        Optional<?> casted = this.runtimeType.tryCast(value);
-        if (casted.isPresent())
+        if (initialized) return Result.of(value);
+        else return Result.fail(new SyntaxException(caller, "Cannot get value of variable '" + name  + "' before it is initialized!"));
+    }
+    
+    public Result<?> setValue(Object value)
+    {
+        Result<?> casted = this.runtimeType.tryCast(value);
+        if (casted.error() == null)
         {
-            this.value = value;
+            this.value = casted.get();
             this.initialized = true;
-            return true;
         }
-        else return false;
+        return casted;
     }
 }

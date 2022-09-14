@@ -3,6 +3,7 @@ package interpreter.core.parser.nodes;
 import interpreter.core.Interpreter;
 import interpreter.core.runtime.SymbolTable;
 import interpreter.core.source.SourcePosition;
+import interpreter.core.utils.Result;
 
 import java.nio.file.Path;
 import java.util.function.BiConsumer;
@@ -27,7 +28,7 @@ public abstract class AbstractNode
     
     public abstract void walk(BiConsumer<AbstractNode, AbstractNode> parentChildConsumer);
     public abstract void debugPrint(int depth);
-    public abstract void interpret(Interpreter interpreter);
+    public abstract Result<Void> interpret(Interpreter interpreter);
     
     public SourcePosition start() { return this.startPosition; }
     public SourcePosition end() { return this.endPosition; }

@@ -1,16 +1,16 @@
 package interpreter.impl.grammar.nodes.expressions;
 
 import interpreter.core.Interpreter;
+import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.runtime.RuntimeType;
-import interpreter.core.runtime.Symbol;
 import interpreter.core.runtime.VariableSymbol;
 import interpreter.core.utils.Printing;
+import interpreter.core.utils.Result;
 import interpreter.impl.runtime.SymbolType;
 
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class VariableAccessNode extends AbstractValuedNode
@@ -34,21 +34,22 @@ public class VariableAccessNode extends AbstractValuedNode
     }
     
     @Override
-    public void interpret(Interpreter interpreter) { }
+    public Result<Void> interpret(Interpreter interpreter) { return Result.of(null); }
     
     @Override
-    public RuntimeType<?> getRuntimeType(Interpreter interpreter)
+    public Result<RuntimeType<?>> getRuntimeType(Interpreter interpreter)
     {
-        Symbol symbol = getSymbolTable().getSymbol(SymbolType.VARIABLE, identifier);
-        if (symbol != null) return ((VariableSymbol)symbol).getRuntimeType();
-        else return null;
+        VariableSymbol symbol = getSymbolTable().getSymbol(SymbolType.VARIABLE, identifier);
+        if (symbol == null) return Result.fail(new SyntaxException(this, "Cannot find variable '" + identifier + "'! Are you sure it was spelled and capitalized correctly?"));
+        
+        return Result.of(symbol.getRuntimeType());
     }
     
     @Override
-    public Optional<?> getValue(Interpreter interpreter)
+    public Result<Object> getValue(Interpreter interpreter)
     {
-        Symbol symbol = getSymbolTable().getSymbol(SymbolType.VARIABLE, identifier);
-        if (symbol != null) return Optional.of(((VariableSymbol)symbol).getValue());
-        else return Optional.empty();
+        VariableSymbol symbol = getSymbolTable().getSymbol(SymbolType.VARIABLE, identifier);
+        if (symbol == null) return Result.fail(new SyntaxException(this, "Cannot find variable '" + identifier + "'! Are you sure it was spelled and capitalized correctly?"));
+        return symbol.getValue(this);
     }
 }

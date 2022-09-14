@@ -2,6 +2,7 @@ package interpreter.impl.grammar.nodes.blocks;
 
 import interpreter.core.Interpreter;
 import interpreter.core.parser.nodes.AbstractNode;
+import interpreter.core.utils.Result;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -33,8 +34,14 @@ public class BlockNode extends AbstractNode
     }
     
     @Override
-    public void interpret(Interpreter interpreter)
+    public Result<Void> interpret(Interpreter interpreter)
     {
-        for (AbstractNode statement : statements) statement.interpret(interpreter);
+        Result<Void> result = new Result<>();
+        for (AbstractNode statement : statements)
+        {
+            result.register(statement.interpret(interpreter));
+            if (result.error() != null) return result;
+        }
+        return result.success(null);
     }
 }

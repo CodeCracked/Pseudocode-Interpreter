@@ -4,6 +4,7 @@ import interpreter.core.Interpreter;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.runtime.SymbolTable;
 import interpreter.core.utils.Printing;
+import interpreter.core.utils.Result;
 
 import java.util.function.BiConsumer;
 
@@ -43,8 +44,8 @@ public class ProgramNode extends AbstractNode
         block.debugPrint(depth + 1);
     }
     @Override
-    public void interpret(Interpreter interpreter)
+    public Result<Void> interpret(Interpreter interpreter)
     {
-        block.interpret(interpreter);
+        return block.interpret(interpreter);
     }
 }

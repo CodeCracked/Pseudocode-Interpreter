@@ -3,7 +3,7 @@ package interpreter.core;
 import interpreter.core.lexer.Lexer;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
-import interpreter.core.parser.ParseResult;
+import interpreter.core.utils.Result;
 import interpreter.core.parser.Parser;
 import interpreter.core.source.SourceCollection;
 import interpreter.core.source.SourcePosition;
@@ -40,16 +40,17 @@ public class Interpreter
         onTokenize(tokens);
         
         // Generate AST from Token List
-        ParseResult parseResult = parser.parse(tokens);
+        Result<AbstractNode> parseResult = parser.parse(tokens);
         if (parseResult.error() != null)
         {
             Printing.Errors.println(parseResult.error().getMessage());
             return;
         }
-        AbstractNode ast = parseResult.node();
+        AbstractNode ast = parseResult.get();
         onBuildAST(ast);
         
         // Interpret AST
-        ast.interpret(this);
+        Result<Void> interpretationResult = ast.interpret(this);
+        if (interpretationResult.error() != null) Printing.Errors.println(interpretationResult.error().getMessage());
     }
 }

@@ -5,8 +5,8 @@ import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.utils.Printing;
+import interpreter.core.utils.Result;
 
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class DisplayStatementNode extends AbstractNode
@@ -33,9 +33,12 @@ public class DisplayStatementNode extends AbstractNode
         message.debugPrint(depth + 1);
     }
     @Override
-    public void interpret(Interpreter interpreter)
+    public Result<Void> interpret(Interpreter interpreter)
     {
-        Optional<?> messageValue = message.getValue(interpreter);
-        messageValue.ifPresent(Printing.Output::println);
+        Result<Object> messageValue = message.getValue(interpreter);
+        if (messageValue.error() != null) return Result.fail(messageValue.error());
+        
+        Printing.Output.println(messageValue.get());
+        return Result.of(null);
     }
 }

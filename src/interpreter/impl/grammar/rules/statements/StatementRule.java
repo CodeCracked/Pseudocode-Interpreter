@@ -4,7 +4,7 @@ import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.IGrammarRule;
-import interpreter.core.parser.ParseResult;
+import interpreter.core.utils.Result;
 import interpreter.core.parser.Parser;
 import interpreter.impl.grammar.rules.GrammarRules;
 import interpreter.impl.tokens.TokenType;
@@ -12,9 +12,9 @@ import interpreter.impl.tokens.TokenType;
 public class StatementRule implements IGrammarRule
 {
     @Override
-    public ParseResult build(Parser parser)
+    public Result<AbstractNode> build(Parser parser)
     {
-        ParseResult result = new ParseResult();
+        Result<AbstractNode> result = new Result<>();
     
         // Get Keyword
         Token keywordToken = parser.getCurrentToken();

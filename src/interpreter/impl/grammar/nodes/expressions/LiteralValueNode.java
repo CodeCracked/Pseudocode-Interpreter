@@ -1,43 +1,44 @@
 package interpreter.impl.grammar.nodes.expressions;
 
 import interpreter.core.Interpreter;
-import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.runtime.RuntimeType;
 import interpreter.core.utils.Printing;
+import interpreter.core.utils.Result;
 
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
 public class LiteralValueNode extends AbstractValuedNode
 {
     private final RuntimeType<?> runtimeType;
-    private final Optional<?> value;
+    private final Object value;
     
-    public LiteralValueNode(Token value)
+    private LiteralValueNode(Token token, RuntimeType<?> type, Object value)
     {
-        super(value.start(), value.end());
+        super(token.start(), token.end());
+        this.runtimeType = type;
+        this.value = value;
+    }
+    
+    public static Result<LiteralValueNode> create(Token value)
+    {
+        Result<LiteralValueNode> result = new Result<>();
         
-        Optional<RuntimeType<?>> dataType = RuntimeType.getTypeFromClass(value.value().getClass());
-        if (dataType.isPresent())
-        {
-            this.runtimeType = dataType.get();
-            this.value = this.runtimeType.tryCast(value.value());
-        }
-        else
-        {
-            this.runtimeType = null;
-            this.value = Optional.empty();
-            Printing.Errors.println(new SyntaxException(this, "Cannot find runtime type for Java type '" + value.value().getClass().getSimpleName() + "'! Please contact Markus to get this fixed."));
-        }
+        Result<RuntimeType<?>> runtimeType = RuntimeType.getTypeFromClass(value.value().getClass());
+        if (runtimeType.error() != null) return result.failure(runtimeType.error());
+        
+        Result<?> casted = runtimeType.get().tryCast(value.value());
+        if (casted.error() != null) return result.failure(casted.error());
+        
+        return result.success(new LiteralValueNode(value, runtimeType.get(), casted.get()));
     }
     
     @Override
     public void walk(BiConsumer<AbstractNode, AbstractNode> parentChildConsumer) { }
     @Override
-    public void interpret(Interpreter interpreter) { }
+    public Result<Void> interpret(Interpreter interpreter) { return Result.of(null); }
     
     @Override
     public void debugPrint(int depth)
@@ -49,13 +50,13 @@ public class LiteralValueNode extends AbstractValuedNode
     }
     
     @Override
-    public RuntimeType<?> getRuntimeType(Interpreter interpreter)
+    public Result<RuntimeType<?>> getRuntimeType(Interpreter interpreter)
     {
-        return this.runtimeType;
+        return Result.of(runtimeType);
     }
     @Override
-    public Optional<?> getValue(Interpreter interpreter)
+    public Result<Object> getValue(Interpreter interpreter)
     {
-        return this.value;
+        return Result.of(value);
     }
 }
