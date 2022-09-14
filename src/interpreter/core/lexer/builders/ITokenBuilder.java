@@ -3,9 +3,9 @@ package interpreter.core.lexer.builders;
 import interpreter.core.lexer.Token;
 import interpreter.core.source.SourcePosition;
 
-public abstract class AbstractTokenBuilder
+public interface ITokenBuilder
 {
-    public Token build(SourcePosition position)
+    default Token build(SourcePosition position)
     {
         position.markPosition();
         Token token = tryBuild(position);
@@ -14,6 +14,6 @@ public abstract class AbstractTokenBuilder
         return token;
     }
     
-    public abstract int priority();
-    protected abstract Token tryBuild(SourcePosition position);
+    int priority();
+    Token tryBuild(SourcePosition position);
 }

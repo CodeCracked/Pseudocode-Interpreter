@@ -6,6 +6,8 @@ public enum TokenType
     IDENTIFIER,
     
     STRING_LITERAL,
+    INTEGER_LITERAL,
+    REAL_LITERAL,
     
     NEWLINE,
     EOF

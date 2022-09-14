@@ -1,6 +1,6 @@
 package interpreter.core.lexer;
 
-import interpreter.core.lexer.builders.AbstractTokenBuilder;
+import interpreter.core.lexer.builders.ITokenBuilder;
 import interpreter.core.source.SourcePosition;
 import interpreter.core.utils.Printing;
 
@@ -12,15 +12,15 @@ import java.util.List;
 public class Lexer
 {
     private final Enum<?> eofToken;
-    private final List<AbstractTokenBuilder> tokenBuilders;
+    private final List<ITokenBuilder> tokenBuilders;
     
-    public Lexer(Enum<?> eofToken, AbstractTokenBuilder... builders)
+    public Lexer(Enum<?> eofToken, ITokenBuilder... builders)
     {
         this.eofToken = eofToken;
         
-        List<AbstractTokenBuilder> tokenBuilders = new ArrayList<>();
+        List<ITokenBuilder> tokenBuilders = new ArrayList<>();
         Collections.addAll(tokenBuilders, builders);
-        tokenBuilders.sort(Comparator.comparingInt(AbstractTokenBuilder::priority));
+        tokenBuilders.sort(Comparator.comparingInt(ITokenBuilder::priority));
         this.tokenBuilders = Collections.unmodifiableList(tokenBuilders);
     }
     
@@ -31,7 +31,7 @@ public class Lexer
         while (position.hasNext())
         {
             Token token = null;
-            for (AbstractTokenBuilder builder : tokenBuilders)
+            for (ITokenBuilder builder : tokenBuilders)
             {
                 token = builder.build(position);
                 if (token != null) break;
@@ -39,7 +39,7 @@ public class Lexer
             
             if (token == null)
             {
-                Printing.Errors.println("Unknown symbol '" + position.getRemainingLine() + "'!");
+                Printing.Errors.println(position + ": Unknown symbol '" + position.getRemainingLine().trim() + "'!");
                 return null;
             }
             else tokens.add(token);

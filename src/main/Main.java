@@ -3,10 +3,7 @@ package main;
 import interpreter.core.Interpreter;
 import interpreter.core.lexer.Lexer;
 import interpreter.core.lexer.Token;
-import interpreter.core.lexer.builders.IdentifierTokenBuilder;
-import interpreter.core.lexer.builders.KeywordTokenBuilder;
-import interpreter.core.lexer.builders.MatcherTokenBuilder;
-import interpreter.core.lexer.builders.StringLiteralTokenBuilder;
+import interpreter.core.lexer.builders.*;
 import interpreter.core.parser.AbstractNode;
 import interpreter.core.parser.Parser;
 import interpreter.core.utils.Printing;
@@ -26,6 +23,7 @@ public class Main
             new KeywordTokenBuilder(TokenType.STATEMENT_KEYWORD, 1, KeywordLists.statementKeywords),
             new IdentifierTokenBuilder(TokenType.IDENTIFIER),
             new StringLiteralTokenBuilder(TokenType.STRING_LITERAL),
+            new NumberLiteralTokenBuilder(TokenType.INTEGER_LITERAL, TokenType.REAL_LITERAL),
             new MatcherTokenBuilder(TokenType.NEWLINE, -1000, "\n", false)
     );
     private static Parser parser = new Parser(GrammarRules.PROGRAM, null);

@@ -5,7 +5,7 @@ import interpreter.core.source.SourcePosition;
 
 import java.util.List;
 
-public class KeywordTokenBuilder extends AbstractTokenBuilder
+public class KeywordTokenBuilder implements ITokenBuilder
 {
     private final int priority;
     private final MatcherTokenBuilder[] matchers;
@@ -24,7 +24,7 @@ public class KeywordTokenBuilder extends AbstractTokenBuilder
     }
     
     @Override
-    protected Token tryBuild(SourcePosition position)
+    public Token tryBuild(SourcePosition position)
     {
         Token token = null;
         for (MatcherTokenBuilder matcher : matchers)

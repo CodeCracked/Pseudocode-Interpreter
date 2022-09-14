@@ -3,7 +3,7 @@ package interpreter.core.lexer.builders;
 import interpreter.core.lexer.Token;
 import interpreter.core.source.SourcePosition;
 
-public class MatcherTokenBuilder extends AbstractTokenBuilder
+public class MatcherTokenBuilder implements ITokenBuilder
 {
     private final Enum<?> type;
     private final int priority;
@@ -25,7 +25,7 @@ public class MatcherTokenBuilder extends AbstractTokenBuilder
     }
     
     @Override
-    protected Token tryBuild(SourcePosition position)
+    public Token tryBuild(SourcePosition position)
     {
         SourcePosition start = position.clone();
         for (char test : token.toCharArray())

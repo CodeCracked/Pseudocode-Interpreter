@@ -3,7 +3,7 @@ package interpreter.core.lexer.builders;
 import interpreter.core.lexer.Token;
 import interpreter.core.source.SourcePosition;
 
-public class IdentifierTokenBuilder extends AbstractTokenBuilder
+public class IdentifierTokenBuilder implements ITokenBuilder
 {
     private static final String startingCharacters = "abcdefghijklmnopqrstuvwxyz";
     private static final String bodyCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

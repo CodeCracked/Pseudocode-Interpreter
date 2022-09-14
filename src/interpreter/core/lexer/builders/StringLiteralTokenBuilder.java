@@ -3,7 +3,7 @@ package interpreter.core.lexer.builders;
 import interpreter.core.lexer.Token;
 import interpreter.core.source.SourcePosition;
 
-public class StringLiteralTokenBuilder extends AbstractTokenBuilder
+public class StringLiteralTokenBuilder implements ITokenBuilder
 {
     private final Enum<?> type;
     
