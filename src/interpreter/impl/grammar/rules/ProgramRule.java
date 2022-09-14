@@ -16,7 +16,7 @@ public class ProgramRule implements IGrammarRule
     {
         ParseResult result = new ParseResult();
         
-        AbstractNode display = result.register(GrammarRules.DISPLAY_STATEMENT.build(parser));
+        AbstractNode display = result.register(GrammarRules.BLOCK.build(parser));
         if (result.error() != null) return result;
     
         Token eof = parser.getCurrentToken();

@@ -17,8 +17,6 @@ public class Interpreter
     private final Lexer lexer;
     private final Parser parser;
     
-    private SourceCollection source;
-    
     public Interpreter(Lexer lexer, Parser parser)
     {
         this.lexer = lexer;
@@ -30,7 +28,8 @@ public class Interpreter
     
     public void runFile(Path file)
     {
-        source = SourceCollection.createFromFile(file);
+        // Load Source Collection
+        SourceCollection source = SourceCollection.createFromFile(file);
         if (source == null) return;
         SourcePosition position = new SourcePosition(source);
     

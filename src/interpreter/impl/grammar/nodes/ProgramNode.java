@@ -8,30 +8,30 @@ import java.util.function.BiConsumer;
 
 public class ProgramNode extends AbstractNode
 {
-    private final AbstractNode displayStatement;
+    private final AbstractNode block;
     
-    public ProgramNode(AbstractNode displayStatement)
+    public ProgramNode(AbstractNode block)
     {
-        super(displayStatement.start(), displayStatement.end());
-        this.displayStatement = displayStatement;
+        super(block.start(), block.end());
+        this.block = block;
     }
     
     @Override
     public void walk(BiConsumer<AbstractNode, AbstractNode> parentChildConsumer)
     {
-        parentChildConsumer.accept(this, displayStatement);
-        displayStatement.walk(parentChildConsumer);
+        parentChildConsumer.accept(this, block);
+        block.walk(parentChildConsumer);
     }
     @Override
     public void debugPrint(int depth)
     {
         Printing.Debug.print("  ".repeat(depth));
         Printing.Debug.println("PROGRAM");
-        displayStatement.debugPrint(depth + 1);
+        block.debugPrint(depth + 1);
     }
     @Override
     public void interpret(Interpreter interpreter)
     {
-        displayStatement.interpret(interpreter);
+        block.interpret(interpreter);
     }
 }

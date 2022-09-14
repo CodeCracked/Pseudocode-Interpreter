@@ -1,3 +1,7 @@
-program:    display
+program:    block EOF
 
-display:    STATEMENT_KEYWORD(content: Display trailingSpaces: 1) STRING_LITERAL NEWLINE
+block:      statement (statement)*
+
+statement:  display_statement
+
+display_statement:    STATEMENT_KEYWORD(content: Display trailingSpaces: 1) STRING_LITERAL NEWLINE
