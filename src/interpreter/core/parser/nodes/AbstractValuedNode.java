@@ -12,4 +12,10 @@ public abstract class AbstractValuedNode extends AbstractTypedNode
     }
     
     public abstract Result<Object> getValue(Interpreter interpreter);
+    
+    @Override
+    public Result<Void> interpret(Interpreter interpreter)
+    {
+        return Result.of(null);
+    }
 }

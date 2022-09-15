@@ -5,7 +5,6 @@ import interpreter.core.runtime.SymbolTable;
 import interpreter.core.source.SourcePosition;
 import interpreter.core.utils.Result;
 
-import java.nio.file.Path;
 import java.util.function.BiConsumer;
 
 public abstract class AbstractNode
@@ -14,8 +13,6 @@ public abstract class AbstractNode
     
     private final SourcePosition startPosition;
     private final SourcePosition endPosition;
-    
-    protected Path transpileTarget;
     
     public AbstractNode(SourcePosition startPosition, SourcePosition endPosition)
     {
@@ -32,5 +29,4 @@ public abstract class AbstractNode
     
     public SourcePosition start() { return this.startPosition; }
     public SourcePosition end() { return this.endPosition; }
-    public Path transpileTarget() { return this.transpileTarget; }
 }

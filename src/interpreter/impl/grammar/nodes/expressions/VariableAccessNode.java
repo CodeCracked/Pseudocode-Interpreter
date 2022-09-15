@@ -37,7 +37,7 @@ public class VariableAccessNode extends AbstractValuedNode
     public Result<Void> interpret(Interpreter interpreter) { return Result.of(null); }
     
     @Override
-    public Result<RuntimeType<?>> getRuntimeType(Interpreter interpreter)
+    public Result<RuntimeType<?>> getRuntimeType()
     {
         VariableSymbol symbol = getSymbolTable().getSymbol(SymbolType.VARIABLE, identifier);
         if (symbol == null) return Result.fail(new SyntaxException(this, "Cannot find variable '" + identifier + "'! Are you sure it was spelled and capitalized correctly?"));

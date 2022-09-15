@@ -1,6 +1,5 @@
 package interpreter.core.parser.nodes;
 
-import interpreter.core.Interpreter;
 import interpreter.core.runtime.RuntimeType;
 import interpreter.core.source.SourcePosition;
 import interpreter.core.utils.Result;
@@ -12,5 +11,5 @@ public abstract class AbstractTypedNode extends AbstractNode
         super(startPosition, endPosition);
     }
     
-    public abstract Result<RuntimeType<?>> getRuntimeType(Interpreter interpreter);
+    public abstract Result<RuntimeType<?>> getRuntimeType();
 }

@@ -40,12 +40,12 @@ public class DeclareStatementRule implements IGrammarRule
         // Optional Initializer
         AbstractNode initialValue = null;
         Token assignmentOperator = parser.getCurrentToken();
-        if (assignmentOperator.isKeyword(TokenType.OPERATOR, "="))
+        if (assignmentOperator.type() == TokenType.ASSIGN)
         {
             result.registerAdvancement();
             parser.advance();
             
-            initialValue = result.register(GrammarRules.ATOM.build(parser));
+            initialValue = result.register(GrammarRules.EXPRESSION.build(parser));
             if (result.error() != null) return result;
         }
         

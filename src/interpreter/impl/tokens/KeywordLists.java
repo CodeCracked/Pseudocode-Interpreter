@@ -10,10 +10,6 @@ public class KeywordLists
             "Real"
     );
     
-    public static List<String> operatorKeywords = List.of(
-            "="
-    );
-    
     public static List<String> statementKeywords = List.of(
             "Declare",
             "Display"

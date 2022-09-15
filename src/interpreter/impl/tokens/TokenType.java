@@ -4,7 +4,6 @@ public enum TokenType
 {
     STATEMENT_KEYWORD,
     TYPE_KEYWORD,
-    OPERATOR,
     
     IDENTIFIER,
     
@@ -13,6 +12,13 @@ public enum TokenType
     REAL_LITERAL,
     
     ASSIGN,
+    PLUS,
+    MINUS,
+    MUL,
+    DIV,
+    MOD,
+    LPAREN,
+    RPAREN,
     
     NEWLINE,
     EOF

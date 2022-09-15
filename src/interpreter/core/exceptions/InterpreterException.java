@@ -34,7 +34,7 @@ public class InterpreterException extends Exception
             else builder.append(' ');
         }
         
-        for (int i = start; i < Math.min(end, lineChars.length); i++)
+        for (int i = start; i < Math.min(end + 1, lineChars.length); i++)
         {
             if (lineChars[i] == '\t') builder.append("^^^^");
             else builder.append('^');

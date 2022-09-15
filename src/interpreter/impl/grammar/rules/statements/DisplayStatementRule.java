@@ -25,7 +25,7 @@ public class DisplayStatementRule implements IGrammarRule
         parser.advance();
         
         // Message
-        AbstractValuedNode message = (AbstractValuedNode)result.register(GrammarRules.ATOM.build(parser));
+        AbstractValuedNode message = (AbstractValuedNode)result.register(GrammarRules.EXPRESSION.build(parser));
         if (result.error() != null) return result;
         
         // Newline

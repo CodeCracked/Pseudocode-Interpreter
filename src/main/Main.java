@@ -24,10 +24,21 @@ public class Main
     private static Lexer lexer = new Lexer(TokenType.EOF,
             new KeywordTokenBuilder(TokenType.STATEMENT_KEYWORD, 1, KeywordLists.statementKeywords),
             new KeywordTokenBuilder(TokenType.TYPE_KEYWORD, 1, KeywordLists.typeKeywords),
-            new KeywordTokenBuilder(TokenType.OPERATOR, 2, KeywordLists.operatorKeywords),
+            
             new IdentifierTokenBuilder(TokenType.IDENTIFIER),
+            
             new StringLiteralTokenBuilder(TokenType.STRING_LITERAL),
             new NumberLiteralTokenBuilder(TokenType.INTEGER_LITERAL, TokenType.REAL_LITERAL),
+            
+            new MatcherTokenBuilder(TokenType.ASSIGN, -1, "=", false),
+            new MatcherTokenBuilder(TokenType.PLUS, -1, "+", false),
+            new MatcherTokenBuilder(TokenType.MINUS, -1, "-", false),
+            new MatcherTokenBuilder(TokenType.MUL, -1, "*", false),
+            new MatcherTokenBuilder(TokenType.DIV, -1, "/", false),
+            new MatcherTokenBuilder(TokenType.MOD, -1, "MOD", false),
+            new MatcherTokenBuilder(TokenType.LPAREN, -1, "(", false),
+            new MatcherTokenBuilder(TokenType.RPAREN, -1, ")", false),
+            
             new MatcherTokenBuilder(TokenType.NEWLINE, -1000, "\n", false)
     );
     private static Parser parser = new Parser(GrammarRules.PROGRAM, null);

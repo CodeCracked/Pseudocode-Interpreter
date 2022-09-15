@@ -50,7 +50,7 @@ public class LiteralValueNode extends AbstractValuedNode
     }
     
     @Override
-    public Result<RuntimeType<?>> getRuntimeType(Interpreter interpreter)
+    public Result<RuntimeType<?>> getRuntimeType()
     {
         return Result.of(runtimeType);
     }

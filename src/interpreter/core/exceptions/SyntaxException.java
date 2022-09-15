@@ -1,11 +1,16 @@
 package interpreter.core.exceptions;
 
+import interpreter.core.lexer.Token;
 import interpreter.core.parser.Parser;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.source.SourcePosition;
 
 public class SyntaxException extends InterpreterException
 {
+    public SyntaxException(Token token, String reason)
+    {
+        this(token.start(), token.end(), reason);
+    }
     public SyntaxException(AbstractNode node, String reason)
     {
         this(node.start(), node.end(), reason);
