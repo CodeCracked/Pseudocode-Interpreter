@@ -17,6 +17,15 @@ public class VariableSymbol extends Symbol
         this.initialized = false;
     }
     
+    @Override
+    public Symbol clone()
+    {
+        VariableSymbol clone = new VariableSymbol(type, name, runtimeType);
+        clone.value = value;
+        clone.initialized = initialized;
+        return clone;
+    }
+    
     public boolean isInitialized() { return initialized; }
     public RuntimeType<?> getRuntimeType() { return runtimeType; }
     
@@ -25,7 +34,6 @@ public class VariableSymbol extends Symbol
         if (initialized) return Result.of(value);
         else return Result.fail(new SyntaxException(caller, "Cannot get value of variable '" + name  + "' before it is initialized!"));
     }
-    
     public Result<?> setValue(Object value)
     {
         Result<?> casted = this.runtimeType.tryCast(value);

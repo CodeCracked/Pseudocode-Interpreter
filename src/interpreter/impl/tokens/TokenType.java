@@ -22,6 +22,10 @@ public enum TokenType
     RPAREN,
     COMMA,
     
+    MODULE,
+    END,
+    
+    INDENT,
     NEWLINE,
     EOF
 }

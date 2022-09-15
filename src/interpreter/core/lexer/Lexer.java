@@ -2,7 +2,7 @@ package interpreter.core.lexer;
 
 import interpreter.core.lexer.builders.ITokenBuilder;
 import interpreter.core.source.SourcePosition;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.Result;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +24,7 @@ public class Lexer
         this.tokenBuilders = Collections.unmodifiableList(tokenBuilders);
     }
     
-    public List<Token> tokenize(SourcePosition position)
+    public Result<List<Token>> tokenize(SourcePosition position)
     {
         List<Token> tokens = new ArrayList<>();
         
@@ -37,15 +37,11 @@ public class Lexer
                 if (token != null) break;
             }
             
-            if (token == null)
-            {
-                Printing.Errors.println(position + ": Unknown symbol '" + position.getRemainingLine().trim() + "'!");
-                return null;
-            }
+            if (token == null) return Result.fail(new IllegalStateException(position + ": Unknown symbol '" + position.getRemainingLine().trim() + "'!"));
             else tokens.add(token);
         }
         
         if (eofToken != null) tokens.add(new Token(eofToken, null, position, position));
-        return tokens;
+        return Result.of(tokens);
     }
 }

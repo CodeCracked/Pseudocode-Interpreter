@@ -21,7 +21,7 @@ import java.util.List;
 
 public class Main
 {
-    private static Lexer lexer = new Lexer(TokenType.EOF,
+    private final static Lexer lexer = new Lexer(TokenType.EOF,
             new KeywordTokenBuilder(TokenType.STATEMENT_KEYWORD, 1, KeywordLists.statementKeywords),
             new KeywordTokenBuilder(TokenType.TYPE_KEYWORD, 1, KeywordLists.typeKeywords),
             
@@ -41,10 +41,14 @@ public class Main
             new MatcherTokenBuilder(TokenType.RPAREN, -1, ")", false),
             new MatcherTokenBuilder(TokenType.COMMA, -1, ",", false),
             
+            new MatcherTokenBuilder(TokenType.MODULE, 0, "Module", false),
+            new MatcherTokenBuilder(TokenType.END, 0, "End", false),
+            
+            new IndentTokenBuilder(TokenType.INDENT, 4),
             new MatcherTokenBuilder(TokenType.NEWLINE, -1000, "\n", false)
     );
-    private static Parser parser = new Parser(GrammarRules.PROGRAM, null);
-    private static Interpreter interpreter = new Interpreter(lexer, parser)
+    private final static Parser parser = new Parser(GrammarRules.PROGRAM, null);
+    private final static Interpreter interpreter = new Interpreter(lexer, parser)
     {
         @Override
         protected void registerTypes()

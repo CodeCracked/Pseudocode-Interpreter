@@ -1,6 +1,7 @@
-Declare Integer test
+Module main()
+	Display "Hello, World!"
+End Module
 
-Display "Enter Number: "
-Input test
-
-Display "You entered ", test
+Module test(Integer value)
+	Display value
+End Module

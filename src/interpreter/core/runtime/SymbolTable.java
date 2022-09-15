@@ -32,4 +32,16 @@ public class SymbolTable
             else return null;
         }
     }
+    
+    public SymbolTable createChild()
+    {
+        SymbolTable child = new SymbolTable();
+        for (Map.Entry<Enum<?>, Map<String, Symbol>> symbolMapEntry : symbolMap.entrySet())
+        {
+            Map<String, Symbol> clonedSymbolMapEntry = new HashMap<>();
+            for (Map.Entry<String, Symbol> symbolEntry : symbolMapEntry.getValue().entrySet()) clonedSymbolMapEntry.put(symbolEntry.getKey(), symbolEntry.getValue().clone());
+            child.symbolMap.put(symbolMapEntry.getKey(), clonedSymbolMapEntry);
+        }
+        return child;
+    }
 }

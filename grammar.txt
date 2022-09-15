@@ -1,6 +1,10 @@
-program     : block EOF
+program     : module* EOF
 
-block       : statement (statement)*
+
+
+module      : MODULE IDENTIFIER params NEWLINE block END MODULE NEWLINE
+
+block       : (statement)*
 
 
 

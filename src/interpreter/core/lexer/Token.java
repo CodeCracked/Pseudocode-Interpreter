@@ -36,6 +36,10 @@ public class Token
     {
         return this.type == keywordType && this.value == keyword && this.trailingSpaces == trailingSpaces;
     }
+    public boolean matches(Enum<?> tokenType, Object tokenValue)
+    {
+        return this.type == tokenType && Objects.equals(this.value, tokenValue);
+    }
     
     @Override
     public String toString()

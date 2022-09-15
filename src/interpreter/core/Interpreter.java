@@ -36,11 +36,16 @@ public class Interpreter
         SourcePosition position = new SourcePosition(source);
     
         // Tokenize Pseudocode Source
-        List<Token> tokens = lexer.tokenize(position);
-        onTokenize(tokens);
+        Result<List<Token>> lexerResult = lexer.tokenize(position);
+        if (lexerResult.error() != null)
+        {
+            Printing.Errors.println(lexerResult.error().getMessage());
+            return;
+        }
+        onTokenize(lexerResult.get());
         
         // Generate AST from Token List
-        Result<AbstractNode> parseResult = parser.parse(this, tokens);
+        Result<AbstractNode> parseResult = parser.parse(this, lexerResult.get());
         if (parseResult.error() != null)
         {
             Printing.Errors.println(parseResult.error().getMessage());

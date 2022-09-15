@@ -1,6 +1,6 @@
 package interpreter.core.runtime;
 
-public class Symbol
+public abstract class Symbol
 {
     public final Enum<?> type;
     public final String name;
@@ -10,4 +10,6 @@ public class Symbol
         this.type = type;
         this.name = name;
     }
+    
+    public abstract Symbol clone();
 }

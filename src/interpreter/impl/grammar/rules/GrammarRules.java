@@ -6,22 +6,25 @@ import interpreter.core.parser.Parser;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.utils.Result;
+import interpreter.impl.grammar.nodes.blocks.BlockNode;
 import interpreter.impl.grammar.nodes.expressions.BinaryOpNode;
-import interpreter.impl.grammar.rules.blocks.BlockRule;
+import interpreter.impl.grammar.rules.blocks.ModuleDefinitionRule;
 import interpreter.impl.grammar.rules.components.ParameterListRule;
 import interpreter.impl.grammar.rules.components.ValueSetRule;
 import interpreter.impl.grammar.rules.expressions.AtomRule;
 import interpreter.impl.grammar.rules.expressions.ExpressionRule;
 import interpreter.impl.grammar.rules.expressions.FactorRule;
 import interpreter.impl.grammar.rules.statements.*;
+import interpreter.impl.tokens.TokenType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class GrammarRules
 {
     public static IGrammarRule PROGRAM = new ProgramRule();
-    
-    public static IGrammarRule BLOCK = new BlockRule();
+    public static IGrammarRule MODULE_DEFINITION = new ModuleDefinitionRule();
     
     public static IGrammarRule STATEMENT = new StatementRule();
     public static IGrammarRule DECLARE_STATEMENT = new DeclareStatementRule();
@@ -65,5 +68,22 @@ public class GrammarRules
         }
         
         return result.success(left);
+    }
+    public static Result<AbstractNode> block(Parser parser, int indentation)
+    {
+        Result<AbstractNode> result = new Result<>();
+        List<AbstractNode> statements = new ArrayList<>();
+        
+        while (parser.getCurrentToken().matches(TokenType.INDENT, indentation))
+        {
+            result.registerAdvancement();
+            parser.advance();
+            
+            Result<AbstractNode> statementResult = GrammarRules.STATEMENT.build(parser);
+            if (statementResult.error() != null) return result.failure(statementResult.error());
+            else statements.add(statementResult.get());
+        }
+    
+        return result.success(new BlockNode(statements));
     }
 }
