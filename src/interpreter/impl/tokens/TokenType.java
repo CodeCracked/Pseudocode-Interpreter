@@ -17,8 +17,10 @@ public enum TokenType
     MUL,
     DIV,
     MOD,
+    
     LPAREN,
     RPAREN,
+    COMMA,
     
     NEWLINE,
     EOF

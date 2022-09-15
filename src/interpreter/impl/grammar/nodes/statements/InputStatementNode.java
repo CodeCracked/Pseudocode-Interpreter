@@ -45,7 +45,7 @@ public class InputStatementNode extends AbstractNode
     public void debugPrint(int depth)
     {
         Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("Input " + identifier + "");
+        Printing.Debug.println("INPUT " + identifier + "");
     }
     
     @Override

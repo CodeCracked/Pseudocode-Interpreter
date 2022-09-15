@@ -3,10 +3,10 @@ package interpreter.impl.grammar.rules.statements;
 import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.IGrammarRule;
+import interpreter.core.parser.Parser;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.utils.Result;
-import interpreter.core.parser.Parser;
-import interpreter.core.parser.nodes.AbstractValuedNode;
+import interpreter.impl.grammar.nodes.components.ValueSetNode;
 import interpreter.impl.grammar.nodes.statements.DisplayStatementNode;
 import interpreter.impl.grammar.rules.GrammarRules;
 import interpreter.impl.tokens.TokenType;
@@ -25,7 +25,7 @@ public class DisplayStatementRule implements IGrammarRule
         parser.advance();
         
         // Message
-        AbstractValuedNode message = (AbstractValuedNode)result.register(GrammarRules.EXPRESSION.build(parser));
+        ValueSetNode message = (ValueSetNode) result.register(GrammarRules.VALUE_SET.build(parser));
         if (result.error() != null) return result;
         
         // Newline

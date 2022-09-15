@@ -53,7 +53,7 @@ public class SetStatementNode extends AbstractNode
     public void debugPrint(int depth)
     {
         Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("Assign " + identifier + ":");
+        Printing.Debug.println("ASSIGN " + identifier + ":");
         value.debugPrint(depth + 1);
     }
     

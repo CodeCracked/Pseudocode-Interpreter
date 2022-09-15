@@ -36,8 +36,10 @@ public class Main
             new MatcherTokenBuilder(TokenType.MUL, -1, "*", false),
             new MatcherTokenBuilder(TokenType.DIV, -1, "/", false),
             new MatcherTokenBuilder(TokenType.MOD, -1, "MOD", false),
+            
             new MatcherTokenBuilder(TokenType.LPAREN, -1, "(", false),
             new MatcherTokenBuilder(TokenType.RPAREN, -1, ")", false),
+            new MatcherTokenBuilder(TokenType.COMMA, -1, ",", false),
             
             new MatcherTokenBuilder(TokenType.NEWLINE, -1000, "\n", false)
     );

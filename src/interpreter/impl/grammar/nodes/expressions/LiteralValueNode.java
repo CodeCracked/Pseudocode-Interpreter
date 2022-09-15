@@ -52,7 +52,7 @@ public class LiteralValueNode extends AbstractValuedNode
     {
         Printing.Debug.print("  ".repeat(depth));
         Printing.Debug.print(runtimeType.keyword);
-        Printing.Debug.print(' ');
+        Printing.Debug.print(": ");
         Printing.Debug.println(value);
     }
     

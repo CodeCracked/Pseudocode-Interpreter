@@ -66,7 +66,7 @@ public class DeclareStatementNode extends AbstractNode
     public void debugPrint(int depth)
     {
         Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("Declare " + dataType.keyword);
+        Printing.Debug.println("DECLARE " + dataType.keyword + ":");
         
         Printing.Debug.print("  ".repeat(depth + 1));
         Printing.Debug.println("Identifier: " + identifier);

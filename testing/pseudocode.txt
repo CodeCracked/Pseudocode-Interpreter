@@ -3,4 +3,4 @@ Declare Integer test
 Display "Enter Number: "
 Input test
 
-Display test
+Display "You entered ", test
