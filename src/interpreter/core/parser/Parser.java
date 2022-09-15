@@ -1,5 +1,6 @@
 package interpreter.core.parser;
 
+import interpreter.core.Interpreter;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.utils.Result;
@@ -36,7 +37,7 @@ public class Parser
         
         if (indentTokenType != null && currentToken != null && currentToken.type() == indentTokenType) this.currentIndent = (int)currentToken.value();
     }
-    public Result<AbstractNode> parse(List<Token> tokens)
+    public Result<AbstractNode> parse(Interpreter interpreter, List<Token> tokens)
     {
         this.tokens = tokens;
         this.tokenIndex = -1;
@@ -53,6 +54,9 @@ public class Parser
                     child.createSymbolTable();
                     child.parent = parent;
                 });
+        
+        Result<Void> populateResult = result.get().populate(interpreter);
+        if (populateResult.error() != null) return result.failure(populateResult.error());
         
         // TODO: Check for trailing tokens
         //if (result.error() == null && currentToken.type() != TokenType.EOF) return result.failure(new MCLSyntaxError(source.getCodeLocation(currentToken.startPosition()),

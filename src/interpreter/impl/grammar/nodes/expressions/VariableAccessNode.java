@@ -17,6 +17,8 @@ public class VariableAccessNode extends AbstractValuedNode
 {
     private final String identifier;
     
+    private VariableSymbol symbol;
+    
     public VariableAccessNode(Token identifier)
     {
         super(identifier.start(), identifier.end());
@@ -25,6 +27,14 @@ public class VariableAccessNode extends AbstractValuedNode
     
     @Override
     public void walk(BiConsumer<AbstractNode, AbstractNode> parentChildConsumer) { }
+    
+    @Override
+    public Result<Void> populate(Interpreter interpreter)
+    {
+        symbol = getSymbolTable().getSymbol(SymbolType.VARIABLE, identifier);
+        if (symbol == null) return Result.fail(new SyntaxException(this, "Cannot find variable '" + identifier + "'! Are you sure it was spelled and capitalized correctly?"));
+        else return Result.of(null);
+    }
     
     @Override
     public void debugPrint(int depth)
@@ -39,17 +49,12 @@ public class VariableAccessNode extends AbstractValuedNode
     @Override
     public Result<RuntimeType<?>> getRuntimeType()
     {
-        VariableSymbol symbol = getSymbolTable().getSymbol(SymbolType.VARIABLE, identifier);
-        if (symbol == null) return Result.fail(new SyntaxException(this, "Cannot find variable '" + identifier + "'! Are you sure it was spelled and capitalized correctly?"));
-        
         return Result.of(symbol.getRuntimeType());
     }
     
     @Override
     public Result<Object> getValue(Interpreter interpreter)
     {
-        VariableSymbol symbol = getSymbolTable().getSymbol(SymbolType.VARIABLE, identifier);
-        if (symbol == null) return Result.fail(new SyntaxException(this, "Cannot find variable '" + identifier + "'! Are you sure it was spelled and capitalized correctly?"));
         return symbol.getValue(this);
     }
 }

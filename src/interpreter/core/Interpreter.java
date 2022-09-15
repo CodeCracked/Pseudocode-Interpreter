@@ -40,7 +40,7 @@ public class Interpreter
         onTokenize(tokens);
         
         // Generate AST from Token List
-        Result<AbstractNode> parseResult = parser.parse(tokens);
+        Result<AbstractNode> parseResult = parser.parse(this, tokens);
         if (parseResult.error() != null)
         {
             Printing.Errors.println(parseResult.error().getMessage());

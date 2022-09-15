@@ -28,6 +28,18 @@ public class BlockNode extends AbstractNode
     }
     
     @Override
+    public Result<Void> populate(Interpreter interpreter)
+    {
+        Result<Void> result = new Result<>();
+        for (AbstractNode statement : statements)
+        {
+            result.register(statement.populate(interpreter));
+            if (result.error() != null) return result;
+        }
+        return result.success(null);
+    }
+    
+    @Override
     public void debugPrint(int depth)
     {
         for (AbstractNode statement : statements) statement.debugPrint(depth);

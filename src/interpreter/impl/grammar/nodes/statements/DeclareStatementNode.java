@@ -6,7 +6,6 @@ import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.runtime.RuntimeType;
-import interpreter.core.runtime.Symbol;
 import interpreter.core.runtime.VariableSymbol;
 import interpreter.core.utils.Printing;
 import interpreter.core.utils.Result;
@@ -16,24 +15,20 @@ import java.util.function.BiConsumer;
 
 public class DeclareStatementNode extends AbstractNode
 {
-    private final RuntimeType<?> dataType;
+    private final Token dataTypeToken;
     private final String identifier;
     private final AbstractValuedNode initialValue;
     
-    private DeclareStatementNode(Token keyword, RuntimeType<?> dataType, Token identifier, AbstractValuedNode initialValue)
+    private RuntimeType<?> dataType;
+    private VariableSymbol symbol;
+    
+    public DeclareStatementNode(Token keyword, Token dataType, Token identifier, AbstractValuedNode initialValue)
     {
         super(keyword.start(), initialValue != null ? initialValue.end() : identifier.end());
     
-        this.dataType = dataType;
+        this.dataTypeToken = dataType;
         this.identifier = (String)identifier.value();
         this.initialValue = initialValue;
-    }
-    
-    public static Result<DeclareStatementNode> create(Token keyword, Token dataType, Token identifier, AbstractValuedNode initialValue)
-    {
-        Result<RuntimeType<?>> type = RuntimeType.getTypeFromKeyword(dataType.value().toString());
-        if (type.error() != null) return Result.fail(type.error());
-        else return Result.of(new DeclareStatementNode(keyword, type.get(), identifier, initialValue));
     }
     
     @Override
@@ -45,7 +40,37 @@ public class DeclareStatementNode extends AbstractNode
             initialValue.walk(parentChildConsumer);
         }
     }
-    
+    @Override
+    public Result<Void> populate(Interpreter interpreter)
+    {
+        Result<Void> result = new Result<>();
+        
+        // Data Type
+        Result<RuntimeType<?>> dataType = RuntimeType.getTypeFromKeyword(this.dataTypeToken.value().toString());
+        if (dataType.error() != null) return result.failure(dataType.error());
+        else this.dataType = dataType.get();
+        
+        // Initial Value
+        if (initialValue != null)
+        {
+            result.register(initialValue.populate(interpreter));
+            if (result.error() != null) return result;
+        }
+        
+        // Symbol
+        symbol = new VariableSymbol(SymbolType.VARIABLE, identifier, this.dataType);
+        if (initialValue != null)
+        {
+            Result<Object> expressionResult = initialValue.getValue(interpreter);
+            if (expressionResult.error() != null) return result.failure(expressionResult.error());
+        
+            Result<?> assignResult = symbol.setValue(expressionResult.get());
+            if (assignResult.error() != null) return result.failure(assignResult.error());
+        }
+        
+        if (getSymbolTable().tryAddSymbol(symbol)) return result.success(null);
+        else return result.failure(new SyntaxException(this, "Variable '" + identifier + "' already exists! Did you mean to Set it instead of Declare it?"));
+    }
     @Override
     public void debugPrint(int depth)
     {
@@ -67,17 +92,6 @@ public class DeclareStatementNode extends AbstractNode
     @Override
     public Result<Void> interpret(Interpreter interpreter)
     {
-        VariableSymbol variable = new VariableSymbol(SymbolType.VARIABLE, identifier, dataType);
-        if (initialValue != null)
-        {
-            Result<Object> expressionResult = initialValue.getValue(interpreter);
-            if (expressionResult.error() != null) return Result.fail(expressionResult.error());
-            
-            Result<?> assignResult = variable.setValue(expressionResult.get());
-            if (assignResult.error() != null) return Result.fail(assignResult.error());
-        }
-        
-        if (getSymbolTable().tryAddSymbol(variable)) return Result.of(null);
-        else return Result.fail(new SyntaxException(this, "Variable '" + identifier + "' already exists! Did you mean to Set it instead of Declare it?"));
+        return Result.of(null);
     }
 }

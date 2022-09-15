@@ -27,10 +27,7 @@ public class AtomRule implements IGrammarRule
         {
             result.registerAdvancement();
             parser.advance();
-            
-            Result<LiteralValueNode> literal = LiteralValueNode.create(atom);
-            if (literal.error() != null) return result.failure(literal.error());
-            else return result.success(literal.get());
+            return result.success(new LiteralValueNode(atom));
         }
         
         // Variable Identifiers
@@ -50,9 +47,7 @@ public class AtomRule implements IGrammarRule
             AbstractNode argument = result.register(GrammarRules.ATOM.build(parser));
             if (result.error() != null) return result;
             
-            Result<UnaryOpNode> unaryOp = UnaryOpNode.create(atom, (AbstractValuedNode) argument);
-            if (unaryOp.error() != null) return result.failure(unaryOp.error());
-            else return result.success(unaryOp.get());
+            return result.success(new UnaryOpNode(atom, (AbstractValuedNode) argument));
         }
         
         // Parenthesis

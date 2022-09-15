@@ -26,6 +26,11 @@ public class DisplayStatementNode extends AbstractNode
         message.walk(parentChildConsumer);
     }
     @Override
+    public Result<Void> populate(Interpreter interpreter)
+    {
+        return message.populate(interpreter);
+    }
+    @Override
     public void debugPrint(int depth)
     {
         Printing.Debug.print("  ".repeat(depth));

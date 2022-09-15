@@ -14,7 +14,6 @@ import interpreter.impl.grammar.rules.expressions.FactorRule;
 import interpreter.impl.grammar.rules.statements.DeclareStatementRule;
 import interpreter.impl.grammar.rules.statements.DisplayStatementRule;
 import interpreter.impl.grammar.rules.statements.StatementRule;
-import interpreter.impl.tokens.TokenType;
 
 import java.util.Set;
 
@@ -48,13 +47,11 @@ public class GrammarRules
                     Token operation = parser.getCurrentToken();
                     result.registerAdvancement();
                     parser.advance();
+                    
                     AbstractValuedNode right = (AbstractValuedNode) result.register(argumentRule.build(parser));
                     if (result.error() != null) return result;
                     
-                    Result<BinaryOpNode> operationResult = BinaryOpNode.create(left, operation, right);
-                    if (operationResult.error() != null) return result.failure(operationResult.error());
-                    
-                    left = operationResult.get();
+                    left = new BinaryOpNode(left, operation, right);
                     foundOperation = true;
                     break;
                 }

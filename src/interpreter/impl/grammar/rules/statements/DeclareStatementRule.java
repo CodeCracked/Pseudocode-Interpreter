@@ -55,8 +55,6 @@ public class DeclareStatementRule implements IGrammarRule
         parser.advance();
         
         // Create Node
-        Result<DeclareStatementNode> node = DeclareStatementNode.create(keyword, dataType, identifier, (AbstractValuedNode) initialValue);
-        if (node.error() != null) return result.failure(node.error());
-        else return result.success(node.get());
+        return result.success(new DeclareStatementNode(keyword, dataType, identifier, (AbstractValuedNode) initialValue));
     }
 }

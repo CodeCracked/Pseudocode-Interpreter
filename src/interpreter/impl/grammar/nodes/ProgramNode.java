@@ -37,6 +37,11 @@ public class ProgramNode extends AbstractNode
         block.walk(parentChildConsumer);
     }
     @Override
+    public Result<Void> populate(Interpreter interpreter)
+    {
+        return block.populate(interpreter);
+    }
+    @Override
     public void debugPrint(int depth)
     {
         Printing.Debug.print("  ".repeat(depth));

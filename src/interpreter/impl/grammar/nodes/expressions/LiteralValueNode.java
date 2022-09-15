@@ -12,31 +12,38 @@ import java.util.function.BiConsumer;
 
 public class LiteralValueNode extends AbstractValuedNode
 {
-    private final RuntimeType<?> runtimeType;
-    private final Object value;
+    private final Token valueToken;
     
-    private LiteralValueNode(Token token, RuntimeType<?> type, Object value)
-    {
-        super(token.start(), token.end());
-        this.runtimeType = type;
-        this.value = value;
-    }
+    private RuntimeType<?> runtimeType;
+    private Object value;
     
-    public static Result<LiteralValueNode> create(Token value)
+    public LiteralValueNode(Token value)
     {
-        Result<LiteralValueNode> result = new Result<>();
-        
-        Result<RuntimeType<?>> runtimeType = RuntimeType.getTypeFromClass(value.value().getClass());
-        if (runtimeType.error() != null) return result.failure(runtimeType.error());
-        
-        Result<?> casted = runtimeType.get().tryCast(value.value());
-        if (casted.error() != null) return result.failure(casted.error());
-        
-        return result.success(new LiteralValueNode(value, runtimeType.get(), casted.get()));
+        super(value.start(), value.end());
+        this.valueToken = value;
     }
     
     @Override
     public void walk(BiConsumer<AbstractNode, AbstractNode> parentChildConsumer) { }
+    
+    @Override
+    public Result<Void> populate(Interpreter interpreter)
+    {
+        Result<Void> result = new Result<>();
+    
+        // Runtime Type
+        Result<RuntimeType<?>> runtimeType = RuntimeType.getTypeFromClass(valueToken.value().getClass());
+        if (runtimeType.error() != null) return result.failure(runtimeType.error());
+        else this.runtimeType = runtimeType.get();
+    
+        // Value
+        Result<?> casted = runtimeType.get().tryCast(valueToken.value());
+        if (casted.error() != null) return result.failure(casted.error());
+        else this.value = casted.get();
+    
+        return result.success(null);
+    }
+    
     @Override
     public Result<Void> interpret(Interpreter interpreter) { return Result.of(null); }
     

@@ -1,2 +1,2 @@
-Declare Real testVariable = 10
-Display testVariable + 5
+Declare Integer testVariable = 10
+Display testVariable

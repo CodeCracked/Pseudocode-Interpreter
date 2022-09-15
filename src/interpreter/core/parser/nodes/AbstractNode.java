@@ -23,6 +23,7 @@ public abstract class AbstractNode
     public void createSymbolTable() { }
     public SymbolTable getSymbolTable() { return parent.getSymbolTable(); }
     
+    public abstract Result<Void> populate(Interpreter interpreter);
     public abstract void walk(BiConsumer<AbstractNode, AbstractNode> parentChildConsumer);
     public abstract void debugPrint(int depth);
     public abstract Result<Void> interpret(Interpreter interpreter);
