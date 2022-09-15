@@ -17,8 +17,9 @@ set_statement       : STATEMENT_KEYWORD(value: Set trailingSpaces: 1) IDENTIFIER
 input_statement     : STATEMENT_KEYWORD(value: Input trailingSpaces: 1) IDENTIFIER NEWLINE
 
 
-
 value_set   : expression (COMMA expression)*
+
+params      : LPAREN (TYPE_KEYWORD(trailingSpaces: 1) IDENTIFIER (COMMA TYPE_KEYWORD(trailingSpaces: 1))*)? RPAREN
 
 
 
