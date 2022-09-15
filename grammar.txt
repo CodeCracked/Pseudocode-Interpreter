@@ -6,10 +6,13 @@ block       : statement (statement)*
 
 statement           : display_statement
                     : declare_statement
+                    : set_statement
 
 display_statement   : STATEMENT_KEYWORD(value: Display trailingSpaces: 1) expression NEWLINE
 
 declare_statement   : STATEMENT_KEYWORD(value: Declare trailingSpaces: 1) TYPE_KEYWORD(trailingSpaces: 1) IDENTIFIER (OPERATOR(value: =) expression)?
+
+set_statement       : STATEMENT_KEYWORD(value: Set trailingSpaces: 1) IDENTIFIER ASSIGN expression
 
 
 

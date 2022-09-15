@@ -58,9 +58,6 @@ public class Parser
         Result<Void> populateResult = result.get().populate(interpreter);
         if (populateResult.error() != null) return result.failure(populateResult.error());
         
-        // TODO: Check for trailing tokens
-        //if (result.error() == null && currentToken.type() != TokenType.EOF) return result.failure(new MCLSyntaxError(source.getCodeLocation(currentToken.startPosition()),
-        //        source.getCodeLocation(currentToken.endPosition()), "Expected 'namespace'"));
         return result;
     }
     

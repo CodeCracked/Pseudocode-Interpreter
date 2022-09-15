@@ -59,15 +59,6 @@ public class DeclareStatementNode extends AbstractNode
         
         // Symbol
         symbol = new VariableSymbol(SymbolType.VARIABLE, identifier, this.dataType);
-        if (initialValue != null)
-        {
-            Result<Object> expressionResult = initialValue.getValue(interpreter);
-            if (expressionResult.error() != null) return result.failure(expressionResult.error());
-        
-            Result<?> assignResult = symbol.setValue(expressionResult.get());
-            if (assignResult.error() != null) return result.failure(assignResult.error());
-        }
-        
         if (getSymbolTable().tryAddSymbol(symbol)) return result.success(null);
         else return result.failure(new SyntaxException(this, "Variable '" + identifier + "' already exists! Did you mean to Set it instead of Declare it?"));
     }
@@ -92,6 +83,15 @@ public class DeclareStatementNode extends AbstractNode
     @Override
     public Result<Void> interpret(Interpreter interpreter)
     {
+        if (initialValue != null)
+        {
+            Result<Object> expressionResult = initialValue.getValue(interpreter);
+            if (expressionResult.error() != null) return Result.fail(expressionResult.error());
+        
+            Result<?> assignResult = symbol.setValue(expressionResult.get());
+            if (assignResult.error() != null) return Result.fail(assignResult.error());
+        }
+        
         return Result.of(null);
     }
 }

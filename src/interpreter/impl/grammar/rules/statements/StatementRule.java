@@ -31,6 +31,9 @@ public class StatementRule implements IGrammarRule
             case "Declare":
                 statementNode = result.register(GrammarRules.DECLARE_STATEMENT.build(parser));
                 break;
+            case "Set":
+                statementNode = result.register(GrammarRules.SET_STATEMENT.build(parser));
+                break;
             default:
                 result.failure(new SyntaxException(parser, "Trying to use " + keyword + " statement, but no grammar rule was defined! Please let Markus know so he can fix this issue."));
                 break;

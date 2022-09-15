@@ -1,2 +1,5 @@
-Declare Integer testVariable = 10
-Display testVariable
+Declare Integer testVariable
+Set testVariable = 20
+
+Declare Integer test2 = testVariable
+Display test2

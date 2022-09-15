@@ -13,6 +13,7 @@ import interpreter.impl.grammar.rules.expressions.ExpressionRule;
 import interpreter.impl.grammar.rules.expressions.FactorRule;
 import interpreter.impl.grammar.rules.statements.DeclareStatementRule;
 import interpreter.impl.grammar.rules.statements.DisplayStatementRule;
+import interpreter.impl.grammar.rules.statements.SetStatementRule;
 import interpreter.impl.grammar.rules.statements.StatementRule;
 
 import java.util.Set;
@@ -26,6 +27,7 @@ public class GrammarRules
     public static IGrammarRule STATEMENT = new StatementRule();
     public static IGrammarRule DECLARE_STATEMENT = new DeclareStatementRule();
     public static IGrammarRule DISPLAY_STATEMENT = new DisplayStatementRule();
+    public static IGrammarRule SET_STATEMENT = new SetStatementRule();
     
     public static IGrammarRule EXPRESSION = new ExpressionRule();
     public static IGrammarRule FACTOR = new FactorRule();

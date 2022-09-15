@@ -12,6 +12,7 @@ public class KeywordLists
     
     public static List<String> statementKeywords = List.of(
             "Declare",
-            "Display"
+            "Display",
+            "Set"
     );
 }
