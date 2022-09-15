@@ -1,23 +1,25 @@
 package interpreter.impl.grammar.nodes.blocks;
 
 import interpreter.core.Interpreter;
+import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
-import interpreter.core.runtime.Symbol;
 import interpreter.core.runtime.SymbolTable;
 import interpreter.core.utils.Printing;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.components.ParameterListNode;
+import interpreter.impl.runtime.ModuleSymbol;
 
 import java.util.function.BiConsumer;
 
 public class ModuleDefinitionNode extends AbstractNode
 {
     private final Token identifier;
-    private final ParameterListNode parameters;
-    private final BlockNode body;
+    public final ParameterListNode parameters;
+    public final BlockNode body;
     
-    private SymbolTable symbolTable;
+    private SymbolTable bodySymbolTable;
+    private ModuleSymbol symbol;
     
     public ModuleDefinitionNode(Token openKeyword, Token identifier, ParameterListNode parameters, BlockNode body, Token closeKeyword)
     {
@@ -30,7 +32,7 @@ public class ModuleDefinitionNode extends AbstractNode
     @Override
     public SymbolTable getSymbolTable()
     {
-        return this.symbolTable;
+        return this.bodySymbolTable;
     }
     
     @Override
@@ -39,8 +41,10 @@ public class ModuleDefinitionNode extends AbstractNode
         Result<Void> result = new Result<>();
         
         // Create Child Symbol Table
-        this.symbolTable = parent.getSymbolTable().createChild();
-        
+        this.symbol = new ModuleSymbol(identifier.value().toString(), this);
+        if (!parent.getSymbolTable().tryAddSymbol(this.symbol)) return result.failure(new SyntaxException(identifier, "Module '" + identifier.value().toString() + "' already exists!"));
+        this.bodySymbolTable = parent.getSymbolTable().createChild();
+    
         // Parameters
         result.register(parameters.populate(interpreter));
         if (result.error() != null) return result;

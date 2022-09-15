@@ -12,19 +12,19 @@ import java.util.function.BiConsumer;
 
 public class ParameterListNode extends AbstractNode
 {
-    public final List<ParameterNode> arguments;
+    public final List<ParameterNode> parameters;
     
     public ParameterListNode(Token leftParenthesis, List<ParameterNode> parameters, Token rightParenthesis)
     {
         super(leftParenthesis.start(), rightParenthesis.end());
-        this.arguments = Collections.unmodifiableList(parameters);
+        this.parameters = Collections.unmodifiableList(parameters);
     }
     
     @Override
     public Result<Void> populate(Interpreter interpreter)
     {
         Result<Void> result = new Result<>();
-        for (ParameterNode arg : arguments)
+        for (ParameterNode arg : parameters)
         {
             result.register(arg.populate(interpreter));
             if (result.error() != null) return result;
@@ -35,7 +35,7 @@ public class ParameterListNode extends AbstractNode
     @Override
     public void walk(BiConsumer<AbstractNode, AbstractNode> parentChildConsumer)
     {
-        for (ParameterNode arg : arguments)
+        for (ParameterNode arg : parameters)
         {
             parentChildConsumer.accept(this, arg);
             arg.walk(parentChildConsumer);
@@ -47,14 +47,14 @@ public class ParameterListNode extends AbstractNode
     {
         Printing.Debug.print("  ".repeat(depth));
         Printing.Debug.println("ARGUMENTS:");
-        for (ParameterNode arg : arguments) arg.debugPrint(depth + 1);
+        for (ParameterNode arg : parameters) arg.debugPrint(depth + 1);
     }
     
     @Override
     public Result<Void> interpret(Interpreter interpreter)
     {
         Result<Void> result = new Result<>();
-        for (ParameterNode arg : arguments)
+        for (ParameterNode arg : parameters)
         {
             result.register(arg.interpret(interpreter));
             if (result.error() != null) return result;

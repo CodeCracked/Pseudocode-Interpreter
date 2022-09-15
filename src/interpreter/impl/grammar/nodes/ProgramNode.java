@@ -6,6 +6,8 @@ import interpreter.core.runtime.SymbolTable;
 import interpreter.core.utils.Printing;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.blocks.ModuleDefinitionNode;
+import interpreter.impl.runtime.ModuleSymbol;
+import interpreter.impl.runtime.SymbolType;
 
 import java.util.Collections;
 import java.util.List;
@@ -63,8 +65,10 @@ public class ProgramNode extends AbstractNode
     @Override
     public Result<Void> interpret(Interpreter interpreter)
     {
-        // TODO: Run main module
-        return Result.of(null);
-        //return block.interpret(interpreter);
+        ModuleSymbol mainModule = this.rootSymbolTable.getSymbol(SymbolType.MODULE, "main");
+        if (mainModule == null) mainModule = this.rootSymbolTable.getSymbol(SymbolType.MODULE, "Main");
+        
+        if (mainModule == null) return Result.fail(new IllegalStateException("Program does not have a main module! Was it spelled and capitalized correctly?"));
+        else return mainModule.call(interpreter, null);
     }
 }
