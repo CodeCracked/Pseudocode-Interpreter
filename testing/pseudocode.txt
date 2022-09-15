@@ -1,5 +1,6 @@
-Declare Integer testVariable
-Set testVariable = 20
+Declare Integer test
 
-Declare Integer test2 = testVariable
-Display test2
+Display "Enter Number: "
+Input test
+
+Display test

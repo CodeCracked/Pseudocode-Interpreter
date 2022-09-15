@@ -10,10 +10,11 @@ statement           : display_statement
 
 display_statement   : STATEMENT_KEYWORD(value: Display trailingSpaces: 1) expression NEWLINE
 
-declare_statement   : STATEMENT_KEYWORD(value: Declare trailingSpaces: 1) TYPE_KEYWORD(trailingSpaces: 1) IDENTIFIER (OPERATOR(value: =) expression)?
+declare_statement   : STATEMENT_KEYWORD(value: Declare trailingSpaces: 1) TYPE_KEYWORD(trailingSpaces: 1) IDENTIFIER (OPERATOR(value: =) expression)? NEWLINE
 
-set_statement       : STATEMENT_KEYWORD(value: Set trailingSpaces: 1) IDENTIFIER ASSIGN expression
+set_statement       : STATEMENT_KEYWORD(value: Set trailingSpaces: 1) IDENTIFIER ASSIGN expression NEWLINE
 
+input_statement     : STATEMENT_KEYWORD(value: Input trailingSpaces: 1) IDENTIFIER NEWLINE
 
 
 expression  : factor ((PLUS|MINUS) factor)*

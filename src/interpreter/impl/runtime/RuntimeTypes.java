@@ -24,7 +24,7 @@ public class RuntimeTypes
         public Result<Long> tryParse(String str)
         {
             try { return Result.of(Long.parseLong(str)); }
-            catch (Exception e) { return Result.fail(e); }
+            catch (Exception e) { return Result.fail(new NumberFormatException("Invalid Integer '" + str + "'!")); }
         }
     
         @Override
@@ -41,7 +41,7 @@ public class RuntimeTypes
         public Result<Double> tryParse(String str)
         {
             try { return Result.of(Double.parseDouble(str)); }
-            catch (Exception e) { return Result.fail(e); }
+            catch (Exception e) { return Result.fail(new NumberFormatException("Invalid Real '" + str + "'!")); }
         }
     
         @Override
