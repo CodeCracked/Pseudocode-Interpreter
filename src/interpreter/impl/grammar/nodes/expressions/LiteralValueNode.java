@@ -5,7 +5,7 @@ import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.runtime.RuntimeType;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 
 import java.util.function.BiConsumer;
@@ -50,10 +50,10 @@ public class LiteralValueNode extends AbstractValuedNode
     @Override
     public void debugPrint(int depth)
     {
-        Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.print(runtimeType.keyword);
-        Printing.Debug.print(": ");
-        Printing.Debug.println(value);
+        IO.Debug.print("  ".repeat(depth));
+        IO.Debug.print(runtimeType.keyword);
+        IO.Debug.print(": ");
+        IO.Debug.println(value);
     }
     
     @Override

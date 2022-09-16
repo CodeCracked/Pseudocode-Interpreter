@@ -1,7 +1,7 @@
 package interpreter.core.source;
 
 import interpreter.core.utils.Pair;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 
 import java.util.Objects;
 import java.util.Stack;
@@ -94,7 +94,7 @@ public class SourcePosition
     {
         if (revertStack.size() == 0)
         {
-            Printing.Errors.println("Trying to revert position of CodeLocation when no positions have been marked!");
+            IO.Errors.println("Trying to revert position of CodeLocation when no positions have been marked!");
             throw new IllegalStateException("Trying to revert position of CodeLocation when no positions have been marked!");
         }
         else this.revertStack.pop();
@@ -103,7 +103,7 @@ public class SourcePosition
     {
         if (revertStack.size() == 0)
         {
-            Printing.Errors.println("Trying to revert position of CodeLocation when no positions have been marked!");
+            IO.Errors.println("Trying to revert position of CodeLocation when no positions have been marked!");
             throw new IllegalStateException("Trying to revert position of CodeLocation when no positions have been marked!");
         }
         else

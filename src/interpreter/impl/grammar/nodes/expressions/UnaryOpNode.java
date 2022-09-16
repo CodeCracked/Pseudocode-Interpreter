@@ -6,7 +6,7 @@ import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.runtime.RuntimeType;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.runtime.RuntimeTypes;
 import interpreter.impl.tokens.TokenType;
@@ -61,8 +61,8 @@ public class UnaryOpNode extends AbstractValuedNode
     @Override
     public void debugPrint(int depth)
     {
-        Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println(operation.type().name() + ":");
+        IO.Debug.print("  ".repeat(depth));
+        IO.Debug.println(operation.type().name() + ":");
         argument.debugPrint(depth + 1);
     }
     

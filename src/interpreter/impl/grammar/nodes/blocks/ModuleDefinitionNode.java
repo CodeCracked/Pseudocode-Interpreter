@@ -5,13 +5,11 @@ import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.runtime.SymbolTable;
-import interpreter.core.runtime.VariableSymbol;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.components.ParameterListNode;
 import interpreter.impl.runtime.ModuleSymbol;
 
-import java.util.List;
 import java.util.function.BiConsumer;
 
 public class ModuleDefinitionNode extends AbstractNode
@@ -76,18 +74,18 @@ public class ModuleDefinitionNode extends AbstractNode
     @Override
     public void debugPrint(int depth)
     {
-        Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("MODULE:");
+        IO.Debug.print("  ".repeat(depth));
+        IO.Debug.println("MODULE:");
     
-        Printing.Debug.print("  ".repeat(depth + 1));
-        Printing.Debug.println("Identifier: " + identifier.value());
+        IO.Debug.print("  ".repeat(depth + 1));
+        IO.Debug.println("Identifier: " + identifier.value());
     
-        Printing.Debug.print("  ".repeat(depth + 1));
-        Printing.Debug.println("Parameters:");
+        IO.Debug.print("  ".repeat(depth + 1));
+        IO.Debug.println("Parameters:");
         parameters.debugPrint(depth + 2);
     
-        Printing.Debug.print("  ".repeat(depth + 1));
-        Printing.Debug.println("Body:");
+        IO.Debug.print("  ".repeat(depth + 1));
+        IO.Debug.println("Body:");
         body.debugPrint(depth + 2);
     }
     

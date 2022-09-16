@@ -3,7 +3,7 @@ package interpreter.impl.grammar.nodes.components;
 import interpreter.core.Interpreter;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 
 import java.util.Collections;
@@ -45,8 +45,8 @@ public class ParameterListNode extends AbstractNode
     @Override
     public void debugPrint(int depth)
     {
-        Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("ARGUMENTS:");
+        IO.Debug.print("  ".repeat(depth));
+        IO.Debug.println("ARGUMENTS:");
         for (ParameterNode arg : parameters) arg.debugPrint(depth + 1);
     }
     

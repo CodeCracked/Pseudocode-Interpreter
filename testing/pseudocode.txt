@@ -1,9 +1,18 @@
 Module main()
-	Declare Integer test = 0
-	Call test(test)
-	Display test
+	Declare Integer input = 0
+	Call getInput(input)
+	Call displayValue(input)
 End Module
 
-Module test(Integer Ref value)
-	Set value = 10
+
+
+Module getInput(Integer Ref input)
+	Display "Enter a number: "
+	Input input
+End Module
+
+
+
+Module displayValue(Integer value)
+	Display "You entered ", value
 End Module

@@ -3,7 +3,7 @@ package interpreter.impl.grammar.nodes;
 import interpreter.core.Interpreter;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.runtime.SymbolTable;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.blocks.ModuleDefinitionNode;
 import interpreter.impl.runtime.ModuleSymbol;
@@ -68,8 +68,8 @@ public class ProgramNode extends AbstractNode
     @Override
     public void debugPrint(int depth)
     {
-        Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("PROGRAM");
+        IO.Debug.print("  ".repeat(depth));
+        IO.Debug.println("PROGRAM");
         for (ModuleDefinitionNode module : modules) module.debugPrint(depth + 1);
     }
     @Override

@@ -6,7 +6,7 @@ import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.runtime.RuntimeType;
 import interpreter.core.runtime.VariableSymbol;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.runtime.SymbolType;
 
@@ -56,12 +56,12 @@ public class ParameterNode extends AbstractNode
     @Override
     public void debugPrint(int depth)
     {
-        Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("ARGUMENT:");
-        Printing.Debug.print("  ".repeat(depth + 1));
-        Printing.Debug.println("Type: " + dataType.keyword);
-        Printing.Debug.print("  ".repeat(depth + 1));
-        Printing.Debug.println("Identifier: " + identifier);
+        IO.Debug.print("  ".repeat(depth));
+        IO.Debug.println("ARGUMENT:");
+        IO.Debug.print("  ".repeat(depth + 1));
+        IO.Debug.println("Type: " + dataType.keyword);
+        IO.Debug.print("  ".repeat(depth + 1));
+        IO.Debug.println("Identifier: " + identifier);
     }
     
     @Override

@@ -4,7 +4,7 @@ import interpreter.core.Interpreter;
 import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.components.ArgumentListNode;
 import interpreter.impl.runtime.ModuleSymbol;
@@ -52,14 +52,14 @@ public class CallStatementNode extends AbstractNode
     @Override
     public void debugPrint(int depth)
     {
-        Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("CALL:");
+        IO.Debug.print("  ".repeat(depth));
+        IO.Debug.println("CALL:");
         
-        Printing.Debug.print("  ".repeat(depth + 1));
-        Printing.Debug.println("Identifier: " + identifier.value().toString());
+        IO.Debug.print("  ".repeat(depth + 1));
+        IO.Debug.println("Identifier: " + identifier.value().toString());
         
-        Printing.Debug.print("  ".repeat(depth + 1));
-        Printing.Debug.println("Arguments:");
+        IO.Debug.print("  ".repeat(depth + 1));
+        IO.Debug.println("Arguments:");
         arguments.debugPrint(depth + 2);
     }
     

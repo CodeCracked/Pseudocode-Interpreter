@@ -5,7 +5,7 @@ import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.runtime.VariableSymbol;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.runtime.SymbolType;
 
@@ -14,8 +14,6 @@ import java.util.function.BiConsumer;
 
 public class InputStatementNode extends AbstractNode
 {
-    private static final Scanner inputSource = new Scanner(System.in);
-    
     private final String identifier;
     
     private VariableSymbol symbol;
@@ -44,14 +42,14 @@ public class InputStatementNode extends AbstractNode
     @Override
     public void debugPrint(int depth)
     {
-        Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("INPUT " + identifier + "");
+        IO.Debug.print("  ".repeat(depth));
+        IO.Debug.println("INPUT " + identifier + "");
     }
     
     @Override
     public Result<Void> interpret(Interpreter interpreter)
     {
-        String inputStr = inputSource.nextLine();
+        String inputStr = IO.Input.readLine();
         
         Result<?> parsed = symbol.getRuntimeType().tryParse(inputStr);
         if (parsed.error() != null) return Result.fail(parsed.error());

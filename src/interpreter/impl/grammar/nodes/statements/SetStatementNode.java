@@ -6,7 +6,7 @@ import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.runtime.VariableSymbol;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.runtime.SymbolType;
 
@@ -52,8 +52,8 @@ public class SetStatementNode extends AbstractNode
     @Override
     public void debugPrint(int depth)
     {
-        Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("ASSIGN " + identifier + ":");
+        IO.Debug.print("  ".repeat(depth));
+        IO.Debug.println("ASSIGN " + identifier + ":");
         value.debugPrint(depth + 1);
     }
     

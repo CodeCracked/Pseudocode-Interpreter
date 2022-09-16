@@ -1,6 +1,6 @@
 package interpreter.core.source;
 
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,7 +27,7 @@ public class SourceCollection
         try { lines = Files.readAllLines(path); }
         catch (IOException e)
         {
-            Printing.Errors.printf("Failed to create pseudocode source from file path '%s'! Error: %s", path.toString(), e.getMessage());
+            IO.Errors.printf("Failed to create pseudocode source from file path '%s'! Error: %s", path.toString(), e.getMessage());
             e.printStackTrace();
             return null;
         }

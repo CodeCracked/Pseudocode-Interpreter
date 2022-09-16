@@ -4,7 +4,7 @@ import interpreter.core.Interpreter;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 
 import java.util.Collections;
@@ -46,8 +46,8 @@ public class ArgumentListNode extends AbstractNode
     @Override
     public void debugPrint(int depth)
     {
-        Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("ARGUMENTS:");
+        IO.Debug.print("  ".repeat(depth));
+        IO.Debug.println("ARGUMENTS:");
         for (AbstractValuedNode argument : arguments) argument.debugPrint(depth + 1);
     }
     

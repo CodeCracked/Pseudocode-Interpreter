@@ -7,7 +7,7 @@ import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.runtime.RuntimeType;
 import interpreter.core.runtime.VariableSymbol;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.runtime.SymbolType;
 
@@ -65,20 +65,20 @@ public class DeclareStatementNode extends AbstractNode
     @Override
     public void debugPrint(int depth)
     {
-        Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("DECLARE " + dataType.keyword + ":");
+        IO.Debug.print("  ".repeat(depth));
+        IO.Debug.println("DECLARE " + dataType.keyword + ":");
         
-        Printing.Debug.print("  ".repeat(depth + 1));
-        Printing.Debug.println("Identifier: " + identifier);
+        IO.Debug.print("  ".repeat(depth + 1));
+        IO.Debug.println("Identifier: " + identifier);
         
-        Printing.Debug.print("  ".repeat(depth + 1));
-        Printing.Debug.print("Initial Value: ");
+        IO.Debug.print("  ".repeat(depth + 1));
+        IO.Debug.print("Initial Value: ");
         if (initialValue != null)
         {
-            Printing.Debug.println();
+            IO.Debug.println();
             initialValue.debugPrint(depth + 2);
         }
-        else Printing.Debug.println("None");
+        else IO.Debug.println("None");
     }
     @Override
     public Result<Void> interpret(Interpreter interpreter)

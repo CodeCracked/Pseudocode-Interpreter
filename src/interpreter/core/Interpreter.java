@@ -7,7 +7,7 @@ import interpreter.core.utils.Result;
 import interpreter.core.parser.Parser;
 import interpreter.core.source.SourceCollection;
 import interpreter.core.source.SourcePosition;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -39,7 +39,7 @@ public class Interpreter
         Result<List<Token>> lexerResult = lexer.tokenize(position);
         if (lexerResult.error() != null)
         {
-            Printing.Errors.println(lexerResult.error().getMessage());
+            IO.Errors.println(lexerResult.error().getMessage());
             return;
         }
         onTokenize(lexerResult.get());
@@ -48,7 +48,7 @@ public class Interpreter
         Result<AbstractNode> parseResult = parser.parse(this, lexerResult.get());
         if (parseResult.error() != null)
         {
-            Printing.Errors.println(parseResult.error().getMessage());
+            IO.Errors.println(parseResult.error().getMessage());
             return;
         }
         AbstractNode ast = parseResult.get();
@@ -56,6 +56,6 @@ public class Interpreter
         
         // Interpret AST
         Result<Void> interpretationResult = ast.interpret(this);
-        if (interpretationResult.error() != null) Printing.Errors.println(interpretationResult.error().getMessage());
+        if (interpretationResult.error() != null) IO.Errors.println(interpretationResult.error().getMessage());
     }
 }

@@ -4,7 +4,7 @@ import interpreter.core.Interpreter;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.components.ValueSetNode;
 
@@ -34,8 +34,8 @@ public class DisplayStatementNode extends AbstractNode
     @Override
     public void debugPrint(int depth)
     {
-        Printing.Debug.print("  ".repeat(depth));
-        Printing.Debug.println("DISPLAY:");
+        IO.Debug.print("  ".repeat(depth));
+        IO.Debug.println("DISPLAY:");
         messagePieces.debugPrint(depth + 1);
     }
     @Override
@@ -45,9 +45,9 @@ public class DisplayStatementNode extends AbstractNode
         {
             Result<Object> pieceValue = messagePiece.getValue(interpreter);
             if (pieceValue.error() != null) return Result.fail(pieceValue.error());
-            Printing.Output.print(pieceValue.get());
+            IO.Output.print(pieceValue.get());
         }
-        Printing.Output.println();
+        IO.Output.println();
         
         return Result.of(null);
     }

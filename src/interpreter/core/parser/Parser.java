@@ -4,7 +4,7 @@ import interpreter.core.Interpreter;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.utils.Result;
-import interpreter.core.utils.Printing;
+import interpreter.core.utils.IO;
 
 import java.util.List;
 import java.util.Stack;
@@ -70,7 +70,7 @@ public class Parser
     {
         if (revertStack.size() == 0)
         {
-            Printing.Errors.println("Trying to revert position of Parser when no positions have been marked!");
+            IO.Errors.println("Trying to revert position of Parser when no positions have been marked!");
             throw new IllegalStateException("Trying to revert position of Parser when no positions have been marked!");
         }
         else this.revertStack.pop();
@@ -79,7 +79,7 @@ public class Parser
     {
         if (revertStack.size() == 0)
         {
-            Printing.Errors.println("Trying to revert position of Parser when no positions have been marked!");
+            IO.Errors.println("Trying to revert position of Parser when no positions have been marked!");
             throw new IllegalStateException("Trying to revert position of Parser when no positions have been marked!");
         }
         else
