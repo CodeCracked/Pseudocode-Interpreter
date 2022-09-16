@@ -2,6 +2,8 @@ package swing;
 
 import interpreter.core.utils.IO;
 import interpreter.impl.PseudocodeInterpreter;
+import main.Main;
+import main.Version;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
@@ -11,6 +13,9 @@ import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
@@ -22,13 +27,16 @@ public class InterpreterWindow extends JFrame implements IO.IInput
     private JTextField statusDisplay;
     private JPanel mainPanel;
     
+    private final Version version;
     private final PseudocodeInterpreter interpreter;
     private Consumer<String> inputCallback;
     
     public InterpreterWindow()
     {
+        this.version = Version.getProjectVersion();
+        
         setContentPane(mainPanel);
-        setTitle("Interpreter Window");
+        setTitle("Pseudocode Interpreter v" + this.version);
         setSize(1280, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
