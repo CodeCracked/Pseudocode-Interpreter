@@ -2,8 +2,8 @@ package swing;
 
 import interpreter.core.utils.IO;
 import interpreter.impl.PseudocodeInterpreter;
-import main.Main;
 import main.Version;
+import main.VersionChecker;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
@@ -13,9 +13,7 @@ import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
@@ -33,7 +31,13 @@ public class InterpreterWindow extends JFrame implements IO.IInput
     
     public InterpreterWindow()
     {
-        this.version = Version.getProjectVersion();
+        IO.Output = (format, args) -> append(output, Color.white, format, args);
+        IO.Debug = (format, args) -> append(output, Color.gray, format, args);
+        IO.Errors = (format, args) -> append(output, Color.red, format, args);
+        IO.Input = this;
+        
+        this.version = Version.getCurrentVersion();
+        runVersionChecker();
         
         setContentPane(mainPanel);
         setTitle("Pseudocode Interpreter v" + this.version);
@@ -64,13 +68,33 @@ public class InterpreterWindow extends JFrame implements IO.IInput
         });
     }
     
+    public void runVersionChecker()
+    {
+        VersionChecker.run(result ->
+        {
+            if (result == VersionChecker.Result.BEHIND)
+            {
+                int promptResult = JOptionPane.showOptionDialog(this, "Interpreter is out of date. Would you like to download the latest version?", "Version Checker",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+                
+                if (promptResult == JOptionPane.YES_OPTION)
+                {
+                    try
+                    {
+                        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) Desktop.getDesktop().browse(new URL("https://github.com/CodeCracked/Pseudocode-Interpreter/releases").toURI());
+                        else IO.Errors.println("Failed to open interpreter download site! Here is the link:\nhttps://github.com/CodeCracked/Pseudocode-Interpreter/releases");
+                    }
+                    catch (Exception e)
+                    {
+                        IO.Errors.println("Failed to open interpreter download site! Here is the link:\nhttps://github.com/CodeCracked/Pseudocode-Interpreter/releases");
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
     public void interpretFile(Path filePath)
     {
-        IO.Output = (format, args) -> append(output, Color.white, format, args);
-        IO.Debug = (format, args) -> append(output, Color.gray, format, args);
-        IO.Errors = (format, args) -> append(output, Color.red, format, args);
-        IO.Input = this;
-        
         output.setText("");
         input.setText("");
         
