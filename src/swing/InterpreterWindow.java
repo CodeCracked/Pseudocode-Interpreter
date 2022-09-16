@@ -4,45 +4,74 @@ import interpreter.core.utils.IO;
 import interpreter.impl.PseudocodeInterpreter;
 
 import javax.swing.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.nio.file.Path;
 
-public class InterpreterWindow
+public class InterpreterWindow extends JFrame
 {
-    private final PseudocodeInterpreter interpreter;
-    private final JFrame frame;
-    private final ColoredTextPane output;
+    private JTextPane output;
+    private JTextField input;
+    private JButton openFileButton;
+    private JTextField statusDisplay;
+    private JPanel mainPanel;
+    
+    private PseudocodeInterpreter interpreter;
     
     public InterpreterWindow()
     {
-        interpreter = new PseudocodeInterpreter();
+        setContentPane(mainPanel);
+        setTitle("Interpreter Window");
+        setSize(1280, 720);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setStatus(InterpreterStatus.IDLE);
         
-        frame = new JFrame("Pseudocode Interpreter");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1280, 720);
-        frame.setLocationRelativeTo(null);
-        
-        output = new ColoredTextPane();
-        output.setBackground(Color.black);
-        output.setEditable(false);
-        
-        frame.add(new JScrollPane(output));
+        this.interpreter = new PseudocodeInterpreter();
     }
     
-    public void show()
-    {
-        try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
-        catch (Exception e) { e.printStackTrace(); }
-        
-        frame.setVisible(true);
-    }
     public void interpretFile(Path filePath)
     {
+        IO.Output = (format, args) -> append(output, Color.white, format, args);
+        IO.Debug = (format, args) -> append(output, Color.gray, format, args);
+        IO.Errors = (format, args) -> append(output, Color.red, format, args);
+        
         output.setText("");
+        input.setText("");
+        
+        setStatus(InterpreterStatus.PROCESSING);
+        this.interpreter.runFile(filePath);
+        append(output, Color.green, "Program Finished!");
+        setStatus(InterpreterStatus.IDLE);
+    }
     
-        IO.Output = (format, args) -> output.append(Color.white, format, args);
-        IO.Debug = (format, args) -> output.append(Color.gray, format, args);
-        IO.Errors = (format, args) -> output.append(Color.red, format, args);;
-        interpreter.runFile(filePath);
+    private void append(JTextPane pane, Color color, String format, Object... args)
+    {
+        boolean editable = pane.isEditable();
+        pane.setEditable(true);
+        
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, color);
+        
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Courier New");
+        aset = sc.addAttribute(aset, StyleConstants.Size, 16);
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
+        
+        int len = pane.getDocument().getLength();
+        pane.setCaretPosition(len);
+        pane.setCharacterAttributes(aset, false);
+        pane.replaceSelection(String.format(format, args));
+        pane.setCaretPosition(0);
+    
+        pane.setEditable(editable);
+    }
+    
+    private void setStatus(InterpreterStatus status)
+    {
+        statusDisplay.setText(status.status);
+        statusDisplay.setBackground(status.background);
+        statusDisplay.setForeground(status.foreground);
     }
 }
