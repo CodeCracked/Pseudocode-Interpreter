@@ -25,6 +25,8 @@ public class VariableAccessNode extends AbstractValuedNode
         this.identifier = (String)identifier.value();
     }
     
+    public VariableSymbol getVariableSymbol() { return symbol; }
+    
     @Override
     public void walk(BiConsumer<AbstractNode, AbstractNode> parentChildConsumer) { }
     

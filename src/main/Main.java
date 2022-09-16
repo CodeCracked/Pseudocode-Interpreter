@@ -43,6 +43,7 @@ public class Main
             
             new MatcherTokenBuilder(TokenType.MODULE, 0, "Module", false),
             new MatcherTokenBuilder(TokenType.END, 0, "End", false),
+            new MatcherTokenBuilder(TokenType.REF, 0, "Ref", false),
             
             new IndentTokenBuilder(TokenType.INDENT, 4),
             new MatcherTokenBuilder(TokenType.NEWLINE, -1000, "\n", false)

@@ -24,6 +24,7 @@ public enum TokenType
     
     MODULE,
     END,
+    REF,
     
     INDENT,
     NEWLINE,

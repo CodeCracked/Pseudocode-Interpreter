@@ -72,12 +72,20 @@ public class ParameterListRule implements IGrammarRule
         result.registerAdvancement();
         parser.advance();
         
+        // Check for Ref Keyword
+        boolean passByReference = parser.getCurrentToken().type() == TokenType.REF;
+        if (passByReference)
+        {
+            result.registerAdvancement();
+            parser.advance();
+        }
+        
         // Identifier
         Token identifier = parser.getCurrentToken();
         if (identifier.type() != TokenType.IDENTIFIER) return result.failure(new SyntaxException(parser, "Expected identifier!"));
         result.registerAdvancement();
         parser.advance();
         
-        return result.success(new ParameterNode(dataType, identifier));
+        return result.success(new ParameterNode(dataType, identifier, passByReference));
     }
 }

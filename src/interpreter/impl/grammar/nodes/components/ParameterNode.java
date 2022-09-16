@@ -17,16 +17,18 @@ public class ParameterNode extends AbstractNode
     private final Token dataTypeToken;
     private final Token identifierToken;
     private final String identifier;
+    public final boolean passByReference;
     
     private RuntimeType<?> dataType;
     private VariableSymbol symbol;
     
-    public ParameterNode(Token dataType, Token identifier)
+    public ParameterNode(Token dataType, Token identifier, boolean passByReference)
     {
         super(dataType.start(), identifier.end());
         this.dataTypeToken = dataType;
         this.identifierToken = identifier;
         this.identifier = identifier.value().toString();
+        this.passByReference = passByReference;
     }
     
     public VariableSymbol getVariableSymbol() { return symbol; }

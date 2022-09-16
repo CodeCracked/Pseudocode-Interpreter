@@ -5,11 +5,13 @@ import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.runtime.SymbolTable;
+import interpreter.core.runtime.VariableSymbol;
 import interpreter.core.utils.Printing;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.components.ParameterListNode;
 import interpreter.impl.runtime.ModuleSymbol;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class ModuleDefinitionNode extends AbstractNode

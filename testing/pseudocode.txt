@@ -4,6 +4,6 @@ Module main()
 	Display test
 End Module
 
-Module test(Integer value)
+Module test(Integer Ref value)
 	Set value = 10
 End Module

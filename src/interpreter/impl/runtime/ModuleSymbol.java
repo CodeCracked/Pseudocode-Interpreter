@@ -9,6 +9,8 @@ import interpreter.core.runtime.VariableSymbol;
 import interpreter.core.source.SourcePosition;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.blocks.ModuleDefinitionNode;
+import interpreter.impl.grammar.nodes.components.ParameterNode;
+import interpreter.impl.grammar.nodes.expressions.VariableAccessNode;
 
 import java.util.List;
 
@@ -34,8 +36,12 @@ public class ModuleSymbol extends Symbol
         // Pass Arguments
         for (int i = 0; i < argumentCount; i++)
         {
-            VariableSymbol parameter = moduleDefinition.parameters.parameters.get(i).getVariableSymbol();
+            ParameterNode parameterDefinition = moduleDefinition.parameters.parameters.get(i);
+            VariableSymbol parameter = parameterDefinition.getVariableSymbol();
             AbstractValuedNode argument = arguments.get(i);
+            
+            // Check For Reference Compliance
+            if (parameterDefinition.passByReference && !(argument instanceof VariableAccessNode)) return result.failure(new SyntaxException(argument, "Only variable identifiers can be passed to Ref parameters!"));
             
             // Get Argument Value
             Result<Object> argumentValue = argument.getValue(interpreter);
@@ -53,7 +59,31 @@ public class ModuleSymbol extends Symbol
             }
         }
         
-        return moduleDefinition.body.interpret(interpreter);
+        // Run Module
+        result.register(moduleDefinition.body.interpret(interpreter));
+        if (result.error() != null) return result;
+        
+        // Pass Back Reference Parameters
+        for (int i = 0; i < argumentCount; i++)
+        {
+            // Check if parameter is a reference
+            ParameterNode parameter = moduleDefinition.parameters.parameters.get(i);
+            if (!parameter.passByReference) continue;
+            
+            // Pass Back New Value
+            AbstractValuedNode argument = arguments.get(i);
+            if (argument instanceof VariableAccessNode targetVariable)
+            {
+                Result<Object> parameterValue = parameter.getVariableSymbol().getValue(argument);
+                if (parameterValue.error() != null) return result.failure(parameterValue.error());
+                
+                Result<?> assignResult = targetVariable.getVariableSymbol().setValue(parameterValue.get());
+                if (assignResult.error() != null) return result.failure(assignResult.error());
+            }
+            else return result.failure(new SyntaxException(argument, "Only variable identifiers can be passed to Ref parameters!"));
+        }
+        
+        return result.success(null);
     }
     
     @Override
