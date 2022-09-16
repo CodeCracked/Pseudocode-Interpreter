@@ -48,11 +48,21 @@ public class ProgramNode extends AbstractNode
     public Result<Void> populate(Interpreter interpreter)
     {
         Result<Void> result = new Result<>();
+        
+        // Register Module Symbol
+        for (ModuleDefinitionNode module : modules)
+        {
+            result.register(module.registerSymbol());
+            if (result.error() != null) return result;
+        }
+        
+        // Populate Modules
         for (ModuleDefinitionNode module : modules)
         {
             result.register(module.populate(interpreter));
             if (result.error() != null) return result;
         }
+        
         return result.success(null);
     }
     @Override
@@ -69,6 +79,6 @@ public class ProgramNode extends AbstractNode
         if (mainModule == null) mainModule = this.rootSymbolTable.getSymbol(SymbolType.MODULE, "Main");
         
         if (mainModule == null) return Result.fail(new IllegalStateException("Program does not have a main module! Was it spelled and capitalized correctly?"));
-        else return mainModule.call(interpreter, null);
+        else return mainModule.call(interpreter, Collections.emptyList(), null, null);
     }
 }

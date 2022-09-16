@@ -29,6 +29,8 @@ public class ParameterNode extends AbstractNode
         this.identifier = identifier.value().toString();
     }
     
+    public VariableSymbol getVariableSymbol() { return symbol; }
+    
     @Override
     public Result<Void> populate(Interpreter interpreter)
     {

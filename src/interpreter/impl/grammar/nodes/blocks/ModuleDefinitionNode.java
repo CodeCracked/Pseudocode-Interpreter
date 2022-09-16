@@ -35,14 +35,19 @@ public class ModuleDefinitionNode extends AbstractNode
         return this.bodySymbolTable;
     }
     
+    public Result<Void> registerSymbol()
+    {
+        this.symbol = new ModuleSymbol(identifier.value().toString(), this);
+        if (!parent.getSymbolTable().tryAddSymbol(this.symbol)) return Result.fail(new SyntaxException(identifier, "Module '" + identifier.value().toString() + "' already exists!"));
+        else return Result.of(null);
+    }
+    
     @Override
     public Result<Void> populate(Interpreter interpreter)
     {
         Result<Void> result = new Result<>();
         
         // Create Child Symbol Table
-        this.symbol = new ModuleSymbol(identifier.value().toString(), this);
-        if (!parent.getSymbolTable().tryAddSymbol(this.symbol)) return result.failure(new SyntaxException(identifier, "Module '" + identifier.value().toString() + "' already exists!"));
         this.bodySymbolTable = parent.getSymbolTable().createChild();
     
         // Parameters

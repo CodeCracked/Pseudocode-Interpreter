@@ -14,6 +14,7 @@ public class KeywordLists
             "Declare",
             "Display",
             "Set",
-            "Input"
+            "Input",
+            "Call"
     );
 }

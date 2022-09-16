@@ -1,7 +1,9 @@
 Module main()
-	Display "Hello, World!"
+	Declare Integer test = 0
+	Call test(test)
+	Display test
 End Module
 
 Module test(Integer value)
-	Display value
+	Set value = 10
 End Module

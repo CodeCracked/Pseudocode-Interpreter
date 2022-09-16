@@ -9,6 +9,7 @@ import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.blocks.BlockNode;
 import interpreter.impl.grammar.nodes.expressions.BinaryOpNode;
 import interpreter.impl.grammar.rules.blocks.ModuleDefinitionRule;
+import interpreter.impl.grammar.rules.components.ArgumentListRule;
 import interpreter.impl.grammar.rules.components.ParameterListRule;
 import interpreter.impl.grammar.rules.components.ValueSetRule;
 import interpreter.impl.grammar.rules.expressions.AtomRule;
@@ -31,8 +32,10 @@ public class GrammarRules
     public static IGrammarRule DISPLAY_STATEMENT = new DisplayStatementRule();
     public static IGrammarRule SET_STATEMENT = new SetStatementRule();
     public static IGrammarRule INPUT_STATEMENT = new InputStatementRule();
+    public static IGrammarRule CALL_STATEMENT = new CallStatementRule();
     
     public static IGrammarRule VALUE_SET = new ValueSetRule();
+    public static IGrammarRule ARGUMENT_LIST = new ArgumentListRule();
     public static IGrammarRule PARAMETER_LIST = new ParameterListRule();
     
     public static IGrammarRule EXPRESSION = new ExpressionRule();
