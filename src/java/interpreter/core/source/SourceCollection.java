@@ -12,13 +12,15 @@ import java.util.List;
 public class SourceCollection
 {
     public final List<CodeLine> lines;
+    public final String commentStartRegex;
     
-    private SourceCollection(List<CodeLine> lines)
+    private SourceCollection(List<CodeLine> lines, String commentStartRegex)
     {
         this.lines = Collections.unmodifiableList(lines);
+        this.commentStartRegex = commentStartRegex;
     }
     
-    public static SourceCollection createFromFile(Path path)
+    public static SourceCollection createFromFile(Path path, String commentStartRegex)
     {
         List<String> lines;
         List<CodeLine> codeLines = new ArrayList<>();
@@ -35,8 +37,8 @@ public class SourceCollection
         // Create source lines from file contents
         for (int lineNumber = 0; lineNumber < lines.size(); lineNumber++)
         {
-            // Get next line, and ignore if it is only whitespace
-            String line = lines.get(lineNumber);
+            // Get next line and strip comments
+            String line = lines.get(lineNumber).split(commentStartRegex, 2)[0];
             if (line.trim().length() == 0) continue;
         
             // Trim off any whitespace at the end of the line, and append a newline character
@@ -48,6 +50,6 @@ public class SourceCollection
         }
         
         // Create and return PseudocodeSource
-        return new SourceCollection(codeLines);
+        return new SourceCollection(codeLines, commentStartRegex);
     }
 }

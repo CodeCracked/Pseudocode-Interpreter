@@ -17,11 +17,13 @@ public class Interpreter
 {
     private final Lexer lexer;
     private final Parser parser;
+    private final String commentStartRegex;
     
-    public Interpreter(Lexer lexer, Parser parser)
+    public Interpreter(Lexer lexer, Parser parser, String commentStartRegex)
     {
         this.lexer = lexer;
         this.parser = parser;
+        this.commentStartRegex = commentStartRegex;
         registerTypes();
     }
     
@@ -34,7 +36,7 @@ public class Interpreter
         Thread thread = new Thread(() ->
         {
             // Load Source Collection
-            SourceCollection source = SourceCollection.createFromFile(file);
+            SourceCollection source = SourceCollection.createFromFile(file, commentStartRegex);
             if (source == null)
             {
                 finishedCallback.accept(false);

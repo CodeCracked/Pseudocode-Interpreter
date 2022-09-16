@@ -50,7 +50,7 @@ public class PseudocodeInterpreter extends Interpreter
     
     public PseudocodeInterpreter()
     {
-        super(lexer, parser);
+        super(lexer, parser, "//");
     }
     
     public boolean isDebugMode() { return this.isDebugMode(); }
