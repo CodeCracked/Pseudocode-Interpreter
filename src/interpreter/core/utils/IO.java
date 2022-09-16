@@ -1,6 +1,7 @@
 package interpreter.core.utils;
 
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 /**
  * Contains wrapper methods for printing. Currently, these only redirect to System.out, but
@@ -13,7 +14,7 @@ public class IO
     public static IPrinter Errors = System.err::printf;
     public static IPrinter Output = System.out::printf;
     public static IPrinter Debug = (format, args) -> System.out.printf("\033[37;0m" + format + "\033[0m", args);
-    public static IInput Input = defaultInput::nextLine;
+    public static IInput Input = callback -> callback.accept(defaultInput.nextLine());
     
     public interface IPrinter
     {
@@ -25,6 +26,6 @@ public class IO
     }
     public interface IInput
     {
-        String readLine();
+        void readLine(Consumer<String> callback);
     }
 }

@@ -40,6 +40,9 @@ public class BinaryOpNode extends AbstractValuedNode
     {
         parentChildConsumer.accept(this, left);
         left.walk(parentChildConsumer);
+        
+        parentChildConsumer.accept(this, right);
+        right.walk(parentChildConsumer);
     }
     
     @Override

@@ -10,6 +10,8 @@ import interpreter.core.utils.Result;
 import interpreter.impl.runtime.SymbolType;
 
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 
 public class InputStatementNode extends AbstractNode
@@ -49,9 +51,17 @@ public class InputStatementNode extends AbstractNode
     @Override
     public Result<Void> interpret(Interpreter interpreter)
     {
-        String inputStr = IO.Input.readLine();
+        // Get Input Line
+        AtomicBoolean finishedFlag = new AtomicBoolean(false);
+        AtomicReference<String> line = new AtomicReference<>();
+        IO.Input.readLine(input ->
+        {
+            line.set(input);
+            finishedFlag.set(true);
+        });
+        while (!finishedFlag.get()) Thread.onSpinWait();
         
-        Result<?> parsed = symbol.getRuntimeType().tryParse(inputStr);
+        Result<?> parsed = symbol.getRuntimeType().tryParse(line.get());
         if (parsed.error() != null) return Result.fail(parsed.error());
         
         Result<?> setResult = symbol.setValue(parsed.get());

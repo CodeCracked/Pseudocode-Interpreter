@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Pseudocode Interpreter:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Pseudocode_Interpreter_jar</output-path>
+    <root id="archive" name="Pseudocode Interpreter.jar">
+      <element id="module-output" name="Pseudocode Interpreter" />
+    </root>
+  </artifact>
+</component>
