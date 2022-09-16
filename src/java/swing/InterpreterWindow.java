@@ -32,7 +32,6 @@ public class InterpreterWindow extends JFrame implements IO.IInput
     public InterpreterWindow()
     {
         IO.Output = (format, args) -> append(output, Color.white, format, args);
-        IO.Debug = (format, args) -> append(output, Color.gray, format, args);
         IO.Errors = (format, args) -> append(output, Color.red, format, args);
         IO.Input = this;
         
@@ -47,6 +46,8 @@ public class InterpreterWindow extends JFrame implements IO.IInput
         setStatus(InterpreterStatus.IDLE);
         
         this.interpreter = new PseudocodeInterpreter();
+        interpreter.setDebugMode(true);
+        
         openFileButton.addActionListener(e -> promptOpenFile());
         input.setCaretColor(new Color(0, 187, 0));
         input.addActionListener(e ->

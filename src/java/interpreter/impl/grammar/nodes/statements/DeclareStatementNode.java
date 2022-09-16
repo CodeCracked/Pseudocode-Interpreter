@@ -16,6 +16,7 @@ import java.util.function.BiConsumer;
 public class DeclareStatementNode extends AbstractNode
 {
     private final Token dataTypeToken;
+    private final Token identifierToken;
     private final String identifier;
     private final AbstractValuedNode initialValue;
     
@@ -27,7 +28,8 @@ public class DeclareStatementNode extends AbstractNode
         super(keyword.start(), initialValue != null ? initialValue.end() : identifier.end());
     
         this.dataTypeToken = dataType;
-        this.identifier = (String)identifier.value();
+        this.identifierToken = identifier;
+        this.identifier = identifier.value().toString();
         this.initialValue = initialValue;
     }
     
@@ -58,9 +60,10 @@ public class DeclareStatementNode extends AbstractNode
         }
         
         // Symbol
+        if (identifier.charAt(0) != identifier.toLowerCase().charAt(0)) return result.failure(new SyntaxException(identifierToken, "Variable identifiers must be camelCase!"));
         symbol = new VariableSymbol(SymbolType.VARIABLE, identifier, this.dataType);
         if (getSymbolTable().tryAddSymbol(symbol)) return result.success(null);
-        else return result.failure(new SyntaxException(this, "Variable '" + identifier + "' already exists! Did you mean to Set it instead of Declare it?"));
+        else return result.failure(new SyntaxException(identifierToken, "Variable '" + identifier + "' already exists! Did you mean to Set it instead of Declare it?"));
     }
     @Override
     public void debugPrint(int depth)

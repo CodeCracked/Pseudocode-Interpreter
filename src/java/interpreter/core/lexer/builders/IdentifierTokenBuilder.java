@@ -5,7 +5,7 @@ import interpreter.core.source.SourcePosition;
 
 public class IdentifierTokenBuilder implements ITokenBuilder
 {
-    private static final String startingCharacters = "abcdefghijklmnopqrstuvwxyz";
+    private static final String startingCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String bodyCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     
     private final Enum<?> type;
@@ -18,7 +18,7 @@ public class IdentifierTokenBuilder implements ITokenBuilder
     @Override
     public int priority()
     {
-        return 0;
+        return 500;
     }
     
     @Override

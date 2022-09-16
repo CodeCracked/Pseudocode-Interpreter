@@ -26,23 +26,23 @@ public class PseudocodeInterpreter extends Interpreter
             new StringLiteralTokenBuilder(TokenType.STRING_LITERAL),
             new NumberLiteralTokenBuilder(TokenType.INTEGER_LITERAL, TokenType.REAL_LITERAL),
             
-            new MatcherTokenBuilder(TokenType.ASSIGN, -1, "=", false),
-            new MatcherTokenBuilder(TokenType.PLUS, -1, "+", false),
-            new MatcherTokenBuilder(TokenType.MINUS, -1, "-", false),
-            new MatcherTokenBuilder(TokenType.MUL, -1, "*", false),
-            new MatcherTokenBuilder(TokenType.DIV, -1, "/", false),
-            new MatcherTokenBuilder(TokenType.MOD, -1, "MOD", false),
+            new MatcherTokenBuilder(TokenType.ASSIGN, -1, "="),
+            new MatcherTokenBuilder(TokenType.PLUS, -1, "+"),
+            new MatcherTokenBuilder(TokenType.MINUS, -1, "-"),
+            new MatcherTokenBuilder(TokenType.MUL, -1, "*"),
+            new MatcherTokenBuilder(TokenType.DIV, -1, "/"),
+            new MatcherTokenBuilder(TokenType.MOD, -1, "MOD"),
             
-            new MatcherTokenBuilder(TokenType.LPAREN, -1, "(", false),
-            new MatcherTokenBuilder(TokenType.RPAREN, -1, ")", false),
-            new MatcherTokenBuilder(TokenType.COMMA, -1, ",", false),
+            new MatcherTokenBuilder(TokenType.LPAREN, -1, "("),
+            new MatcherTokenBuilder(TokenType.RPAREN, -1, ")"),
+            new MatcherTokenBuilder(TokenType.COMMA, -1, ","),
             
-            new MatcherTokenBuilder(TokenType.MODULE, 0, "Module", false),
-            new MatcherTokenBuilder(TokenType.END, 0, "End", false),
-            new MatcherTokenBuilder(TokenType.REF, 0, "Ref", false),
+            new MatcherTokenBuilder(TokenType.MODULE, 0, "Module"),
+            new MatcherTokenBuilder(TokenType.END, 0, "End"),
+            new MatcherTokenBuilder(TokenType.REF, 0, "Ref"),
             
             new IndentTokenBuilder(TokenType.INDENT, 4),
-            new MatcherTokenBuilder(TokenType.NEWLINE, -1000, "\n", false)
+            new MatcherTokenBuilder(TokenType.NEWLINE, -1000, "\n")
     );
     private final static Parser parser = new Parser(GrammarRules.PROGRAM, null);
     

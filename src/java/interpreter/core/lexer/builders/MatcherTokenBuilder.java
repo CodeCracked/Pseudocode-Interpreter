@@ -9,13 +9,19 @@ public class MatcherTokenBuilder implements ITokenBuilder
     private final int priority;
     private final String token;
     private final boolean storeContents;
+    private final boolean trailingSpace;
     
-    public MatcherTokenBuilder(Enum<?> type, int priority, String token, boolean storeContents)
+    public MatcherTokenBuilder(Enum<?> type, int priority, String token)
+    {
+        this(type, priority, token, false, false);
+    }
+    public MatcherTokenBuilder(Enum<?> type, int priority, String token, boolean storeContents, boolean trailingSpace)
     {
         this.type = type;
         this.priority = priority;
         this.token = token;
         this.storeContents = storeContents;
+        this.trailingSpace = trailingSpace;
     }
     
     @Override
@@ -33,6 +39,8 @@ public class MatcherTokenBuilder implements ITokenBuilder
             if (!position.hasNext() || position.getCharacter() != test) return null;
             else position.advance();
         }
-        return new Token(type, storeContents ? token : null, start, position);
+        
+        if (!trailingSpace || position.getCharacter() == ' ') return new Token(type, storeContents ? token : null, start, position);
+        else return null;
     }
 }

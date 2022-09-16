@@ -14,7 +14,7 @@ public class KeywordTokenBuilder implements ITokenBuilder
     {
         this.priority = priority;
         this.matchers = new MatcherTokenBuilder[keywords.size()];
-        for (int i = 0; i < matchers.length; i++) matchers[i] = new MatcherTokenBuilder(type, priority, keywords.get(i), true);
+        for (int i = 0; i < matchers.length; i++) matchers[i] = new MatcherTokenBuilder(type, priority, keywords.get(i), true, true);
     }
     
     @Override
