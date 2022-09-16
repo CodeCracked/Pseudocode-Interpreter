@@ -13,7 +13,7 @@ public class IO
     
     public static IPrinter Errors = System.err::printf;
     public static IPrinter Output = System.out::printf;
-    public static IPrinter Debug = (format, args) -> System.out.printf("\033[37;0m" + format + "\033[0m", args);
+    public static IPrinter Debug = System.out::printf;
     public static IInput Input = callback -> callback.accept(defaultInput.nextLine());
     
     public interface IPrinter
