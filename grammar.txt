@@ -33,7 +33,9 @@ params      : LPAREN (TYPE_KEYWORD(trailingSpaces: 1) REF? IDENTIFIER (COMMA TYP
 
 expression  : factor ((PLUS|MINUS) factor)*
 
-factor      : atom ((MUL|DIV|MOD) atom)*
+factor      : exponent ((MUL|DIV|MOD) exponent)*
+
+exponent	: atom (POW atom)*
 
 atom        : INTEGER_LITERAL|REAL_LITERAL|STRING_LITERAL
             : IDENTIFIER

@@ -16,7 +16,7 @@ import java.util.function.BiConsumer;
 
 public class BinaryOpNode extends AbstractValuedNode
 {
-    private static final Set<Enum<?>> mathOperators = Set.of(TokenType.PLUS, TokenType.MINUS, TokenType.MUL, TokenType.DIV, TokenType.MOD);
+    private static final Set<Enum<?>> mathOperators = Set.of(TokenType.PLUS, TokenType.MINUS, TokenType.MUL, TokenType.DIV, TokenType.POW, TokenType.MOD);
     private static final Set<RuntimeType<?>> mathTypes = Set.of(RuntimeTypes.INTEGER, RuntimeTypes.REAL);
     
     private final AbstractValuedNode left;
@@ -75,7 +75,7 @@ public class BinaryOpNode extends AbstractValuedNode
             runtimeType = leftType.get();
             if (runtimeType.equals(RuntimeTypes.INTEGER) && rightType.get().equals(RuntimeTypes.REAL)) runtimeType = RuntimeTypes.REAL;
         }
-        else return Result.fail(new SyntaxException(operation, "Expected '+', '-', '*', '/', or 'MOD'!"));
+        else return Result.fail(new SyntaxException(operation, "Expected '+', '-', '*', '/', '^', or 'MOD'!"));
         
         return result.success(null);
     }
@@ -129,6 +129,12 @@ public class BinaryOpNode extends AbstractValuedNode
         {
             if (runtimeType.equals(RuntimeTypes.INTEGER)) return Result.of(((Long)leftCasted.get()) / ((Long)rightCasted.get()));
             else if (runtimeType.equals(RuntimeTypes.REAL)) return Result.of(((Double)leftCasted.get()) / ((Double)rightCasted.get()));
+            else return Result.fail(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
+        }
+        else if (operation.type() == TokenType.POW)
+        {
+            if (runtimeType.equals(RuntimeTypes.INTEGER)) return Result.of((long)Math.pow((Long)leftCasted.get(), (Long)rightCasted.get()));
+            else if (runtimeType.equals(RuntimeTypes.REAL)) return Result.of(Math.pow((Double)leftCasted.get(), (Double)rightCasted.get()));
             else return Result.fail(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
         }
         else if (operation.type() == TokenType.MOD)

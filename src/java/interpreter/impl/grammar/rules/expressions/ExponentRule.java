@@ -9,13 +9,13 @@ import interpreter.impl.tokens.TokenType;
 
 import java.util.Set;
 
-public class FactorRule implements IGrammarRule
+public class ExponentRule implements IGrammarRule
 {
-    private final Set<Enum<?>> arithmeticOperators = Set.of(TokenType.MUL, TokenType.DIV, TokenType.MOD);
+    private final Set<Enum<?>> arithmeticOperators = Set.of(TokenType.POW);
     
     @Override
     public Result<AbstractNode> build(Parser parser)
     {
-        return GrammarRules.binaryOperationRule(parser, GrammarRules.EXPONENT, arithmeticOperators);
+        return GrammarRules.binaryOperationRule(parser, GrammarRules.ATOM, arithmeticOperators);
     }
 }

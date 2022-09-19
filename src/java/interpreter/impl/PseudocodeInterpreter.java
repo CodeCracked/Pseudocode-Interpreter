@@ -32,6 +32,7 @@ public class PseudocodeInterpreter extends Interpreter
             new MatcherTokenBuilder(TokenType.MUL, -1, "*"),
             new MatcherTokenBuilder(TokenType.DIV, -1, "/"),
             new MatcherTokenBuilder(TokenType.MOD, -1, "MOD"),
+            new MatcherTokenBuilder(TokenType.POW, -1, "^"),
             
             new MatcherTokenBuilder(TokenType.LPAREN, -1, "("),
             new MatcherTokenBuilder(TokenType.RPAREN, -1, ")"),

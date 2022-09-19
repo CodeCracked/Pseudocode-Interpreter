@@ -13,6 +13,7 @@ import interpreter.impl.grammar.rules.components.ArgumentListRule;
 import interpreter.impl.grammar.rules.components.ParameterListRule;
 import interpreter.impl.grammar.rules.components.ValueSetRule;
 import interpreter.impl.grammar.rules.expressions.AtomRule;
+import interpreter.impl.grammar.rules.expressions.ExponentRule;
 import interpreter.impl.grammar.rules.expressions.ExpressionRule;
 import interpreter.impl.grammar.rules.expressions.FactorRule;
 import interpreter.impl.grammar.rules.statements.*;
@@ -40,6 +41,7 @@ public class GrammarRules
     
     public static IGrammarRule EXPRESSION = new ExpressionRule();
     public static IGrammarRule FACTOR = new FactorRule();
+    public static IGrammarRule EXPONENT = new ExponentRule();
     public static IGrammarRule ATOM = new AtomRule();
     
     public static Result<AbstractNode> binaryOperationRule(Parser parser, IGrammarRule argumentRule, Set<Enum<?>> operations)

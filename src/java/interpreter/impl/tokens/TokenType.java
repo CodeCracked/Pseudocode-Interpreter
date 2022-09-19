@@ -16,6 +16,7 @@ public enum TokenType
     MINUS,
     MUL,
     DIV,
+    POW,
     MOD,
     
     LPAREN,
