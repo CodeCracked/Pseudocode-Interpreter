@@ -7,16 +7,24 @@ import interpreter.core.utils.Result;
 public class VariableSymbol extends Symbol
 {
     private final RuntimeType<?> runtimeType;
+    private final boolean constant;
     private Object value;
     private boolean initialized;
-    private boolean constant;
     
     public VariableSymbol(Enum<?> type, String name, RuntimeType<?> runtimeType, boolean constant)
     {
+        this(type, name, runtimeType, null, constant);
+    }
+    public VariableSymbol(Enum<?> type, String name, RuntimeType<?> runtimeType, Object value, boolean constant)
+    {
         super(type, name);
         this.runtimeType = runtimeType;
-        this.initialized = false;
         this.constant = constant;
+        if (value != null)
+        {
+            this.value = value;
+            this.initialized = true;
+        }
     }
     
     @Override

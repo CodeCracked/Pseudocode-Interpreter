@@ -7,7 +7,8 @@ public class KeywordLists
     public static List<String> typeKeywords = List.of(
             "String",
             "Integer",
-            "Real"
+            "Real",
+            "Boolean"
     );
     
     public static List<String> statementKeywords = List.of(

@@ -3,10 +3,12 @@ package interpreter.impl.grammar.nodes;
 import interpreter.core.Interpreter;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.runtime.SymbolTable;
+import interpreter.core.runtime.VariableSymbol;
 import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.blocks.ModuleDefinitionNode;
 import interpreter.impl.runtime.ModuleSymbol;
+import interpreter.impl.runtime.RuntimeTypes;
 import interpreter.impl.runtime.SymbolType;
 
 import java.util.Collections;
@@ -28,6 +30,8 @@ public class ProgramNode extends AbstractNode
     public void createSymbolTable()
     {
         this.rootSymbolTable = new SymbolTable();
+        this.rootSymbolTable.tryAddSymbol(new VariableSymbol(SymbolType.VARIABLE, "True", RuntimeTypes.BOOLEAN, true, true));
+        this.rootSymbolTable.tryAddSymbol(new VariableSymbol(SymbolType.VARIABLE, "False", RuntimeTypes.BOOLEAN, false, true));
     }
     @Override
     public SymbolTable getSymbolTable()

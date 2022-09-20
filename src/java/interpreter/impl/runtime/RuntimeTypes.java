@@ -54,10 +54,28 @@ public class RuntimeTypes
             else return Result.fail(new IllegalArgumentException("Cannot cast " + value.getClass().getSimpleName() + " to RuntimeType " + keyword));
         }
     };
+    public static final RuntimeType<Boolean> BOOLEAN = new RuntimeType<Boolean>("Boolean", Boolean.class)
+    {
+        @Override
+        public Result<Boolean> tryParse(String str)
+        {
+            if (str.equalsIgnoreCase("true")) return Result.of(true);
+            else if (str.equalsIgnoreCase("false")) return Result.of(false);
+            else return Result.fail(new IllegalArgumentException("Cannot parse boolean from '" + str + "'!"));
+        }
+
+        @Override
+        public Result<Boolean> tryCast(Object value)
+        {
+            if (value instanceof Boolean bool) return Result.of(bool);
+            else return Result.fail(new IllegalArgumentException("Cannot cast " + value.getClass().getSimpleName() + " to RuntimeType " + keyword));
+        }
+    };
     
     public static final Set<RuntimeType<?>> ALL_TYPES = Set.of(
             STRING,
             INTEGER,
-            REAL
+            REAL,
+            BOOLEAN
     );
 }

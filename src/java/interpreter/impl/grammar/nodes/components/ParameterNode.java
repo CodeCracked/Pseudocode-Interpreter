@@ -44,7 +44,7 @@ public class ParameterNode extends AbstractNode
         else this.dataType = dataType.get();
         
         // Symbol
-        symbol = new VariableSymbol(SymbolType.VARIABLE, identifier, this.dataType);
+        symbol = new VariableSymbol(SymbolType.VARIABLE, identifier, this.dataType, false);
         if (!getSymbolTable().tryAddSymbol(symbol)) return result.failure(new SyntaxException(identifierToken, "Variable '" + identifier + "' already exists!"));
         
         return result.success(null);
