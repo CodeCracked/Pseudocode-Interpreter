@@ -63,7 +63,7 @@ public class SetStatementNode extends AbstractNode
         Result<Object> argumentValue = value.getValue(interpreter);
         if (argumentValue.error() != null) return Result.fail(argumentValue.error());
         
-        Result<?> setResult = symbol.setValue(argumentValue.get());
+        Result<?> setResult = symbol.setValue(argumentValue.get(), this);
         if (setResult.error() != null) return Result.fail(setResult.error());
         
         return Result.of(null);

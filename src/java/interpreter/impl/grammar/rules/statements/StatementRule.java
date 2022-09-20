@@ -31,6 +31,9 @@ public class StatementRule implements IGrammarRule
             case "Declare":
                 statementNode = result.register(GrammarRules.DECLARE_STATEMENT.build(parser));
                 break;
+            case "Constant":
+                statementNode = result.register(GrammarRules.CONSTANT_STATEMENT.build(parser));
+                break;
             case "Set":
                 statementNode = result.register(GrammarRules.SET_STATEMENT.build(parser));
                 break;

@@ -64,7 +64,7 @@ public class InputStatementNode extends AbstractNode
         Result<?> parsed = symbol.getRuntimeType().tryParse(line.get());
         if (parsed.error() != null) return Result.fail(parsed.error());
         
-        Result<?> setResult = symbol.setValue(parsed.get());
+        Result<?> setResult = symbol.setValue(parsed.get(), this);
         if (setResult.error() != null) return Result.fail(setResult.error());
         
         return Result.of(null);

@@ -9,25 +9,30 @@ block       : (statement)*
 
 
 statement           : display_statement
+					: constant_statement
                     : declare_statement
                     : set_statement
+                    : input_statement
+                    : call_statement
 
-display_statement   : STATEMENT_KEYWORD(value: Display trailingSpaces: 1) value_set NEWLINE
+display_statement   : STATEMENT_KEYWORD(value: Display) value_set NEWLINE
 
-declare_statement   : STATEMENT_KEYWORD(value: Declare trailingSpaces: 1) TYPE_KEYWORD(trailingSpaces: 1) IDENTIFIER (OPERATOR(value: =) expression)? NEWLINE
+constant_statement	: STATEMENT_KEYWORD(value: Constant) TYPE_KEYWORD IDENTIFIER OPERATOR(value: =) expression NEWLINE
 
-set_statement       : STATEMENT_KEYWORD(value: Set trailingSpaces: 1) IDENTIFIER ASSIGN expression NEWLINE
+declare_statement   : STATEMENT_KEYWORD(value: Declare) TYPE_KEYWORD IDENTIFIER (OPERATOR(value: =) expression)? NEWLINE
 
-input_statement     : STATEMENT_KEYWORD(value: Input trailingSpaces: 1) IDENTIFIER NEWLINE
+set_statement       : STATEMENT_KEYWORD(value: Set) IDENTIFIER ASSIGN expression NEWLINE
 
-call_statement		: STATEMENT_KEYWORD(value: Call trailingSpaces: 1) IDENTIFIER arguments NEWLINE
+input_statement     : STATEMENT_KEYWORD(value: Input) IDENTIFIER NEWLINE
+
+call_statement		: STATEMENT_KEYWORD(value: Call) IDENTIFIER arguments NEWLINE
 
 
 value_set   : expression (COMMA expression)*
 
 arguments	: LPAREN value_set? RPAREN
 
-params      : LPAREN (TYPE_KEYWORD(trailingSpaces: 1) REF? IDENTIFIER (COMMA TYPE_KEYWORD(trailingSpaces: 1) REF? IDENTIFIER)*)? RPAREN
+params      : LPAREN (TYPE_KEYWORD REF? IDENTIFIER (COMMA TYPE_KEYWORD REF? IDENTIFIER)*)? RPAREN
 
 
 

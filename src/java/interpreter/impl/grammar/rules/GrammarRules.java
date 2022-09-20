@@ -29,6 +29,7 @@ public class GrammarRules
     public static IGrammarRule MODULE_DEFINITION = new ModuleDefinitionRule();
     
     public static IGrammarRule STATEMENT = new StatementRule();
+    public static IGrammarRule CONSTANT_STATEMENT = new ConstantStatementRule();
     public static IGrammarRule DECLARE_STATEMENT = new DeclareStatementRule();
     public static IGrammarRule DISPLAY_STATEMENT = new DisplayStatementRule();
     public static IGrammarRule SET_STATEMENT = new SetStatementRule();

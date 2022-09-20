@@ -13,7 +13,7 @@ import interpreter.impl.runtime.SymbolType;
 
 import java.util.function.BiConsumer;
 
-public class DeclareStatementNode extends AbstractNode
+public class ConstantStatementNode extends AbstractNode
 {
     private final Token dataTypeToken;
     private final Token identifierToken;
@@ -23,7 +23,7 @@ public class DeclareStatementNode extends AbstractNode
     private RuntimeType<?> dataType;
     private VariableSymbol symbol;
     
-    public DeclareStatementNode(Token keyword, Token dataType, Token identifier, AbstractValuedNode initialValue)
+    public ConstantStatementNode(Token keyword, Token dataType, Token identifier, AbstractValuedNode initialValue)
     {
         super(keyword.start(), initialValue != null ? initialValue.end() : identifier.end());
     
@@ -59,9 +59,10 @@ public class DeclareStatementNode extends AbstractNode
             if (result.error() != null) return result;
         }
         
+        // TODO: Check for SNAKE_CASE name
+        
         // Symbol
-        if (identifier.charAt(0) != identifier.toLowerCase().charAt(0)) return result.failure(new SyntaxException(identifierToken, "Variable identifiers must be camelCase!"));
-        symbol = new VariableSymbol(SymbolType.VARIABLE, identifier, this.dataType, false);
+        symbol = new VariableSymbol(SymbolType.VARIABLE, identifier, this.dataType, true);
         if (getSymbolTable().tryAddSymbol(symbol)) return result.success(null);
         else return result.failure(new SyntaxException(identifierToken, "Variable '" + identifier + "' already exists! Did you mean to Set it instead of Declare it?"));
     }
@@ -69,7 +70,7 @@ public class DeclareStatementNode extends AbstractNode
     public void debugPrint(int depth)
     {
         IO.Debug.print("  ".repeat(depth));
-        IO.Debug.println("DECLARE " + dataType.keyword + ":");
+        IO.Debug.println("CONSTANT " + dataType.keyword + ":");
         
         IO.Debug.print("  ".repeat(depth + 1));
         IO.Debug.println("Identifier: " + identifier);
@@ -86,14 +87,11 @@ public class DeclareStatementNode extends AbstractNode
     @Override
     public Result<Void> interpret(Interpreter interpreter)
     {
-        if (initialValue != null)
-        {
-            Result<Object> expressionResult = initialValue.getValue(interpreter);
-            if (expressionResult.error() != null) return Result.fail(expressionResult.error());
-        
-            Result<?> assignResult = symbol.setValue(expressionResult.get(), this);
-            if (assignResult.error() != null) return Result.fail(assignResult.error());
-        }
+        Result<Object> expressionResult = initialValue.getValue(interpreter);
+        if (expressionResult.error() != null) return Result.fail(expressionResult.error());
+    
+        Result<?> assignResult = symbol.setValue(expressionResult.get(), this);
+        if (assignResult.error() != null) return Result.fail(assignResult.error());
         
         return Result.of(null);
     }

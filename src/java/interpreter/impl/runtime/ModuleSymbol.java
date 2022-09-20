@@ -41,14 +41,18 @@ public class ModuleSymbol extends Symbol
             AbstractValuedNode argument = arguments.get(i);
             
             // Check For Reference Compliance
-            if (parameterDefinition.passByReference && !(argument instanceof VariableAccessNode)) return result.failure(new SyntaxException(argument, "Only variable identifiers can be passed to Ref parameters!"));
+            if (parameterDefinition.passByReference)
+            {
+                if (!(argument instanceof VariableAccessNode variableAccessNode)) return result.failure(new SyntaxException(argument, "Only variable identifiers can be passed to Ref parameters!"));
+                else if (variableAccessNode.getVariableSymbol().isConstant()) return result.failure(new SyntaxException(argument, "Cannot pass a constant variable by reference!"));
+            }
             
             // Get Argument Value
             Result<Object> argumentValue = argument.getValue(interpreter);
             if (argumentValue.error() != null) return result.failure(argumentValue.error());
             
             // Pass Argument to Parameter
-            Result<?> passResult = parameter.setValue(argumentValue.get());
+            Result<?> passResult = parameter.setValue(argumentValue.get(), argument);
             if (passResult.error() != null)
             {
                 RuntimeType<?> expectedType = parameter.getRuntimeType();
@@ -77,7 +81,7 @@ public class ModuleSymbol extends Symbol
                 Result<Object> parameterValue = parameter.getVariableSymbol().getValue(argument);
                 if (parameterValue.error() != null) return result.failure(parameterValue.error());
                 
-                Result<?> assignResult = targetVariable.getVariableSymbol().setValue(parameterValue.get());
+                Result<?> assignResult = targetVariable.getVariableSymbol().setValue(parameterValue.get(), parameter);
                 if (assignResult.error() != null) return result.failure(assignResult.error());
             }
             else return result.failure(new SyntaxException(argument, "Only variable identifiers can be passed to Ref parameters!"));
