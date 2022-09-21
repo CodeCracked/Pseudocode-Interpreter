@@ -54,6 +54,11 @@ public class UnaryOpNode extends AbstractValuedNode
             if (argumentType.get() != RuntimeTypes.INTEGER && argumentType.get() != RuntimeTypes.REAL) return result.failure(new SyntaxException(argument, "Expected Integer or Real, found " + argumentType.get().keyword + "!"));
             else this.runtimeType = argumentType.get();
         }
+        else if (operation.type() == TokenType.NOT)
+        {
+            if (argumentType.get() != RuntimeTypes.BOOLEAN) return result.failure(new SyntaxException(argument, "Expected Boolean, found " + argumentType.get().keyword + "!"));
+            else this.runtimeType = RuntimeTypes.BOOLEAN;
+        }
         else return result.failure(new SyntaxException(operation, "Expected '-'!"));
         
         return result.success(null);
@@ -74,14 +79,19 @@ public class UnaryOpNode extends AbstractValuedNode
     @Override
     public Result<Object> getValue(Interpreter interpreter)
     {
+        Result<Object> argumentValue = argument.getValue(interpreter);
+        if (argumentValue.error() != null) return Result.fail(argumentValue.error());
+        
         if (operation.type() == TokenType.MINUS)
         {
-            Result<Object> argumentValue = argument.getValue(interpreter);
-            if (argumentValue.error() != null) return Result.fail(argumentValue.error());
-            
             if (argumentType.equals(RuntimeTypes.INTEGER)) return Result.of(-((Long)argumentValue.get()));
             else if (argumentType.equals(RuntimeTypes.REAL)) return Result.of(-((Double)argumentValue.get()));
             else return Result.fail(new SyntaxException(argument, "Expected Integer or Real, found " + argumentType.keyword + "!"));
+        }
+        else if (operation.type() == TokenType.NOT)
+        {
+            if (argumentType.equals(RuntimeTypes.BOOLEAN)) return Result.of(!((Boolean)argumentValue.get()));
+            else return Result.fail(new SyntaxException(argument, "Expected Boolean, found " + argumentType.keyword + "!"));
         }
         else return Result.fail(new SyntaxException(this, "Unknown unary operator '" + operation.type().name() + "'!"));
     }

@@ -34,6 +34,17 @@ public class PseudocodeInterpreter extends Interpreter
             new MatcherTokenBuilder(TokenType.MOD, -1, "MOD"),
             new MatcherTokenBuilder(TokenType.POW, -1, "^"),
             
+            new MatcherTokenBuilder(TokenType.EQUALS, -2, "=="),
+            new MatcherTokenBuilder(TokenType.NOT_EQUALS, -2, "!="),
+            new MatcherTokenBuilder(TokenType.GREATER, -1, ">"),
+            new MatcherTokenBuilder(TokenType.LESS, -1, "<"),
+            new MatcherTokenBuilder(TokenType.GREATER_EQUAL, -2, ">="),
+            new MatcherTokenBuilder(TokenType.LESS_EQUAL, -2, "<="),
+        
+            new MatcherTokenBuilder(TokenType.AND, -2, "AND"),
+            new MatcherTokenBuilder(TokenType.OR, -2, "OR"),
+            new MatcherTokenBuilder(TokenType.NOT, -2, "NOT"),
+            
             new MatcherTokenBuilder(TokenType.LPAREN, -1, "("),
             new MatcherTokenBuilder(TokenType.RPAREN, -1, ")"),
             new MatcherTokenBuilder(TokenType.COMMA, -1, ","),

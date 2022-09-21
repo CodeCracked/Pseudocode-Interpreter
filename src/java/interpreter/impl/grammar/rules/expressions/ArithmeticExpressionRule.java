@@ -9,13 +9,13 @@ import interpreter.impl.tokens.TokenType;
 
 import java.util.Set;
 
-public class ExpressionRule implements IGrammarRule
+public class ArithmeticExpressionRule implements IGrammarRule
 {
-    private final Set<Enum<?>> booleanOperators = Set.of(TokenType.AND, TokenType.OR);
+    private final Set<Enum<?>> arithmeticOperators = Set.of(TokenType.PLUS, TokenType.MINUS);
     
     @Override
     public Result<AbstractNode> build(Parser parser)
     {
-        return GrammarRules.binaryOperationRule(parser, GrammarRules.COMPARISON_EXPRESSION, booleanOperators);
+        return GrammarRules.binaryOperationRule(parser, GrammarRules.FACTOR, arithmeticOperators);
     }
 }

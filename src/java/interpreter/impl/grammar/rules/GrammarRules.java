@@ -12,10 +12,7 @@ import interpreter.impl.grammar.rules.blocks.ModuleDefinitionRule;
 import interpreter.impl.grammar.rules.components.ArgumentListRule;
 import interpreter.impl.grammar.rules.components.ParameterListRule;
 import interpreter.impl.grammar.rules.components.ValueSetRule;
-import interpreter.impl.grammar.rules.expressions.AtomRule;
-import interpreter.impl.grammar.rules.expressions.ExponentRule;
-import interpreter.impl.grammar.rules.expressions.ExpressionRule;
-import interpreter.impl.grammar.rules.expressions.FactorRule;
+import interpreter.impl.grammar.rules.expressions.*;
 import interpreter.impl.grammar.rules.statements.*;
 import interpreter.impl.tokens.TokenType;
 
@@ -41,6 +38,8 @@ public class GrammarRules
     public static IGrammarRule PARAMETER_LIST = new ParameterListRule();
     
     public static IGrammarRule EXPRESSION = new ExpressionRule();
+    public static IGrammarRule COMPARISON_EXPRESSION = new ComparisonExpressionRule();
+    public static IGrammarRule ARITHMETIC_EXPRESSION = new ArithmeticExpressionRule();
     public static IGrammarRule FACTOR = new FactorRule();
     public static IGrammarRule EXPONENT = new ExponentRule();
     public static IGrammarRule ATOM = new AtomRule();

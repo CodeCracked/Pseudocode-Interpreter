@@ -12,12 +12,24 @@ public enum TokenType
     REAL_LITERAL,
     
     ASSIGN,
+    
     PLUS,
     MINUS,
     MUL,
     DIV,
     POW,
     MOD,
+    
+    EQUALS,
+    NOT_EQUALS,
+    GREATER,
+    LESS,
+    GREATER_EQUAL,
+    LESS_EQUAL,
+    
+    NOT,
+    AND,
+    OR,
     
     LPAREN,
     RPAREN,
