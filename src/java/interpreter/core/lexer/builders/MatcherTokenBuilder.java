@@ -40,7 +40,7 @@ public class MatcherTokenBuilder implements ITokenBuilder
             else position.advance();
         }
         
-        if (!trailingSpace || position.getCharacter() == ' ') return new Token(type, storeContents ? token : null, start, position);
+        if (!trailingSpace || Character.isWhitespace(position.getCharacter())) return new Token(type, storeContents ? token : null, start, position);
         else return null;
     }
 }

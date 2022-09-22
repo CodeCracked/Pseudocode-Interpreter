@@ -11,8 +11,8 @@ public abstract class AbstractNode
 {
     public AbstractNode parent;
     
-    private final SourcePosition startPosition;
-    private final SourcePosition endPosition;
+    protected SourcePosition startPosition;
+    protected SourcePosition endPosition;
     
     public AbstractNode(SourcePosition startPosition, SourcePosition endPosition)
     {

@@ -4,6 +4,8 @@ public enum TokenType
 {
     STATEMENT_KEYWORD,
     TYPE_KEYWORD,
+    THEN,
+    ELSE,
     
     IDENTIFIER,
     

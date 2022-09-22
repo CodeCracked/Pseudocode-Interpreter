@@ -1,5 +1,6 @@
 package interpreter.impl.grammar.rules;
 
+import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.IGrammarRule;
 import interpreter.core.parser.Parser;
@@ -32,6 +33,7 @@ public class GrammarRules
     public static IGrammarRule SET_STATEMENT = new SetStatementRule();
     public static IGrammarRule INPUT_STATEMENT = new InputStatementRule();
     public static IGrammarRule CALL_STATEMENT = new CallStatementRule();
+    public static IGrammarRule IF_STATEMENT = new IfStatementRule();
     
     public static IGrammarRule VALUE_SET = new ValueSetRule();
     public static IGrammarRule ARGUMENT_LIST = new ArgumentListRule();
@@ -74,6 +76,11 @@ public class GrammarRules
         
         return result.success(left);
     }
+    
+    public static Result<AbstractNode> block(Parser parser)
+    {
+        return block(parser, parser.getCurrentIndent());
+    }
     public static Result<AbstractNode> block(Parser parser, int indentation)
     {
         Result<AbstractNode> result = new Result<>();
@@ -89,6 +96,7 @@ public class GrammarRules
             else statements.add(statementResult.get());
         }
     
-        return result.success(new BlockNode(statements));
+        if (statements.size() == 0) return result.failure(new SyntaxException(parser, "Expected indentation of size " + indentation + ", then a statement!"));
+        else return result.success(new BlockNode(statements));
     }
 }

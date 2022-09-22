@@ -20,6 +20,8 @@ public class PseudocodeInterpreter extends Interpreter
     private final static Lexer lexer = new Lexer(TokenType.EOF,
             new KeywordTokenBuilder(TokenType.STATEMENT_KEYWORD, 1, KeywordLists.statementKeywords),
             new KeywordTokenBuilder(TokenType.TYPE_KEYWORD, 1, KeywordLists.typeKeywords),
+            new MatcherTokenBuilder(TokenType.THEN, 1, "Then"),
+            new MatcherTokenBuilder(TokenType.ELSE, 1, "Else"),
             
             new IdentifierTokenBuilder(TokenType.IDENTIFIER),
             
@@ -56,7 +58,7 @@ public class PseudocodeInterpreter extends Interpreter
             new IndentTokenBuilder(TokenType.INDENT, 4),
             new MatcherTokenBuilder(TokenType.NEWLINE, -1000, "\n")
     );
-    private final static Parser parser = new Parser(GrammarRules.PROGRAM, null);
+    private final static Parser parser = new Parser(GrammarRules.PROGRAM, TokenType.INDENT);
     
     private boolean debugMode;
     
