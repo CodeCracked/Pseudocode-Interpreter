@@ -6,7 +6,6 @@ import interpreter.core.parser.Parser;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.source.SourceCollection;
 import interpreter.core.source.SourcePosition;
-import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 
 import java.nio.file.Path;
@@ -46,9 +45,9 @@ public class Interpreter
     
             // Tokenize Pseudocode Source
             Result<List<Token>> lexerResult = lexer.tokenize(position);
+            lexerResult.displayIssues();
             if (lexerResult.error() != null)
             {
-                IO.Errors.println(lexerResult.error().getMessage());
                 finishedCallback.accept(false);
                 return;
             }
@@ -56,9 +55,9 @@ public class Interpreter
     
             // Generate AST from Token List
             Result<AbstractNode> parseResult = parser.parse(this, lexerResult.get());
+            parseResult.displayIssues();
             if (parseResult.error() != null)
             {
-                IO.Errors.println(parseResult.error().getMessage());
                 finishedCallback.accept(false);
                 return;
             }
@@ -67,9 +66,9 @@ public class Interpreter
     
             // Interpret AST
             Result<Void> interpretationResult = ast.interpret(this);
+            interpretationResult.displayIssues();
             if (interpretationResult.error() != null)
             {
-                IO.Errors.println(interpretationResult.error().getMessage());
                 finishedCallback.accept(false);
                 return;
             }

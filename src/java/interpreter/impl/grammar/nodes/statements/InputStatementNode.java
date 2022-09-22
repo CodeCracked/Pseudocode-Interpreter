@@ -50,6 +50,8 @@ public class InputStatementNode extends AbstractNode
     @Override
     public Result<Void> interpret(Interpreter interpreter)
     {
+        Result<Void> result = new Result<>();
+
         // Get Input Line
         AtomicBoolean finishedFlag = new AtomicBoolean(false);
         AtomicReference<String> line = new AtomicReference<>();
@@ -59,13 +61,13 @@ public class InputStatementNode extends AbstractNode
             finishedFlag.set(true);
         });
         while (!finishedFlag.get()) Thread.onSpinWait();
+
+        Result<?> parsed = result.registerIssues(symbol.getRuntimeType().tryParse(line.get()));
+        if (result.error() != null) return result;
+
+        result.registerIssues(symbol.setValue(parsed.get(), this));
+        if (result.error() != null) return result;
         
-        Result<?> parsed = symbol.getRuntimeType().tryParse(line.get());
-        if (parsed.error() != null) return Result.fail(parsed.error());
-        
-        Result<?> setResult = symbol.setValue(parsed.get(), this);
-        if (setResult.error() != null) return Result.fail(setResult.error());
-        
-        return Result.of(null);
+        return result.success(null);
     }
 }

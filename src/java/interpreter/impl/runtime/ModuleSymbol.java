@@ -48,19 +48,18 @@ public class ModuleSymbol extends Symbol
             }
             
             // Get Argument Value
-            Result<Object> argumentValue = argument.getValue(interpreter);
-            if (argumentValue.error() != null) return result.failure(argumentValue.error());
+            Result<Object> argumentValue = result.registerIssues(argument.getValue(interpreter));
+            if (result.error() != null) return result;
             
             // Pass Argument to Parameter
-            Result<?> passResult = parameter.setValue(argumentValue.get(), argument);
-            if (passResult.error() != null)
-            {
-                RuntimeType<?> expectedType = parameter.getRuntimeType();
-                Result<RuntimeType<?>> foundType = argument.getRuntimeType();
-                
-                if (foundType.error() != null) return result.failure(new SyntaxException(argument, "Expected " + expectedType.keyword + ", found Unknown!"));
-                else return result.failure(new SyntaxException(argument, "Expected " + expectedType.keyword + ", found " + foundType.get().keyword + "!"));
-            }
+            Result<?> passResult = result.registerIssues(parameter.setValue(argumentValue.get(), argument));
+            if (result.error() != null) return result;
+
+            RuntimeType<?> expectedType = parameter.getRuntimeType();
+            Result<RuntimeType<?>> foundType = result.registerIssues(argument.getRuntimeType());
+
+            if (foundType.error() != null) return result.failure(new SyntaxException(argument, "Expected " + expectedType.keyword + ", found Unknown!"));
+            else return result.failure(new SyntaxException(argument, "Expected " + expectedType.keyword + ", found " + foundType.get().keyword + "!"));
         }
         
         // Run Module
@@ -78,11 +77,11 @@ public class ModuleSymbol extends Symbol
             AbstractValuedNode argument = arguments.get(i);
             if (argument instanceof VariableAccessNode targetVariable)
             {
-                Result<Object> parameterValue = parameter.getVariableSymbol().getValue(argument);
-                if (parameterValue.error() != null) return result.failure(parameterValue.error());
+                Result<Object> parameterValue = result.registerIssues(parameter.getVariableSymbol().getValue(argument));
+                if (result.error() != null) return result;
                 
-                Result<?> assignResult = targetVariable.getVariableSymbol().setValue(parameterValue.get(), parameter);
-                if (assignResult.error() != null) return result.failure(assignResult.error());
+                result.registerIssues(targetVariable.getVariableSymbol().setValue(parameterValue.get(), parameter));
+                if (result.error() != null) return result;
             }
             else return result.failure(new SyntaxException(argument, "Only variable identifiers can be passed to Ref parameters!"));
         }

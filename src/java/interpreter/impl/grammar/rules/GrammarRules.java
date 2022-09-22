@@ -13,8 +13,20 @@ import interpreter.impl.grammar.rules.blocks.ModuleDefinitionRule;
 import interpreter.impl.grammar.rules.components.ArgumentListRule;
 import interpreter.impl.grammar.rules.components.ParameterListRule;
 import interpreter.impl.grammar.rules.components.ValueSetRule;
-import interpreter.impl.grammar.rules.expressions.*;
-import interpreter.impl.grammar.rules.statements.*;
+import interpreter.impl.grammar.rules.expressions.ArithmeticExpressionRule;
+import interpreter.impl.grammar.rules.expressions.AtomRule;
+import interpreter.impl.grammar.rules.expressions.ComparisonExpressionRule;
+import interpreter.impl.grammar.rules.expressions.ExponentRule;
+import interpreter.impl.grammar.rules.expressions.ExpressionRule;
+import interpreter.impl.grammar.rules.expressions.FactorRule;
+import interpreter.impl.grammar.rules.statements.CallStatementRule;
+import interpreter.impl.grammar.rules.statements.ConstantStatementRule;
+import interpreter.impl.grammar.rules.statements.DeclareStatementRule;
+import interpreter.impl.grammar.rules.statements.DisplayStatementRule;
+import interpreter.impl.grammar.rules.statements.IfStatementRule;
+import interpreter.impl.grammar.rules.statements.InputStatementRule;
+import interpreter.impl.grammar.rules.statements.SetStatementRule;
+import interpreter.impl.grammar.rules.statements.StatementRule;
 import interpreter.impl.tokens.TokenType;
 
 import java.util.ArrayList;
@@ -91,9 +103,9 @@ public class GrammarRules
             result.registerAdvancement();
             parser.advance();
             
-            Result<AbstractNode> statementResult = GrammarRules.STATEMENT.build(parser);
-            if (statementResult.error() != null) return result.failure(statementResult.error());
-            else statements.add(statementResult.get());
+            Result<AbstractNode> statementResult = result.registerIssues(GrammarRules.STATEMENT.build(parser));
+            if (result.error() != null) return result;
+            statements.add(statementResult.get());
         }
     
         if (statements.size() == 0) return result.failure(new SyntaxException(parser, "Expected indentation of size " + indentation + ", then a statement!"));

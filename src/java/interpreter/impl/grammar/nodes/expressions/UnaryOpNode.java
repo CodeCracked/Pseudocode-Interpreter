@@ -44,9 +44,9 @@ public class UnaryOpNode extends AbstractValuedNode
         if (result.error() != null) return result;
         
         // Argument Type
-        Result<RuntimeType<?>> argumentType = argument.getRuntimeType();
-        if (argumentType.error() != null) return Result.fail(argumentType.error());
-        else this.argumentType = argumentType.get();
+        Result<RuntimeType<?>> argumentType = result.registerIssues(argument.getRuntimeType());
+        if (result.error() != null) return result;
+        this.argumentType = argumentType.get();
         
         // Validate Argument Data Type With Operation
         if (operation.type() == TokenType.MINUS)
@@ -79,20 +79,22 @@ public class UnaryOpNode extends AbstractValuedNode
     @Override
     public Result<Object> getValue(Interpreter interpreter)
     {
-        Result<Object> argumentValue = argument.getValue(interpreter);
-        if (argumentValue.error() != null) return Result.fail(argumentValue.error());
+        Result<Object> result = new Result<>();
+
+        Result<Object> argumentValue = result.registerIssues(argument.getValue(interpreter));
+        if (result.error() != null) return result;
         
         if (operation.type() == TokenType.MINUS)
         {
-            if (argumentType.equals(RuntimeTypes.INTEGER)) return Result.of(-((Long)argumentValue.get()));
-            else if (argumentType.equals(RuntimeTypes.REAL)) return Result.of(-((Double)argumentValue.get()));
-            else return Result.fail(new SyntaxException(argument, "Expected Integer or Real, found " + argumentType.keyword + "!"));
+            if (argumentType.equals(RuntimeTypes.INTEGER)) return result.success(-((Long)argumentValue.get()));
+            else if (argumentType.equals(RuntimeTypes.REAL)) return result.success(-((Double)argumentValue.get()));
+            else return result.failure(new SyntaxException(argument, "Expected Integer or Real, found " + argumentType.keyword + "!"));
         }
         else if (operation.type() == TokenType.NOT)
         {
-            if (argumentType.equals(RuntimeTypes.BOOLEAN)) return Result.of(!((Boolean)argumentValue.get()));
-            else return Result.fail(new SyntaxException(argument, "Expected Boolean, found " + argumentType.keyword + "!"));
+            if (argumentType.equals(RuntimeTypes.BOOLEAN)) return result.success(!((Boolean)argumentValue.get()));
+            else return result.failure(new SyntaxException(argument, "Expected Boolean, found " + argumentType.keyword + "!"));
         }
-        else return Result.fail(new SyntaxException(this, "Unknown unary operator '" + operation.type().name() + "'!"));
+        else return result.failure(new SyntaxException(this, "Unknown unary operator '" + operation.type().name() + "'!"));
     }
 }

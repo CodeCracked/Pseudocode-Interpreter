@@ -32,14 +32,14 @@ public class LiteralValueNode extends AbstractValuedNode
         Result<Void> result = new Result<>();
     
         // Runtime Type
-        Result<RuntimeType<?>> runtimeType = RuntimeType.getTypeFromClass(valueToken.value().getClass());
-        if (runtimeType.error() != null) return result.failure(runtimeType.error());
-        else this.runtimeType = runtimeType.get();
+        Result<RuntimeType<?>> runtimeType = result.registerIssues(RuntimeType.getTypeFromClass(valueToken.value().getClass()));
+        if (result.error() != null) return result;
+        this.runtimeType = runtimeType.get();
     
         // Value
-        Result<?> casted = runtimeType.get().tryCast(valueToken.value());
-        if (casted.error() != null) return result.failure(casted.error());
-        else this.value = casted.get();
+        Result<?> casted = result.registerIssues(runtimeType.get().tryCast(valueToken.value()));
+        if (result.error() != null) return result;
+        this.value = casted.get();
     
         return result.success(null);
     }

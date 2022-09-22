@@ -33,6 +33,7 @@ public class InterpreterWindow extends JFrame implements IO.IInput
     {
         IO.Output = (format, args) -> append(output, Color.white, format, args);
         IO.Errors = (format, args) -> append(output, Color.red, format, args);
+        IO.Warnings = (format, args) -> append(output, Color.yellow, format, args);
         IO.Input = this;
         
         this.version = Version.getCurrentVersion();

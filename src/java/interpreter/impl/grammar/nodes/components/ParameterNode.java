@@ -39,9 +39,9 @@ public class ParameterNode extends AbstractNode
         Result<Void> result = new Result<>();
         
         // Data Type
-        Result<RuntimeType<?>> dataType = RuntimeType.getTypeFromKeyword(dataTypeToken.value().toString());
-        if (dataType.error() != null) return result.failure(dataType.error());
-        else this.dataType = dataType.get();
+        Result<RuntimeType<?>> dataType = result.registerIssues(RuntimeType.getTypeFromKeyword(dataTypeToken.value().toString()));
+        if (result.error() != null) return result;
+        this.dataType = dataType.get();
         
         // Symbol
         symbol = new VariableSymbol(SymbolType.VARIABLE, identifier, this.dataType, false);

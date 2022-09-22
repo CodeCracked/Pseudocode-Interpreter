@@ -110,10 +110,11 @@ public class IfStatementNode extends AbstractNode
         Result<Void> result = new Result<>();
         
         // Condition Result
-        Result<Object> conditionResult = condition.getValue(interpreter);
-        if (conditionResult.error() != null) return result.failure(conditionResult.error());
-        Result<Boolean> casted = RuntimeTypes.BOOLEAN.tryCast(conditionResult.get());
-        if (casted.error() != null) return result.failure(casted.error());
+        Result<Object> conditionResult = result.registerIssues(condition.getValue(interpreter));
+        if (result.error() != null) return result;
+
+        Result<Boolean> casted = result.registerIssues(RuntimeTypes.BOOLEAN.tryCast(conditionResult.get()));
+        if (result.error() != null) return result;
         
         // True Node
         if (casted.get()) result.register(trueNode.interpret(interpreter));

@@ -41,14 +41,16 @@ public class DisplayStatementNode extends AbstractNode
     @Override
     public Result<Void> interpret(Interpreter interpreter)
     {
+        Result<Void> result = new Result<>();
+
         for (AbstractValuedNode messagePiece : messagePieces.values)
         {
-            Result<Object> pieceValue = messagePiece.getValue(interpreter);
-            if (pieceValue.error() != null) return Result.fail(pieceValue.error());
+            Result<Object> pieceValue = result.registerIssues(messagePiece.getValue(interpreter));
+            if (result.error() != null) return result;
             IO.Output.print(pieceValue.get());
         }
         IO.Output.println();
         
-        return Result.of(null);
+        return result.success(null);
     }
 }

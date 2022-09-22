@@ -54,10 +54,8 @@ public class Parser
                     child.createSymbolTable();
                     child.parent = parent;
                 });
-        
-        Result<Void> populateResult = result.get().populate(interpreter);
-        if (populateResult.error() != null) return result.failure(populateResult.error());
-        
+
+        result.registerIssues(result.get().populate(interpreter));
         return result;
     }
     

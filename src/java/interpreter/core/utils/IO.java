@@ -10,7 +10,8 @@ import java.util.function.Consumer;
 public class IO
 {
     private static final Scanner defaultInput = new Scanner(System.in);
-    
+
+    public static IPrinter Warnings = System.err::printf;
     public static IPrinter Errors = System.err::printf;
     public static IPrinter Output = System.out::printf;
     public static IPrinter Debug = System.out::printf;

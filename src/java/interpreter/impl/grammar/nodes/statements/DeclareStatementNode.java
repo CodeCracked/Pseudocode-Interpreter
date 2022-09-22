@@ -48,9 +48,9 @@ public class DeclareStatementNode extends AbstractNode
         Result<Void> result = new Result<>();
         
         // Data Type
-        Result<RuntimeType<?>> dataType = RuntimeType.getTypeFromKeyword(this.dataTypeToken.value().toString());
-        if (dataType.error() != null) return result.failure(dataType.error());
-        else this.dataType = dataType.get();
+        Result<RuntimeType<?>> dataType = result.registerIssues(RuntimeType.getTypeFromKeyword(this.dataTypeToken.value().toString()));
+        if (result.error() != null) return result;
+        this.dataType = dataType.get();
         
         // Initial Value
         if (initialValue != null)
@@ -60,7 +60,7 @@ public class DeclareStatementNode extends AbstractNode
         }
         
         // Symbol
-        if (identifier.charAt(0) != identifier.toLowerCase().charAt(0)) return result.failure(new SyntaxException(identifierToken, "Variable identifiers must be camelCase!"));
+        if (identifier.charAt(0) != identifier.toLowerCase().charAt(0)) result.warn(new SyntaxException(identifierToken, "Variable identifiers should be camelCase!"));
         symbol = new VariableSymbol(SymbolType.VARIABLE, identifier, this.dataType, false);
         if (getSymbolTable().tryAddSymbol(symbol)) return result.success(null);
         else return result.failure(new SyntaxException(identifierToken, "Variable '" + identifier + "' already exists! Did you mean to Set it instead of Declare it?"));
@@ -86,13 +86,15 @@ public class DeclareStatementNode extends AbstractNode
     @Override
     public Result<Void> interpret(Interpreter interpreter)
     {
+        Result<Void> result = new Result<>();
+
         if (initialValue != null)
         {
-            Result<Object> expressionResult = initialValue.getValue(interpreter);
-            if (expressionResult.error() != null) return Result.fail(expressionResult.error());
+            Result<Object> expressionResult = result.registerIssues(initialValue.getValue(interpreter));
+            if (result.error() != null) return result;
         
-            Result<?> assignResult = symbol.setValue(expressionResult.get(), this);
-            if (assignResult.error() != null) return Result.fail(assignResult.error());
+            result.registerIssues(symbol.setValue(expressionResult.get(), this));
+            if (result.error() != null) return result;
         }
         
         return Result.of(null);

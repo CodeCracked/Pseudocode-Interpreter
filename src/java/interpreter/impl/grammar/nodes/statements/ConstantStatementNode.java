@@ -48,9 +48,9 @@ public class ConstantStatementNode extends AbstractNode
         Result<Void> result = new Result<>();
         
         // Data Type
-        Result<RuntimeType<?>> dataType = RuntimeType.getTypeFromKeyword(this.dataTypeToken.value().toString());
-        if (dataType.error() != null) return result.failure(dataType.error());
-        else this.dataType = dataType.get();
+        Result<RuntimeType<?>> dataType = result.registerIssues(RuntimeType.getTypeFromKeyword(this.dataTypeToken.value().toString()));
+        if (result.error() != null) return result;
+        this.dataType = dataType.get();
         
         // Initial Value
         if (initialValue != null)
@@ -87,12 +87,14 @@ public class ConstantStatementNode extends AbstractNode
     @Override
     public Result<Void> interpret(Interpreter interpreter)
     {
-        Result<Object> expressionResult = initialValue.getValue(interpreter);
-        if (expressionResult.error() != null) return Result.fail(expressionResult.error());
-    
-        Result<?> assignResult = symbol.setValue(expressionResult.get(), this);
-        if (assignResult.error() != null) return Result.fail(assignResult.error());
+        Result<Void> result = new Result<>();
+
+        Result<Object> expressionResult = result.registerIssues(initialValue.getValue(interpreter));
+        if (result.error() != null) return result;
+
+        result.registerIssues(symbol.setValue(expressionResult.get(), this));
+        if (result.error() != null) return result;
         
-        return Result.of(null);
+        return result.success(null);
     }
 }

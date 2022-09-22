@@ -60,12 +60,14 @@ public class SetStatementNode extends AbstractNode
     @Override
     public Result<Void> interpret(Interpreter interpreter)
     {
-        Result<Object> argumentValue = value.getValue(interpreter);
-        if (argumentValue.error() != null) return Result.fail(argumentValue.error());
+        Result<Void> result = new Result<>();
+
+        Result<Object> argumentValue = result.registerIssues(value.getValue(interpreter));
+        if (result.error() != null) return result;
+
+        result.registerIssues(symbol.setValue(argumentValue.get(), this));
+        if (result.error() != null) return result;
         
-        Result<?> setResult = symbol.setValue(argumentValue.get(), this);
-        if (setResult.error() != null) return Result.fail(setResult.error());
-        
-        return Result.of(null);
+        return result.success(null);
     }
 }

@@ -59,20 +59,20 @@ public class BinaryOpNode extends AbstractValuedNode
         if (result.error() != null) return result;
         
         // Left Argument Type
-        Result<RuntimeType<?>> leftType = left.getRuntimeType();
-        if (leftType.error() != null) return result.failure(leftType.error());
-        else this.leftCastType = leftType.get();
+        Result<RuntimeType<?>> leftType = result.registerIssues(left.getRuntimeType());
+        if (result.error() != null) return result;
+        this.leftCastType = leftType.get();
     
         // Right Argument Type
-        Result<RuntimeType<?>> rightType = right.getRuntimeType();
-        if (rightType.error() != null) return result.failure(rightType.error());
-        else this.rightCastType = rightType.get();
+        Result<RuntimeType<?>> rightType = result.registerIssues(right.getRuntimeType());
+        if (result.error() != null) return result;
+        this.rightCastType = rightType.get();
     
         // Validate Argument Data Types Match Operator
         if (mathOperators.contains(operation.type()))
         {
-            if (!mathTypes.contains(leftType.get())) return Result.fail(new SyntaxException(left, "Expected Integer or Real, found " + leftType.get().keyword));
-            if (!mathTypes.contains(rightType.get())) return Result.fail(new SyntaxException(right, "Expected Integer or Real, found " + rightType.get().keyword));
+            if (!mathTypes.contains(leftType.get())) return result.failure(new SyntaxException(left, "Expected Integer or Real, found " + leftType.get().keyword));
+            if (!mathTypes.contains(rightType.get())) return result.failure(new SyntaxException(right, "Expected Integer or Real, found " + rightType.get().keyword));
         
             runtimeType = leftType.get();
             if (runtimeType.equals(RuntimeTypes.INTEGER) && rightType.get().equals(RuntimeTypes.REAL)) runtimeType = RuntimeTypes.REAL;
@@ -84,8 +84,8 @@ public class BinaryOpNode extends AbstractValuedNode
             // Non-Equality comparisons
             if (operation.type() != TokenType.EQUALS && operation.type() != TokenType.NOT_EQUALS)
             {
-                if (!mathTypes.contains(leftType.get())) return Result.fail(new SyntaxException(left, "Expected Integer or Real, found " + leftType.get().keyword));
-                if (!mathTypes.contains(rightType.get())) return Result.fail(new SyntaxException(right, "Expected Integer or Real, found " + rightType.get().keyword));
+                if (!mathTypes.contains(leftType.get())) return result.failure(new SyntaxException(left, "Expected Integer or Real, found " + leftType.get().keyword));
+                if (!mathTypes.contains(rightType.get())) return result.failure(new SyntaxException(right, "Expected Integer or Real, found " + rightType.get().keyword));
                 
                 leftCastType = leftType.get();
                 if (leftCastType.equals(RuntimeTypes.INTEGER) && rightType.get().equals(RuntimeTypes.REAL)) leftCastType = RuntimeTypes.REAL;
@@ -102,11 +102,11 @@ public class BinaryOpNode extends AbstractValuedNode
         }
         else if (booleanOperators.contains(operation.type()))
         {
-            if (!leftType.get().equals(RuntimeTypes.BOOLEAN)) return Result.fail(new SyntaxException(left, "Expected Boolean, found " + leftType.get().keyword));
-            if (!rightType.get().equals(RuntimeTypes.BOOLEAN)) return Result.fail(new SyntaxException(right, "Expected Boolean, found " + rightType.get().keyword));
+            if (!leftType.get().equals(RuntimeTypes.BOOLEAN)) return result.failure(new SyntaxException(left, "Expected Boolean, found " + leftType.get().keyword));
+            if (!rightType.get().equals(RuntimeTypes.BOOLEAN)) return result.failure(new SyntaxException(right, "Expected Boolean, found " + rightType.get().keyword));
             runtimeType = RuntimeTypes.BOOLEAN;
         }
-        else return Result.fail(new SyntaxException(operation, "Expected operator!"));
+        else return result.failure(new SyntaxException(operation, "Expected operator!"));
         
         return result.success(null);
     }
@@ -128,87 +128,89 @@ public class BinaryOpNode extends AbstractValuedNode
     @Override
     public Result<Object> getValue(Interpreter interpreter)
     {
-        Result<Object> leftValue = left.getValue(interpreter);
-        if (leftValue.error() != null) return Result.fail(leftValue.error());
-        Result<?> leftCasted = leftCastType.tryCast(leftValue.get());
-        if (leftCasted.error() != null) return Result.fail(leftCasted.error());
+        Result<Object> result = new Result<>();
+
+        Result<Object> leftValue = result.registerIssues(left.getValue(interpreter));
+        if (result.error() != null) return result;
+        Result<?> leftCasted = result.registerIssues(leftCastType.tryCast(leftValue.get()));
+        if (result.error() != null) return result;
     
-        Result<Object> rightValue = right.getValue(interpreter);
-        if (rightValue.error() != null) return Result.fail(rightValue.error());
-        Result<?> rightCasted = rightCastType.tryCast(rightValue.get());
-        if (rightCasted.error() != null) return Result.fail(rightCasted.error());
+        Result<Object> rightValue = result.registerIssues(right.getValue(interpreter));
+        if (result.error() != null) return result;
+        Result<?> rightCasted = result.registerIssues(rightCastType.tryCast(rightValue.get()));
+        if (result.error() != null) return result;
         
         //region Arithmetic Operators
         if (operation.type() == TokenType.PLUS)
         {
-            if (runtimeType.equals(RuntimeTypes.INTEGER)) return Result.of(((Long)leftCasted.get()) + ((Long)rightCasted.get()));
-            else if (runtimeType.equals(RuntimeTypes.REAL)) return Result.of(((Double)leftCasted.get()) + ((Double)rightCasted.get()));
-            else return Result.fail(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
+            if (runtimeType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) + ((Long)rightCasted.get()));
+            else if (runtimeType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) + ((Double)rightCasted.get()));
+            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
         }
         else if (operation.type() == TokenType.MINUS)
         {
-            if (runtimeType.equals(RuntimeTypes.INTEGER)) return Result.of(((Long)leftCasted.get()) - ((Long)rightCasted.get()));
-            else if (runtimeType.equals(RuntimeTypes.REAL)) return Result.of(((Double)leftCasted.get()) - ((Double)rightCasted.get()));
-            else return Result.fail(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
+            if (runtimeType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) - ((Long)rightCasted.get()));
+            else if (runtimeType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) - ((Double)rightCasted.get()));
+            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
         }
         else if (operation.type() == TokenType.MUL)
         {
-            if (runtimeType.equals(RuntimeTypes.INTEGER)) return Result.of(((Long)leftCasted.get()) * ((Long)rightCasted.get()));
-            else if (runtimeType.equals(RuntimeTypes.REAL)) return Result.of(((Double)leftCasted.get()) * ((Double)rightCasted.get()));
-            else return Result.fail(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
+            if (runtimeType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) * ((Long)rightCasted.get()));
+            else if (runtimeType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) * ((Double)rightCasted.get()));
+            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
         }
         else if (operation.type() == TokenType.DIV)
         {
-            if (runtimeType.equals(RuntimeTypes.INTEGER)) return Result.of(((Long)leftCasted.get()) / ((Long)rightCasted.get()));
-            else if (runtimeType.equals(RuntimeTypes.REAL)) return Result.of(((Double)leftCasted.get()) / ((Double)rightCasted.get()));
-            else return Result.fail(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
+            if (runtimeType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) / ((Long)rightCasted.get()));
+            else if (runtimeType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) / ((Double)rightCasted.get()));
+            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
         }
         else if (operation.type() == TokenType.POW)
         {
-            if (runtimeType.equals(RuntimeTypes.INTEGER)) return Result.of((long)Math.pow((Long)leftCasted.get(), (Long)rightCasted.get()));
-            else if (runtimeType.equals(RuntimeTypes.REAL)) return Result.of(Math.pow((Double)leftCasted.get(), (Double)rightCasted.get()));
-            else return Result.fail(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
+            if (runtimeType.equals(RuntimeTypes.INTEGER)) return result.success((long)Math.pow((Long)leftCasted.get(), (Long)rightCasted.get()));
+            else if (runtimeType.equals(RuntimeTypes.REAL)) return result.success(Math.pow((Double)leftCasted.get(), (Double)rightCasted.get()));
+            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
         }
         else if (operation.type() == TokenType.MOD)
         {
-            if (runtimeType.equals(RuntimeTypes.INTEGER)) return Result.of(((Long)leftCasted.get()) % ((Long)rightCasted.get()));
-            else if (runtimeType.equals(RuntimeTypes.REAL)) return Result.of(((Double)leftCasted.get()) % ((Double)rightCasted.get()));
-            else return Result.fail(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
+            if (runtimeType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) % ((Long)rightCasted.get()));
+            else if (runtimeType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) % ((Double)rightCasted.get()));
+            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
         }
         //endregion
         //region Comparison Operators
-        else if (operation.type() == TokenType.EQUALS) return Result.of(leftCasted.get().equals(rightCasted.get()));
-        else if (operation.type() == TokenType.NOT_EQUALS) return Result.of(!leftCasted.get().equals(rightCasted.get()));
+        else if (operation.type() == TokenType.EQUALS) return result.success(leftCasted.get().equals(rightCasted.get()));
+        else if (operation.type() == TokenType.NOT_EQUALS) return result.success(!leftCasted.get().equals(rightCasted.get()));
         else if (operation.type() == TokenType.GREATER)
         {
-            if (leftCastType.equals(RuntimeTypes.INTEGER)) return Result.of(((Long)leftCasted.get()) > ((Long)rightCasted.get()));
-            else if (leftCastType.equals(RuntimeTypes.REAL)) return Result.of(((Double)leftCasted.get()) > ((Double)rightCasted.get()));
-            else return Result.fail(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
+            if (leftCastType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) > ((Long)rightCasted.get()));
+            else if (leftCastType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) > ((Double)rightCasted.get()));
+            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
         }
         else if (operation.type() == TokenType.LESS)
         {
-            if (leftCastType.equals(RuntimeTypes.INTEGER)) return Result.of(((Long)leftCasted.get()) < ((Long)rightCasted.get()));
-            else if (leftCastType.equals(RuntimeTypes.REAL)) return Result.of(((Double)leftCasted.get()) < ((Double)rightCasted.get()));
-            else return Result.fail(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
+            if (leftCastType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) < ((Long)rightCasted.get()));
+            else if (leftCastType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) < ((Double)rightCasted.get()));
+            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
         }
         else if (operation.type() == TokenType.GREATER_EQUAL)
         {
-            if (leftCastType.equals(RuntimeTypes.INTEGER)) return Result.of(((Long)leftCasted.get()) >= ((Long)rightCasted.get()));
-            else if (leftCastType.equals(RuntimeTypes.REAL)) return Result.of(((Double)leftCasted.get()) >= ((Double)rightCasted.get()));
-            else return Result.fail(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
+            if (leftCastType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) >= ((Long)rightCasted.get()));
+            else if (leftCastType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) >= ((Double)rightCasted.get()));
+            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
         }
         else if (operation.type() == TokenType.LESS_EQUAL)
         {
-            if (leftCastType.equals(RuntimeTypes.INTEGER)) return Result.of(((Long)leftCasted.get()) <= ((Long)rightCasted.get()));
-            else if (leftCastType.equals(RuntimeTypes.REAL)) return Result.of(((Double)leftCasted.get()) <= ((Double)rightCasted.get()));
-            else return Result.fail(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
+            if (leftCastType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) <= ((Long)rightCasted.get()));
+            else if (leftCastType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) <= ((Double)rightCasted.get()));
+            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
         }
         //endregion
         //region Boolean Operators
-        else if (operation.type() == TokenType.AND) return Result.of((Boolean)leftCasted.get() && (Boolean)rightCasted.get());
-        else if (operation.type() == TokenType.OR) return Result.of((Boolean)leftCasted.get() || (Boolean)rightCasted.get());
+        else if (operation.type() == TokenType.AND) return result.success((Boolean)leftCasted.get() && (Boolean)rightCasted.get());
+        else if (operation.type() == TokenType.OR) return result.success((Boolean)leftCasted.get() || (Boolean)rightCasted.get());
         //endregion
         
-        else return Result.fail(new SyntaxException(this, "Unknown operator '" + operation.type().name() + "'!"));
+        else return result.failure(new SyntaxException(this, "Unknown operator '" + operation.type().name() + "'!"));
     }
 }
