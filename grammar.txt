@@ -14,6 +14,7 @@ statement           : display_statement
                     : set_statement
                     : input_statement
                     : call_statement
+                    : if_statement
 
 display_statement   : STATEMENT_KEYWORD(value: Display) value_set NEWLINE
 
@@ -28,6 +29,7 @@ input_statement     : STATEMENT_KEYWORD(value: Input) IDENTIFIER NEWLINE
 call_statement		: STATEMENT_KEYWORD(value: Call) IDENTIFIER arguments NEWLINE
 
 if_statement		: if_clause (ELSE if_clause)* (ELSE NEWLINE block)? END IF NEWLINE
+
 
 
 value_set   : expression (COMMA expression)*

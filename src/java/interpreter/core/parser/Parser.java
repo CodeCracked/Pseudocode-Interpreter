@@ -3,8 +3,8 @@ package interpreter.core.parser;
 import interpreter.core.Interpreter;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
-import interpreter.core.utils.Result;
 import interpreter.core.utils.IO;
+import interpreter.core.utils.Result;
 
 import java.util.List;
 import java.util.Stack;

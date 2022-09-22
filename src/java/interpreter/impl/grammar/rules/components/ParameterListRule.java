@@ -6,8 +6,8 @@ import interpreter.core.parser.IGrammarRule;
 import interpreter.core.parser.Parser;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.utils.Result;
-import interpreter.impl.grammar.nodes.components.ParameterNode;
 import interpreter.impl.grammar.nodes.components.ParameterListNode;
+import interpreter.impl.grammar.nodes.components.ParameterNode;
 import interpreter.impl.tokens.TokenType;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package interpreter.core.source;
 
-import interpreter.core.utils.Pair;
 import interpreter.core.utils.IO;
+import interpreter.core.utils.Pair;
 
 import java.util.Objects;
 import java.util.Stack;

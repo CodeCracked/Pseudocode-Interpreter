@@ -2,13 +2,12 @@ package interpreter.impl.grammar.rules;
 
 import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
-import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.IGrammarRule;
-import interpreter.core.utils.Result;
 import interpreter.core.parser.Parser;
+import interpreter.core.parser.nodes.AbstractNode;
+import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.ProgramNode;
 import interpreter.impl.grammar.nodes.blocks.ModuleDefinitionNode;
-import interpreter.impl.grammar.rules.blocks.ModuleDefinitionRule;
 import interpreter.impl.tokens.TokenType;
 
 import java.util.ArrayList;

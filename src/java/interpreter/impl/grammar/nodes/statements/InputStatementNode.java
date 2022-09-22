@@ -9,7 +9,6 @@ import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.runtime.SymbolType;
 
-import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;

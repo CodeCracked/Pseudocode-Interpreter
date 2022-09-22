@@ -5,11 +5,8 @@ import interpreter.core.lexer.Token;
 import interpreter.core.parser.IGrammarRule;
 import interpreter.core.parser.Parser;
 import interpreter.core.parser.nodes.AbstractNode;
-import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.statements.InputStatementNode;
-import interpreter.impl.grammar.nodes.statements.SetStatementNode;
-import interpreter.impl.grammar.rules.GrammarRules;
 import interpreter.impl.tokens.TokenType;
 
 public class InputStatementRule implements IGrammarRule
