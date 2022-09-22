@@ -54,6 +54,8 @@ public class IfStatementRule implements IGrammarRule
                 BlockNode elseBlock = (BlockNode) result.register(GrammarRules.block(parser));
                 if (result.error() != null) return result;
                 else rootStatement.setElse(elseBlock);
+
+                break;
             }
             
             else return result.failure(new SyntaxException(parser, "Expected 'If' or newline!"));

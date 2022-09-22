@@ -63,8 +63,11 @@ public class IfStatementNode extends AbstractNode
         if (result.error() != null) return result;
     
         // False Node
-        result.register(falseNode.populate(interpreter));
-        if (result.error() != null) return result;
+        if (falseNode != null)
+        {
+            result.register(falseNode.populate(interpreter));
+            if (result.error() != null) return result;
+        }
         
         return result.success(null);
     }
@@ -81,8 +84,11 @@ public class IfStatementNode extends AbstractNode
         trueNode.walk(parentChildConsumer);
     
         // False Node
-        parentChildConsumer.accept(this, falseNode);
-        falseNode.walk(parentChildConsumer);
+        if (falseNode != null)
+        {
+            parentChildConsumer.accept(this, falseNode);
+            falseNode.walk(parentChildConsumer);
+        }
     }
     
     @Override
@@ -99,9 +105,12 @@ public class IfStatementNode extends AbstractNode
         IO.Debug.println("True:");
         trueNode.debugPrint(depth + 2);
     
-        IO.Debug.print("  ".repeat(depth + 1));
-        IO.Debug.println("False:");
-        falseNode.debugPrint(depth + 2);
+        if (falseNode != null)
+        {
+            IO.Debug.print("  ".repeat(depth + 1));
+            IO.Debug.println("False:");
+            falseNode.debugPrint(depth + 2);
+        }
     }
     
     @Override
@@ -120,7 +129,7 @@ public class IfStatementNode extends AbstractNode
         if (casted.get()) result.register(trueNode.interpret(interpreter));
         
         // False Node
-        else result.register(falseNode.interpret(interpreter));
+        else if (falseNode != null) result.register(falseNode.interpret(interpreter));
         
         return result;
     }
