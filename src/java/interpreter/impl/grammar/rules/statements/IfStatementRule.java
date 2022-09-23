@@ -25,6 +25,8 @@ public class IfStatementRule implements IGrammarRule
         if (result.error() != null) return result;
     
         // Else-If and Else Blocks
+        boolean requireElseClause = false;
+        boolean hasElseClause = false;
         while (parser.peekNextToken().type() == TokenType.ELSE)
         {
             // Indent
@@ -41,7 +43,9 @@ public class IfStatementRule implements IGrammarRule
             {
                 IfStatementNode elseIf = (IfStatementNode) result.register(ifClause(parser));
                 if (result.error() != null) return result;
-                else rootStatement.addElseIf(elseIf);
+                
+                rootStatement.addElseIf(elseIf);
+                requireElseClause = true;
             }
             
             // Else Statement
@@ -53,8 +57,10 @@ public class IfStatementRule implements IGrammarRule
                 // Else Block
                 BlockNode elseBlock = (BlockNode) result.register(GrammarRules.block(parser));
                 if (result.error() != null) return result;
-                else rootStatement.setElse(elseBlock);
-
+                
+                rootStatement.setElse(elseBlock);
+                hasElseClause = true;
+                
                 break;
             }
             
@@ -65,6 +71,9 @@ public class IfStatementRule implements IGrammarRule
         if (!parser.getCurrentToken().matches(TokenType.INDENT, indentation)) return result.failure(new SyntaxException(parser, "Expected indentation of size " + indentation + "!"));
         result.registerAdvancement();
         parser.advance();
+        
+        // Check required Else clause
+        if (requireElseClause && !hasElseClause) return result.failure(new SyntaxException(parser, "Expected 'Else'! Else clauses are required when using else-if clauses!"));
         
         // End
         if (parser.getCurrentToken().type() != TokenType.END) return result.failure(new SyntaxException(parser, "Expected 'End If'!"));

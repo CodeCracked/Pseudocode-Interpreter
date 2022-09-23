@@ -28,7 +28,7 @@ input_statement     : STATEMENT_KEYWORD(value: Input) IDENTIFIER NEWLINE
 
 call_statement		: STATEMENT_KEYWORD(value: Call) IDENTIFIER arguments NEWLINE
 
-if_statement		: if_clause (ELSE if_clause)* (ELSE NEWLINE block)? END IF NEWLINE
+if_statement		: if_clause ((ELSE if_clause)* ELSE NEWLINE block)? END IF NEWLINE
 
 
 
