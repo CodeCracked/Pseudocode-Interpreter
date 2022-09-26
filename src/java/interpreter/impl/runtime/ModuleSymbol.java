@@ -8,7 +8,7 @@ import interpreter.core.runtime.Symbol;
 import interpreter.core.runtime.VariableSymbol;
 import interpreter.core.source.SourcePosition;
 import interpreter.core.utils.Result;
-import interpreter.impl.grammar.nodes.blocks.ModuleDefinitionNode;
+import interpreter.impl.grammar.nodes.statements.ModuleDefinitionNode;
 import interpreter.impl.grammar.nodes.components.ParameterNode;
 import interpreter.impl.grammar.nodes.expressions.VariableAccessNode;
 

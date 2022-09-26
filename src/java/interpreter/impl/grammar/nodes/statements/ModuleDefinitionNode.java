@@ -1,12 +1,12 @@
-package interpreter.impl.grammar.nodes.blocks;
+package interpreter.impl.grammar.nodes.statements;
 
 import interpreter.core.Interpreter;
 import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
-import interpreter.core.runtime.SymbolTable;
 import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
+import interpreter.impl.grammar.nodes.flow.BlockNode;
 import interpreter.impl.grammar.nodes.components.ParameterListNode;
 import interpreter.impl.runtime.ModuleSymbol;
 
@@ -18,7 +18,6 @@ public class ModuleDefinitionNode extends AbstractNode
     public final ParameterListNode parameters;
     public final BlockNode body;
     
-    private SymbolTable bodySymbolTable;
     private ModuleSymbol symbol;
     
     public ModuleDefinitionNode(Token openKeyword, Token identifier, ParameterListNode parameters, BlockNode body, Token closeKeyword)
@@ -27,12 +26,6 @@ public class ModuleDefinitionNode extends AbstractNode
         this.identifier = identifier;
         this.parameters = parameters;
         this.body = body;
-    }
-    
-    @Override
-    public SymbolTable getSymbolTable()
-    {
-        return this.bodySymbolTable;
     }
     
     public Result<Void> registerSymbol()
@@ -47,9 +40,6 @@ public class ModuleDefinitionNode extends AbstractNode
     {
         Result<Void> result = new Result<>();
         
-        // Create Child Symbol Table
-        this.bodySymbolTable = parent.getSymbolTable().createChild();
-    
         // Parameters
         result.register(parameters.populate(interpreter));
         if (result.error() != null) return result;

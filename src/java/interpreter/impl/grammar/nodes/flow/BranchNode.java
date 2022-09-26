@@ -1,4 +1,4 @@
-package interpreter.impl.grammar.nodes.statements;
+package interpreter.impl.grammar.nodes.flow;
 
 import interpreter.core.Interpreter;
 import interpreter.core.lexer.Token;
@@ -6,32 +6,31 @@ import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
-import interpreter.impl.grammar.nodes.blocks.BlockNode;
 import interpreter.impl.runtime.RuntimeTypes;
 
 import java.util.function.BiConsumer;
 
-public class IfStatementNode extends AbstractNode
+public class BranchNode extends AbstractNode
 {
     private final AbstractValuedNode condition;
     private final BlockNode trueNode;
     private AbstractNode falseNode;
     
-    public IfStatementNode(Token ifKeyword, AbstractValuedNode condition, BlockNode trueNode)
+    public BranchNode(Token ifKeyword, AbstractValuedNode condition, BlockNode trueNode)
     {
         super(ifKeyword.start(), trueNode.end());
         this.condition = condition;
         this.trueNode = trueNode;
     }
     
-    public Result<AbstractNode> addElseIf(IfStatementNode elseIfStatement)
+    public Result<AbstractNode> addElseIf(BranchNode elseIfStatement)
     {
         if (falseNode == null)
         {
             this.falseNode = elseIfStatement;
             return Result.of(this);
         }
-        else if (falseNode instanceof IfStatementNode elseIf) return elseIf.addElseIf(elseIfStatement);
+        else if (falseNode instanceof BranchNode elseIf) return elseIf.addElseIf(elseIfStatement);
         else return Result.fail(new IllegalStateException("Trying to add else-if statement to an if-statement that already has an else block!"));
     }
     public Result<AbstractNode> setElse(BlockNode elseBody)
@@ -41,7 +40,7 @@ public class IfStatementNode extends AbstractNode
             this.falseNode = elseBody;
             return Result.of(this);
         }
-        else if (falseNode instanceof IfStatementNode elseIf) return elseIf.setElse(elseBody);
+        else if (falseNode instanceof BranchNode elseIf) return elseIf.setElse(elseBody);
         else return Result.fail(new IllegalStateException("Trying to add an else block to an if-statement that already has an else block!"));
     }
     public void setEnd(Token closeToken)

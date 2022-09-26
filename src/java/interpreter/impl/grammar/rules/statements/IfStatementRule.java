@@ -7,8 +7,8 @@ import interpreter.core.parser.Parser;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
 import interpreter.core.utils.Result;
-import interpreter.impl.grammar.nodes.blocks.BlockNode;
-import interpreter.impl.grammar.nodes.statements.IfStatementNode;
+import interpreter.impl.grammar.nodes.flow.BlockNode;
+import interpreter.impl.grammar.nodes.flow.BranchNode;
 import interpreter.impl.grammar.rules.GrammarRules;
 import interpreter.impl.tokens.TokenType;
 
@@ -21,7 +21,7 @@ public class IfStatementRule implements IGrammarRule
         int indentation = parser.getCurrentIndent();
     
         // Root Statement
-        IfStatementNode rootStatement = (IfStatementNode) result.register(ifClause(parser));
+        BranchNode rootStatement = (BranchNode) result.register(ifClause(parser));
         if (result.error() != null) return result;
     
         // Else-If and Else Blocks
@@ -41,7 +41,7 @@ public class IfStatementRule implements IGrammarRule
             // Else-If Statement
             if (parser.getCurrentToken().isKeyword(TokenType.STATEMENT_KEYWORD, "If", 1))
             {
-                IfStatementNode elseIf = (IfStatementNode) result.register(ifClause(parser));
+                BranchNode elseIf = (BranchNode) result.register(ifClause(parser));
                 if (result.error() != null) return result;
                 
                 rootStatement.addElseIf(elseIf);
@@ -123,6 +123,6 @@ public class IfStatementRule implements IGrammarRule
         BlockNode trueNode = (BlockNode) result.register(GrammarRules.block(parser));
         if (result.error() != null) return result;
         
-        return result.success(new IfStatementNode(ifKeyword, condition, trueNode));
+        return result.success(new BranchNode(ifKeyword, condition, trueNode));
     }
 }

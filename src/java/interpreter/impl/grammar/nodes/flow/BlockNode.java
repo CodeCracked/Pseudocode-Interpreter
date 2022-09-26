@@ -1,7 +1,8 @@
-package interpreter.impl.grammar.nodes.blocks;
+package interpreter.impl.grammar.nodes.flow;
 
 import interpreter.core.Interpreter;
 import interpreter.core.parser.nodes.AbstractNode;
+import interpreter.core.runtime.SymbolTable;
 import interpreter.core.utils.Result;
 
 import java.util.List;
@@ -11,10 +12,18 @@ public class BlockNode extends AbstractNode
 {
     private final List<AbstractNode> statements;
     
+    private SymbolTable symbolTable;
+    
     public BlockNode(List<AbstractNode> statements)
     {
         super(statements.get(0).start(), statements.get(statements.size() - 1).end());
         this.statements = statements;
+    }
+    
+    @Override
+    public SymbolTable getSymbolTable()
+    {
+        return symbolTable;
     }
     
     @Override
@@ -30,6 +39,8 @@ public class BlockNode extends AbstractNode
     @Override
     public Result<Void> populate(Interpreter interpreter)
     {
+        this.symbolTable = parent.getSymbolTable().createChild();
+        
         Result<Void> result = new Result<>();
         for (AbstractNode statement : statements)
         {

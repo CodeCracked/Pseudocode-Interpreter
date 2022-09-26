@@ -7,7 +7,7 @@ import interpreter.core.parser.Parser;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.ProgramNode;
-import interpreter.impl.grammar.nodes.blocks.ModuleDefinitionNode;
+import interpreter.impl.grammar.nodes.statements.ModuleDefinitionNode;
 import interpreter.impl.tokens.TokenType;
 
 import java.util.ArrayList;

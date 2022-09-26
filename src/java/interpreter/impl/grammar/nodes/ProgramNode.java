@@ -6,7 +6,7 @@ import interpreter.core.runtime.SymbolTable;
 import interpreter.core.runtime.VariableSymbol;
 import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
-import interpreter.impl.grammar.nodes.blocks.ModuleDefinitionNode;
+import interpreter.impl.grammar.nodes.statements.ModuleDefinitionNode;
 import interpreter.impl.runtime.ModuleSymbol;
 import interpreter.impl.runtime.RuntimeTypes;
 import interpreter.impl.runtime.SymbolType;
