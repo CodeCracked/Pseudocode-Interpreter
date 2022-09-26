@@ -1,5 +1,6 @@
 package interpreter.impl.runtime;
 
+import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.runtime.RuntimeType;
 import interpreter.core.utils.Result;
 
@@ -17,6 +18,13 @@ public class RuntimeTypes
     
         @Override
         public Result<String> tryCast(Object value) { return Result.of(value != null ? value.toString() : ""); }
+    
+        @Override
+        protected Result<Integer> tryCompare(AbstractNode expressionNode, String value, RuntimeType<?> otherType, Object otherValue)
+        {
+            if (otherType.equals(STRING) && otherValue instanceof String otherString) return Result.of(value.compareTo(otherString));
+            else return compareNotSupported(expressionNode, otherType);
+        }
     };
     public static final RuntimeType<Long> INTEGER = new RuntimeType<>("Integer", Long.class)
     {
@@ -33,6 +41,14 @@ public class RuntimeTypes
             if (value instanceof Integer casted) return Result.of((long)casted);
             else if (value instanceof Long casted) return Result.of(casted);
             else return Result.fail(new IllegalArgumentException("Cannot cast " + value.getClass().getSimpleName() + " to RuntimeType " + keyword));
+        }
+    
+        @Override
+        protected Result<Integer> tryCompare(AbstractNode expressionNode, Long value, RuntimeType<?> otherType, Object otherValue)
+        {
+            if (otherType.equals(INTEGER) && otherValue instanceof Long otherLong) return Result.of(Long.compare(value, otherLong));
+            else if (otherType.equals(REAL) && otherValue instanceof Double otherDouble) return Result.of(Double.compare(value, otherDouble));
+            else return compareNotSupported(expressionNode, otherType);
         }
     };
     public static final RuntimeType<Double> REAL = new RuntimeType<>("Real", Double.class)
@@ -53,9 +69,24 @@ public class RuntimeTypes
             else if (value instanceof Double casted) return Result.of(casted);
             else return Result.fail(new IllegalArgumentException("Cannot cast " + value.getClass().getSimpleName() + " to RuntimeType " + keyword));
         }
+    
+        @Override
+        protected Result<Integer> tryCompare(AbstractNode expressionNode, Double value, RuntimeType<?> otherType, Object otherValue)
+        {
+            if (otherType.equals(INTEGER) && otherValue instanceof Long otherLong) return Result.of(Double.compare(value, otherLong));
+            else if (otherType.equals(REAL) && otherValue instanceof Double otherDouble) return Result.of(Double.compare(value, otherDouble));
+            else return compareNotSupported(expressionNode, otherType);
+        }
     };
     public static final RuntimeType<Boolean> BOOLEAN = new RuntimeType<Boolean>("Boolean", Boolean.class)
     {
+        @Override
+        public String toString(Boolean value)
+        {
+            if (value) return "True";
+            else return "False";
+        }
+    
         @Override
         public Result<Boolean> tryParse(String str)
         {
@@ -69,6 +100,13 @@ public class RuntimeTypes
         {
             if (value instanceof Boolean bool) return Result.of(bool);
             else return Result.fail(new IllegalArgumentException("Cannot cast " + value.getClass().getSimpleName() + " to RuntimeType " + keyword));
+        }
+    
+        @Override
+        protected Result<Integer> tryCompare(AbstractNode expressionNode, Boolean value, RuntimeType<?> otherType, Object otherValue)
+        {
+            if (otherType.equals(BOOLEAN) && otherValue instanceof Boolean otherBool) return Result.of(Boolean.compare(value, otherBool));
+            else return compareNotSupported(expressionNode, otherType);
         }
     };
     

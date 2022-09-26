@@ -81,24 +81,9 @@ public class BinaryOpNode extends AbstractValuedNode
         }
         else if (comparisonOperators.contains(operation.type()))
         {
-            // Non-Equality comparisons
-            if (operation.type() != TokenType.EQUALS && operation.type() != TokenType.NOT_EQUALS)
-            {
-                if (!mathTypes.contains(leftType.get())) return result.failure(new SyntaxException(left, "Expected Integer or Real, found " + leftType.get().keyword));
-                if (!mathTypes.contains(rightType.get())) return result.failure(new SyntaxException(right, "Expected Integer or Real, found " + rightType.get().keyword));
-                
-                leftCastType = leftType.get();
-                if (leftCastType.equals(RuntimeTypes.INTEGER) && rightType.get().equals(RuntimeTypes.REAL)) leftCastType = RuntimeTypes.REAL;
-                rightCastType = leftCastType;
-                runtimeType = RuntimeTypes.BOOLEAN;
-            }
-            // Equality comparisons
-            else
-            {
-                runtimeType = RuntimeTypes.BOOLEAN;
-                leftCastType = leftType.get();
-                rightCastType = rightType.get();
-            }
+            runtimeType = RuntimeTypes.BOOLEAN;
+            leftCastType = leftType.get();
+            rightCastType = rightType.get();
         }
         else if (booleanOperators.contains(operation.type()))
         {
@@ -179,31 +164,17 @@ public class BinaryOpNode extends AbstractValuedNode
         }
         //endregion
         //region Comparison Operators
-        else if (operation.type() == TokenType.EQUALS) return result.success(leftCasted.get().equals(rightCasted.get()));
-        else if (operation.type() == TokenType.NOT_EQUALS) return result.success(!leftCasted.get().equals(rightCasted.get()));
-        else if (operation.type() == TokenType.GREATER)
+        else if (comparisonOperators.contains(operation.type()))
         {
-            if (leftCastType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) > ((Long)rightCasted.get()));
-            else if (leftCastType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) > ((Double)rightCasted.get()));
-            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
-        }
-        else if (operation.type() == TokenType.LESS)
-        {
-            if (leftCastType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) < ((Long)rightCasted.get()));
-            else if (leftCastType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) < ((Double)rightCasted.get()));
-            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
-        }
-        else if (operation.type() == TokenType.GREATER_EQUAL)
-        {
-            if (leftCastType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) >= ((Long)rightCasted.get()));
-            else if (leftCastType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) >= ((Double)rightCasted.get()));
-            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
-        }
-        else if (operation.type() == TokenType.LESS_EQUAL)
-        {
-            if (leftCastType.equals(RuntimeTypes.INTEGER)) return result.success(((Long)leftCasted.get()) <= ((Long)rightCasted.get()));
-            else if (leftCastType.equals(RuntimeTypes.REAL)) return result.success(((Double)leftCasted.get()) <= ((Double)rightCasted.get()));
-            else return result.failure(new SyntaxException(this, "Expected Integer or Real, found " + runtimeType.keyword + "!"));
+            Result<Integer> comparison = result.registerIssues(leftCastType.compare(this, leftCasted.get(), rightCastType, rightCasted.get()));
+            if (result.error() != null) return result;
+            
+            else if (operation.type() == TokenType.EQUALS) return result.success(comparison.get() == 0);
+            else if (operation.type() == TokenType.NOT_EQUALS) return result.success(comparison.get() != 0);
+            else if (operation.type() == TokenType.GREATER) return result.success(comparison.get() > 0);
+            else if (operation.type() == TokenType.LESS) return result.success(comparison.get() < 0);
+            else if (operation.type() == TokenType.GREATER_EQUAL) return result.success(comparison.get() >= 0);
+            else if (operation.type() == TokenType.LESS_EQUAL) return result.success(comparison.get() <= 0);
         }
         //endregion
         //region Boolean Operators
@@ -211,6 +182,6 @@ public class BinaryOpNode extends AbstractValuedNode
         else if (operation.type() == TokenType.OR) return result.success((Boolean)leftCasted.get() || (Boolean)rightCasted.get());
         //endregion
         
-        else return result.failure(new SyntaxException(this, "Unknown operator '" + operation.type().name() + "'!"));
+        return result.failure(new SyntaxException(this, "Unknown operator '" + operation.type().name() + "'!"));
     }
 }

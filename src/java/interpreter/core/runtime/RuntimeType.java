@@ -1,5 +1,7 @@
 package interpreter.core.runtime;
 
+import interpreter.core.exceptions.SyntaxException;
+import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.utils.Result;
 
 import java.util.HashMap;
@@ -35,6 +37,19 @@ public abstract class RuntimeType<T>
         this.valueClass = valueClass;
     }
     
+    public Result<Integer> compare(AbstractNode expressionNode, Object value, RuntimeType<?> otherType, Object otherValue)
+    {
+        return tryCompare(expressionNode, (T)value, otherType, otherValue);
+    }
+    public String display(Object value) { return toString((T)value); }
+    
+    protected String toString(T value) { return value.toString(); }
     public abstract Result<T> tryParse(String str);
     public abstract Result<T> tryCast(Object value);
+    protected abstract Result<Integer> tryCompare(AbstractNode expressionNode, T value, RuntimeType<?> otherType, Object otherValue);
+    
+    protected Result<Integer> compareNotSupported(AbstractNode expressionNode, RuntimeType<?> otherType)
+    {
+        return Result.fail(new SyntaxException(expressionNode, "Comparison between " + keyword + " and " + otherType.keyword + " is not supported!"));
+    }
 }

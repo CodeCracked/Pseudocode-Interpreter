@@ -4,6 +4,7 @@ import interpreter.core.Interpreter;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.parser.nodes.AbstractValuedNode;
+import interpreter.core.runtime.RuntimeType;
 import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.components.ValueSetNode;
@@ -45,9 +46,13 @@ public class DisplayStatementNode extends AbstractNode
 
         for (AbstractValuedNode messagePiece : messagePieces.values)
         {
+            Result<RuntimeType<?>> pieceType = result.registerIssues(messagePiece.getRuntimeType());
+            if (result.error() != null) return result;
+            
             Result<Object> pieceValue = result.registerIssues(messagePiece.getValue(interpreter));
             if (result.error() != null) return result;
-            IO.Output.print(pieceValue.get());
+            
+            IO.Output.print(pieceType.get().display(pieceValue.get()));
         }
         IO.Output.println();
         

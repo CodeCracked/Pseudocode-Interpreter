@@ -68,7 +68,15 @@ public class Result<T>
 
     public void displayIssues()
     {
-        for (Exception warning : warnings) IO.Warnings.println(warning.getMessage());
-        if (error != null) IO.Errors.println(error.getMessage());
+        for (Exception warning : warnings)
+        {
+            IO.Warnings.println(warning.getMessage());
+            warning.printStackTrace();
+        }
+        if (error != null)
+        {
+            IO.Errors.println(error.getMessage());
+            error.printStackTrace();
+        }
     }
 }
