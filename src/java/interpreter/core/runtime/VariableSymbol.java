@@ -27,15 +27,6 @@ public class VariableSymbol extends Symbol
         }
     }
     
-    @Override
-    public Symbol clone()
-    {
-        VariableSymbol clone = new VariableSymbol(type, name, runtimeType, constant);
-        clone.value = value;
-        clone.initialized = initialized;
-        return clone;
-    }
-    
     public boolean isInitialized() { return initialized; }
     public boolean isConstant() { return constant; }
     public RuntimeType<?> getRuntimeType() { return runtimeType; }

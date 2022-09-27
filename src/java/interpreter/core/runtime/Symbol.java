@@ -10,6 +10,4 @@ public abstract class Symbol
         this.type = type;
         this.name = name;
     }
-    
-    public abstract Symbol clone();
 }

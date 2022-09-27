@@ -88,10 +88,4 @@ public class ModuleSymbol extends Symbol
         
         return result.success(null);
     }
-    
-    @Override
-    public Symbol clone()
-    {
-        return new ModuleSymbol(name, moduleDefinition);
-    }
 }
