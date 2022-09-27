@@ -44,22 +44,10 @@ public class ModuleDefinitionRule implements IGrammarRule
         BlockNode body = (BlockNode) result.register(GrammarRules.block(parser, 1));
         if (result.error() != null) return result;
         
-        // End Keyword
-        if (parser.getCurrentToken().type() != TokenType.END) return result.failure(new SyntaxException(parser, "Expected 'End'!"));
-        result.registerAdvancement();
-        parser.advance();
-    
-        // Module Keyword
-        if (parser.getCurrentToken().type() != TokenType.MODULE) return result.failure(new SyntaxException(parser, "Expected 'Module'!"));
-        result.registerAdvancement();
-        parser.advance();
-    
-        // End Keyword
-        Token closeKeyword = parser.getCurrentToken();
-        if (closeKeyword.type() != TokenType.NEWLINE) return result.failure(new SyntaxException(parser, "Expected newline!"));
-        result.registerAdvancement();
-        parser.advance();
+        // End Module
+        Result<Token> closeKeyword = result.registerIssues(GrammarRules.endStatement(parser, 0, TokenType.MODULE, null));
+        if (result.error() != null) return result;
         
-        return result.success(new ModuleDefinitionNode(openKeyword, identifier, parameters, body, closeKeyword));
+        return result.success(new ModuleDefinitionNode(openKeyword, identifier, parameters, body, closeKeyword.get()));
     }
 }

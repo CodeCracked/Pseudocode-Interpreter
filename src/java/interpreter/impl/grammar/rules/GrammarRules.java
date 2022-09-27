@@ -34,6 +34,7 @@ public class GrammarRules
     public static IGrammarRule INPUT_STATEMENT = new InputStatementRule();
     public static IGrammarRule CALL_STATEMENT = new CallStatementRule();
     public static IGrammarRule IF_STATEMENT = new IfStatementRule();
+    public static IGrammarRule SWITCH_STATEMENT = new SwitchStatementRule();
     
     public static IGrammarRule VALUE_SET = new ValueSetRule();
     public static IGrammarRule ARGUMENT_LIST = new ArgumentListRule();
@@ -98,5 +99,40 @@ public class GrammarRules
     
         if (statements.size() == 0) return result.failure(new SyntaxException(parser, "Expected indentation of size " + indentation + ", then a statement!"));
         else return result.success(new BlockNode(statements));
+    }
+    
+    public static Result<Token> endStatement(Parser parser, int indentation, String statementKeyword)
+    {
+        return endStatement(parser, indentation, TokenType.STATEMENT_KEYWORD, statementKeyword);
+    }
+    public static Result<Token> endStatement(Parser parser, int indentation, Enum<?> keywordType, String keyword)
+    {
+        Result<Token> result = new Result<>();
+        
+        if (indentation != 0)
+        {
+            // Indent
+            if (!parser.getCurrentToken().matches(TokenType.INDENT, indentation)) return result.failure(new SyntaxException(parser, "Expected indentation of size " + indentation + "!"));
+            result.registerAdvancement();
+            parser.advance();
+        }
+    
+        // End
+        if (parser.getCurrentToken().type() != TokenType.END) return result.failure(new SyntaxException(parser, "Expected 'End " + keyword + "'!"));
+        result.registerAdvancement();
+        parser.advance();
+    
+        // Statement Keyword
+        Token closeToken = parser.getCurrentToken();
+        if (!closeToken.matches(keywordType, keyword)) return result.failure(new SyntaxException(parser, "Expected '" + keyword + "'!"));
+        result.registerAdvancement();
+        parser.advance();
+    
+        // Newline
+        if (parser.getCurrentToken().type() != TokenType.NEWLINE) return result.failure(new SyntaxException(parser, "Expected newline!"));
+        result.registerAdvancement();
+        parser.advance();
+        
+        return result.success(closeToken);
     }
 }

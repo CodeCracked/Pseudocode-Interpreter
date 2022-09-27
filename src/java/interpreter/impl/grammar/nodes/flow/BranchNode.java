@@ -13,10 +13,10 @@ import java.util.function.BiConsumer;
 public class BranchNode extends AbstractNode
 {
     private final AbstractValuedNode condition;
-    private final BlockNode trueNode;
+    private final AbstractNode trueNode;
     private AbstractNode falseNode;
     
-    public BranchNode(Token ifKeyword, AbstractValuedNode condition, BlockNode trueNode)
+    public BranchNode(Token ifKeyword, AbstractValuedNode condition, AbstractNode trueNode)
     {
         super(ifKeyword.start(), trueNode.end());
         this.condition = condition;
@@ -33,7 +33,7 @@ public class BranchNode extends AbstractNode
         else if (falseNode instanceof BranchNode elseIf) return elseIf.addElseIf(elseIfStatement);
         else return Result.fail(new IllegalStateException("Trying to add else-if statement to an if-statement that already has an else block!"));
     }
-    public Result<AbstractNode> setElse(BlockNode elseBody)
+    public Result<AbstractNode> setElse(AbstractNode elseBody)
     {
         if (falseNode == null)
         {

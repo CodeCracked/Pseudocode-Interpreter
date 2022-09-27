@@ -30,6 +30,8 @@ call_statement		: STATEMENT_KEYWORD(value: Call) IDENTIFIER arguments NEWLINE
 
 if_statement		: if_clause ((ELSE if_clause)* ELSE NEWLINE block)? END IF NEWLINE
 
+switch_statement	: STATEMENT_KEYWORD(value: Select) expression NEWLINE INDENT case_clause+ DEFAULT NEWLINE INDENT block END STATEMENT_KEYWORD(value: Select)
+
 
 
 value_set   : expression (COMMA expression)*
@@ -39,6 +41,8 @@ arguments	: LPAREN value_set? RPAREN
 params      : LPAREN (TYPE_KEYWORD REF? IDENTIFIER (COMMA TYPE_KEYWORD REF? IDENTIFIER)*)? RPAREN
 
 if_clause	: STATEMENT_KEYWORD(value: If) expression THEN NEWLINE block
+
+case_clause	: CASE expression COLON NEWLINE block
 
 
 

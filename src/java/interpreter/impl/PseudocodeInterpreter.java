@@ -22,6 +22,8 @@ public class PseudocodeInterpreter extends Interpreter
             new KeywordTokenBuilder(TokenType.TYPE_KEYWORD, 1, KeywordLists.typeKeywords),
             new MatcherTokenBuilder(TokenType.THEN, 1, "Then"),
             new MatcherTokenBuilder(TokenType.ELSE, 1, "Else"),
+            new MatcherTokenBuilder(TokenType.CASE, 1, "Case"),
+            new MatcherTokenBuilder(TokenType.DEFAULT, 1, "Default:"),
             
             new IdentifierTokenBuilder(TokenType.IDENTIFIER),
             
@@ -50,6 +52,7 @@ public class PseudocodeInterpreter extends Interpreter
             new MatcherTokenBuilder(TokenType.LPAREN, -1, "("),
             new MatcherTokenBuilder(TokenType.RPAREN, -1, ")"),
             new MatcherTokenBuilder(TokenType.COMMA, -1, ","),
+            new MatcherTokenBuilder(TokenType.COLON, -1, ":"),
             
             new MatcherTokenBuilder(TokenType.MODULE, 0, "Module"),
             new MatcherTokenBuilder(TokenType.END, 0, "End"),

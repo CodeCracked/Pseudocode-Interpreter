@@ -6,6 +6,8 @@ public enum TokenType
     TYPE_KEYWORD,
     THEN,
     ELSE,
+    CASE,
+    DEFAULT,
     
     IDENTIFIER,
     
@@ -36,6 +38,7 @@ public enum TokenType
     LPAREN,
     RPAREN,
     COMMA,
+    COLON,
     
     MODULE,
     END,

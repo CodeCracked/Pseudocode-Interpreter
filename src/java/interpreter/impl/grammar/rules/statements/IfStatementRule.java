@@ -55,7 +55,7 @@ public class IfStatementRule implements IGrammarRule
                 parser.advance();
                 
                 // Else Block
-                BlockNode elseBlock = (BlockNode) result.register(GrammarRules.block(parser));
+                AbstractNode elseBlock = result.register(GrammarRules.block(parser));
                 if (result.error() != null) return result;
                 
                 rootStatement.setElse(elseBlock);
@@ -66,32 +66,15 @@ public class IfStatementRule implements IGrammarRule
             
             else return result.failure(new SyntaxException(parser, "Expected 'If' or newline!"));
         }
-        
-        // Indent
-        if (!parser.getCurrentToken().matches(TokenType.INDENT, indentation)) return result.failure(new SyntaxException(parser, "Expected indentation of size " + indentation + "!"));
-        result.registerAdvancement();
-        parser.advance();
-        
+    
         // Check required Else clause
         if (requireElseClause && !hasElseClause) return result.failure(new SyntaxException(parser, "Expected 'Else'! Else clauses are required when using else-if clauses!"));
         
-        // End
-        if (parser.getCurrentToken().type() != TokenType.END) return result.failure(new SyntaxException(parser, "Expected 'End If'!"));
-        result.registerAdvancement();
-        parser.advance();
+        // End If
+        Result<Token> closeToken = result.registerIssues(GrammarRules.endStatement(parser, indentation, "If"));
+        if (result.error() != null) return result;
         
-        // If
-        Token closeToken = parser.getCurrentToken();
-        if (!closeToken.matches(TokenType.STATEMENT_KEYWORD, "If")) return result.failure(new SyntaxException(parser, "Expected 'If'!"));
-        result.registerAdvancement();
-        parser.advance();
-        rootStatement.setEnd(closeToken);
-        
-        // Newline
-        if (parser.getCurrentToken().type() != TokenType.NEWLINE) return result.failure(new SyntaxException(parser, "Expected newline!"));
-        result.registerAdvancement();
-        parser.advance();
-        
+        rootStatement.setEnd(closeToken.get());
         return result.success(rootStatement);
     }
     
@@ -120,7 +103,7 @@ public class IfStatementRule implements IGrammarRule
         parser.advance();
         
         // True Block
-        BlockNode trueNode = (BlockNode) result.register(GrammarRules.block(parser));
+        AbstractNode trueNode = result.register(GrammarRules.block(parser));
         if (result.error() != null) return result;
         
         return result.success(new BranchNode(ifKeyword, condition, trueNode));

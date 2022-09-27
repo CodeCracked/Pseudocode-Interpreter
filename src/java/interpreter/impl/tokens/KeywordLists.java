@@ -18,6 +18,7 @@ public class KeywordLists
             "Set",
             "Input",
             "Call",
-            "If"
+            "If",
+            "Select"
     );
 }
