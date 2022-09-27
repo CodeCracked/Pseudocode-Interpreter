@@ -21,6 +21,12 @@ public class BlockNode extends AbstractNode
     }
     
     @Override
+    public void createSymbolTable()
+    {
+        this.symbolTable = parent.getSymbolTable().createChild();
+    }
+    
+    @Override
     public SymbolTable getSymbolTable()
     {
         return symbolTable;
@@ -39,8 +45,6 @@ public class BlockNode extends AbstractNode
     @Override
     public Result<Void> populate(Interpreter interpreter)
     {
-        this.symbolTable = parent.getSymbolTable().createChild();
-        
         Result<Void> result = new Result<>();
         for (AbstractNode statement : statements)
         {

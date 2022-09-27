@@ -4,6 +4,7 @@ import interpreter.core.Interpreter;
 import interpreter.core.exceptions.SyntaxException;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
+import interpreter.core.runtime.SymbolTable;
 import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 import interpreter.impl.grammar.nodes.flow.BlockNode;
@@ -41,6 +42,7 @@ public class ModuleDefinitionNode extends AbstractNode
         Result<Void> result = new Result<>();
         
         // Parameters
+        parameters.setParameterTable(body.getSymbolTable());
         result.register(parameters.populate(interpreter));
         if (result.error() != null) return result;
         

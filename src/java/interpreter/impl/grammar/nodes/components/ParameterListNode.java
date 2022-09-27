@@ -3,6 +3,7 @@ package interpreter.impl.grammar.nodes.components;
 import interpreter.core.Interpreter;
 import interpreter.core.lexer.Token;
 import interpreter.core.parser.nodes.AbstractNode;
+import interpreter.core.runtime.SymbolTable;
 import interpreter.core.utils.IO;
 import interpreter.core.utils.Result;
 
@@ -14,15 +15,31 @@ public class ParameterListNode extends AbstractNode
 {
     public final List<ParameterNode> parameters;
     
+    private SymbolTable parameterTable;
+    
     public ParameterListNode(Token leftParenthesis, List<ParameterNode> parameters, Token rightParenthesis)
     {
         super(leftParenthesis.start(), rightParenthesis.end());
         this.parameters = Collections.unmodifiableList(parameters);
+        for (ParameterNode parameter : this.parameters) parameter.setOwner(this);
+    }
+    
+    public void setParameterTable(SymbolTable parameterTable)
+    {
+        this.parameterTable = parameterTable;
+    }
+    
+    @Override
+    public SymbolTable getSymbolTable()
+    {
+        return this.parameterTable;
     }
     
     @Override
     public Result<Void> populate(Interpreter interpreter)
     {
+        if (parameterTable == null) parameterTable = parent.getSymbolTable();
+        
         Result<Void> result = new Result<>();
         for (ParameterNode arg : parameters)
         {

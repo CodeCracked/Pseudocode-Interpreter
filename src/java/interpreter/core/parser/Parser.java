@@ -51,8 +51,8 @@ public class Parser
         result.get().createSymbolTable();
         result.get().walk((parent, child) ->
                 {
-                    child.createSymbolTable();
                     child.parent = parent;
+                    child.createSymbolTable();
                 });
 
         result.registerIssues(result.get().populate(interpreter));

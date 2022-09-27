@@ -52,14 +52,15 @@ public class ModuleSymbol extends Symbol
             if (result.error() != null) return result;
             
             // Pass Argument to Parameter
-            Result<?> passResult = result.registerIssues(parameter.setValue(argumentValue.get(), argument));
-            if (result.error() != null) return result;
-
-            RuntimeType<?> expectedType = parameter.getRuntimeType();
-            Result<RuntimeType<?>> foundType = result.registerIssues(argument.getRuntimeType());
-
-            if (foundType.error() != null) return result.failure(new SyntaxException(argument, "Expected " + expectedType.keyword + ", found Unknown!"));
-            else return result.failure(new SyntaxException(argument, "Expected " + expectedType.keyword + ", found " + foundType.get().keyword + "!"));
+            result.registerIssues(parameter.setValue(argumentValue.get(), argument));
+            if (result.error() != null)
+            {
+                RuntimeType<?> expectedType = parameter.getRuntimeType();
+                Result<RuntimeType<?>> foundType = result.registerIssues(argument.getRuntimeType());
+    
+                if (foundType.error() != null) return result.failure(new SyntaxException(argument, "Expected " + expectedType.keyword + ", found Unknown!"));
+                else return result.failure(new SyntaxException(argument, "Expected " + expectedType.keyword + ", found " + foundType.get().keyword + "!"));
+            }
         }
         
         // Run Module

@@ -21,6 +21,7 @@ public class ParameterNode extends AbstractNode
     
     private RuntimeType<?> dataType;
     private VariableSymbol symbol;
+    private ParameterListNode owner;
     
     public ParameterNode(Token dataType, Token identifier, boolean passByReference)
     {
@@ -30,6 +31,8 @@ public class ParameterNode extends AbstractNode
         this.identifier = identifier.value().toString();
         this.passByReference = passByReference;
     }
+    
+    public void setOwner(ParameterListNode owner) { this.owner = owner; }
     
     public VariableSymbol getVariableSymbol() { return symbol; }
     
@@ -45,7 +48,7 @@ public class ParameterNode extends AbstractNode
         
         // Symbol
         symbol = new VariableSymbol(SymbolType.VARIABLE, identifier, this.dataType, false);
-        if (!getSymbolTable().tryAddSymbol(symbol)) return result.failure(new SyntaxException(identifierToken, "Variable '" + identifier + "' already exists!"));
+        if (!owner.getSymbolTable().tryAddSymbol(symbol)) return result.failure(new SyntaxException(identifierToken, "Variable '" + identifier + "' already exists!"));
         
         return result.success(null);
     }
