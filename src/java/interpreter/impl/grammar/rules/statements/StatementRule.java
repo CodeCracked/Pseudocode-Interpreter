@@ -49,6 +49,9 @@ public class StatementRule implements IGrammarRule
             case "Select":
                 statementNode = result.register(GrammarRules.SWITCH_STATEMENT.build(parser));
                 break;
+            case "While":
+                statementNode = result.register(GrammarRules.WHILE_STATEMENT.build(parser));
+                break;
             default:
                 result.failure(new SyntaxException(parser, "Trying to use " + keyword + " statement, but no grammar rule was defined! Please let Markus know so he can fix this issue."));
                 break;

@@ -19,6 +19,7 @@ public class KeywordLists
             "Input",
             "Call",
             "If",
-            "Select"
+            "Select",
+            "While"
     );
 }
