@@ -64,10 +64,10 @@ public class DoStatementNode extends AbstractNode
     public void debugPrint(int depth)
     {
         IO.Debug.print("  ".repeat(depth));
-        IO.Debug.println("WHILE");
+        IO.Debug.println("DO");
     
         IO.Debug.print("  ".repeat(depth + 1));
-        IO.Debug.println("Condition: ");
+        IO.Debug.println("Condition (breakOnTrue: " + breakOnTrue + "): ");
         condition.debugPrint(depth + 2);
     
         IO.Debug.print("  ".repeat(depth + 1));

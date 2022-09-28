@@ -17,6 +17,8 @@ statement           : display_statement
                     : if_statement
                     : switch_statement
                     : while_statement
+                    : do_statement
+                    : for_statement
 
 display_statement   : STATEMENT_KEYWORD(value: Display) value_set NEWLINE
 
@@ -37,6 +39,8 @@ switch_statement	: STATEMENT_KEYWORD(value: Select) expression NEWLINE INDENT ca
 while_statement		: STATEMENT_KEYWORD(value: While) expression NEWLINE INDENT block END STATEMENT_KEYWORD(value: While)
 
 do_statement		: STATEMENT_KEYWORD(value: Do) NEWLINE INDENT block (STATEMENT_KEYWORD(value: While)|UNTIL) expression NEWLINE
+
+for_statement		: STATEMENT_KEYWORD(value: For) IDENTIFIER ASSIGN expression TO expression (STEP expression)? NEWLINE block END STATEMENT_KEYWORD(value: For)
 
 
 

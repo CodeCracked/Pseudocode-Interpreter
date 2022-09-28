@@ -9,6 +9,8 @@ public enum TokenType
     CASE,
     DEFAULT,
     UNTIL,
+    TO,
+    STEP,
     
     IDENTIFIER,
     

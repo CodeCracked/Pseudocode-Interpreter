@@ -25,39 +25,18 @@ public class StatementRule implements IGrammarRule
         AbstractNode statementNode = null;
         switch (keyword)
         {
-            case "Display":
-                statementNode = result.register(GrammarRules.DISPLAY_STATEMENT.build(parser));
-                break;
-            case "Declare":
-                statementNode = result.register(GrammarRules.DECLARE_STATEMENT.build(parser));
-                break;
-            case "Constant":
-                statementNode = result.register(GrammarRules.CONSTANT_STATEMENT.build(parser));
-                break;
-            case "Set":
-                statementNode = result.register(GrammarRules.SET_STATEMENT.build(parser));
-                break;
-            case "Input":
-                statementNode = result.register(GrammarRules.INPUT_STATEMENT.build(parser));
-                break;
-            case "Call":
-                statementNode = result.register(GrammarRules.CALL_STATEMENT.build(parser));
-                break;
-            case "If":
-                statementNode = result.register(GrammarRules.IF_STATEMENT.build(parser));
-                break;
-            case "Select":
-                statementNode = result.register(GrammarRules.SWITCH_STATEMENT.build(parser));
-                break;
-            case "While":
-                statementNode = result.register(GrammarRules.WHILE_STATEMENT.build(parser));
-                break;
-            case "Do":
-                statementNode = result.register(GrammarRules.DO_STATEMENT.build(parser));
-                break;
-            default:
-                result.failure(new SyntaxException(parser, "Trying to use " + keyword + " statement, but no grammar rule was defined! Please let Markus know so he can fix this issue."));
-                break;
+            case "Display"  -> statementNode = result.register(GrammarRules.DISPLAY_STATEMENT.build(parser));
+            case "Declare"  -> statementNode = result.register(GrammarRules.DECLARE_STATEMENT.build(parser));
+            case "Constant" -> statementNode = result.register(GrammarRules.CONSTANT_STATEMENT.build(parser));
+            case "Set"      -> statementNode = result.register(GrammarRules.SET_STATEMENT.build(parser));
+            case "Input"    -> statementNode = result.register(GrammarRules.INPUT_STATEMENT.build(parser));
+            case "Call"     -> statementNode = result.register(GrammarRules.CALL_STATEMENT.build(parser));
+            case "If"       -> statementNode = result.register(GrammarRules.IF_STATEMENT.build(parser));
+            case "Select"   -> statementNode = result.register(GrammarRules.SWITCH_STATEMENT.build(parser));
+            case "While"    -> statementNode = result.register(GrammarRules.WHILE_STATEMENT.build(parser));
+            case "Do"       -> statementNode = result.register(GrammarRules.DO_STATEMENT.build(parser));
+            case "For"      -> statementNode = result.register(GrammarRules.FOR_STATEMENT.build(parser));
+            default         -> result.failure(new SyntaxException(parser, "Trying to use " + keyword + " statement, but no grammar rule was defined! Please let Markus know so he can fix this issue."));
         }
         
         // Return Result

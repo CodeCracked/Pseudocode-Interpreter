@@ -21,6 +21,7 @@ public class KeywordLists
             "If",
             "Select",
             "While",
-            "Do"
+            "Do",
+            "For"
     );
 }
