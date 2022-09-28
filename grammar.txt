@@ -36,6 +36,8 @@ switch_statement	: STATEMENT_KEYWORD(value: Select) expression NEWLINE INDENT ca
 
 while_statement		: STATEMENT_KEYWORD(value: While) expression NEWLINE INDENT block END STATEMENT_KEYWORD(value: While)
 
+do_statement		: STATEMENT_KEYWORD(value: Do) NEWLINE INDENT block (STATEMENT_KEYWORD(value: While)|UNTIL) expression NEWLINE
+
 
 
 value_set   : expression (COMMA expression)*

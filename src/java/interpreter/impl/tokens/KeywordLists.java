@@ -20,6 +20,7 @@ public class KeywordLists
             "Call",
             "If",
             "Select",
-            "While"
+            "While",
+            "Do"
     );
 }
