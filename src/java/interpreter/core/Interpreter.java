@@ -30,40 +30,47 @@ public class Interpreter
     protected void onTokenize(List<Token> tokens) { }
     protected void onBuildAST(AbstractNode ast) { }
     
-    public void runFile(Path file, Consumer<Boolean> finishedCallback)
+    public Result<AbstractNode> runFile(Path file, Consumer<Boolean> finishedCallback)
+    {
+        Result<AbstractNode> result = new Result<>();
+
+        // Load Source Collection
+        SourceCollection source = SourceCollection.createFromFile(file, commentStartRegex);
+        if (source == null)
+        {
+            finishedCallback.accept(false);
+            return result.failure(new IllegalArgumentException("Could not load source collection " + file.toString()));
+        }
+        SourcePosition position = new SourcePosition(source);
+
+        // Tokenize Pseudocode Source
+        Result<List<Token>> lexerResult = result.registerIssues(lexer.tokenize(position));
+        lexerResult.displayIssues();
+        if (result.error() != null)
+        {
+            finishedCallback.accept(false);
+            return result;
+        }
+        onTokenize(lexerResult.get());
+
+        // Generate AST from Token List
+        Result<AbstractNode> parseResult = result.registerIssues(parser.parse(this, lexerResult.get()));
+        parseResult.displayIssues();
+        if (result.error() != null)
+        {
+            finishedCallback.accept(false);
+            return result;
+        }
+        AbstractNode ast = parseResult.get();
+        onBuildAST(ast);
+
+        runAST(ast, finishedCallback);
+        return result.success(ast);
+    }
+    public void runAST(AbstractNode ast, Consumer<Boolean> finishedCallback)
     {
         Thread thread = new Thread(() ->
         {
-            // Load Source Collection
-            SourceCollection source = SourceCollection.createFromFile(file, commentStartRegex);
-            if (source == null)
-            {
-                finishedCallback.accept(false);
-                return;
-            }
-            SourcePosition position = new SourcePosition(source);
-    
-            // Tokenize Pseudocode Source
-            Result<List<Token>> lexerResult = lexer.tokenize(position);
-            lexerResult.displayIssues();
-            if (lexerResult.error() != null)
-            {
-                finishedCallback.accept(false);
-                return;
-            }
-            onTokenize(lexerResult.get());
-    
-            // Generate AST from Token List
-            Result<AbstractNode> parseResult = parser.parse(this, lexerResult.get());
-            parseResult.displayIssues();
-            if (parseResult.error() != null)
-            {
-                finishedCallback.accept(false);
-                return;
-            }
-            AbstractNode ast = parseResult.get();
-            onBuildAST(ast);
-    
             // Interpret AST
             Result<Void> interpretationResult = ast.interpret(this);
             interpretationResult.displayIssues();
@@ -72,7 +79,7 @@ public class Interpreter
                 finishedCallback.accept(false);
                 return;
             }
-            
+
             finishedCallback.accept(true);
         });
         thread.setName("InterpreterThread");

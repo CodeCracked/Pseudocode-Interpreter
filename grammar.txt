@@ -15,6 +15,10 @@ statement           : display_statement
                     : input_statement
                     : call_statement
                     : if_statement
+                    : switch_statement
+                    : while_statement
+                    : do_statement
+                    : for_statement
 
 display_statement   : STATEMENT_KEYWORD(value: Display) value_set NEWLINE
 
@@ -31,6 +35,12 @@ call_statement		: STATEMENT_KEYWORD(value: Call) IDENTIFIER arguments NEWLINE
 if_statement		: if_clause ((ELSE if_clause)* ELSE NEWLINE block)? END IF NEWLINE
 
 switch_statement	: STATEMENT_KEYWORD(value: Select) expression NEWLINE INDENT case_clause+ DEFAULT NEWLINE INDENT block END STATEMENT_KEYWORD(value: Select)
+
+while_statement		: STATEMENT_KEYWORD(value: While) expression NEWLINE INDENT block END STATEMENT_KEYWORD(value: While)
+
+do_statement		: STATEMENT_KEYWORD(value: Do) NEWLINE INDENT block (STATEMENT_KEYWORD(value: While)|UNTIL) expression NEWLINE
+
+for_statement		: STATEMENT_KEYWORD(value: For) IDENTIFIER ASSIGN expression TO expression (STEP expression)? NEWLINE block END STATEMENT_KEYWORD(value: For)
 
 
 

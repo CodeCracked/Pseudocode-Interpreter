@@ -35,6 +35,9 @@ public class GrammarRules
     public static IGrammarRule CALL_STATEMENT = new CallStatementRule();
     public static IGrammarRule IF_STATEMENT = new IfStatementRule();
     public static IGrammarRule SWITCH_STATEMENT = new SwitchStatementRule();
+    public static IGrammarRule WHILE_STATEMENT = new WhileStatementRule();
+    public static IGrammarRule DO_STATEMENT = new DoStatementRule();
+    public static IGrammarRule FOR_STATEMENT = new ForStatementRule();
     
     public static IGrammarRule VALUE_SET = new ValueSetRule();
     public static IGrammarRule ARGUMENT_LIST = new ArgumentListRule();

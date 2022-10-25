@@ -1,6 +1,8 @@
 package swing;
 
+import interpreter.core.parser.nodes.AbstractNode;
 import interpreter.core.utils.IO;
+import interpreter.core.utils.Result;
 import interpreter.impl.PseudocodeInterpreter;
 import main.Version;
 import main.VersionChecker;
@@ -14,6 +16,8 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
@@ -24,10 +28,15 @@ public class InterpreterWindow extends JFrame implements IO.IInput
     private JButton openFileButton;
     private JTextField statusDisplay;
     private JPanel mainPanel;
-    
+    private JButton rerunASTButton;
+    private JButton reparseFileButton;
+
     private final Version version;
     private final PseudocodeInterpreter interpreter;
     private Consumer<String> inputCallback;
+
+    private Path lastFileLoaded;
+    private AbstractNode lastASTParsed;
     
     public InterpreterWindow()
     {
@@ -50,6 +59,9 @@ public class InterpreterWindow extends JFrame implements IO.IInput
         interpreter.setDebugMode(true);
         
         openFileButton.addActionListener(e -> promptOpenFile());
+        rerunASTButton.addActionListener(e -> rerunAST());
+        reparseFileButton.addActionListener(e -> reparseFile());
+
         input.setCaretColor(new Color(0, 187, 0));
         input.addActionListener(e ->
         {
@@ -97,16 +109,19 @@ public class InterpreterWindow extends JFrame implements IO.IInput
     }
     public void interpretFile(Path filePath)
     {
+        lastFileLoaded = filePath;
         output.setText("");
         input.setText("");
         
         setStatus(InterpreterStatus.PROCESSING);
-        this.interpreter.runFile(filePath, successful ->
+        Result<AbstractNode> ast = this.interpreter.runFile(filePath, successful ->
         {
             if (successful) append(output, Color.green, "Program Finished!");
             else append(output, Color.red, "Program Failed!");
             setStatus(InterpreterStatus.IDLE);
         });
+
+        lastASTParsed = ast.get();
     }
     
     private void promptOpenFile()
@@ -114,6 +129,23 @@ public class InterpreterWindow extends JFrame implements IO.IInput
         final JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) interpretFile(fileChooser.getSelectedFile().toPath());
+    }
+    private void rerunAST()
+    {
+        output.setText("");
+        input.setText("");
+
+        setStatus(InterpreterStatus.PROCESSING);
+        if (lastASTParsed != null) interpreter.runAST(lastASTParsed, successful ->
+        {
+            if (successful) append(output, Color.green, "Program Finished!");
+            else append(output, Color.red, "Program Failed!");
+            setStatus(InterpreterStatus.IDLE);
+        });
+    }
+    private void reparseFile()
+    {
+        if (lastFileLoaded != null && Files.exists(lastFileLoaded, LinkOption.NOFOLLOW_LINKS)) interpretFile(lastFileLoaded);
     }
     
     private void append(JTextPane pane, Color color, String format, Object... args)
@@ -136,7 +168,6 @@ public class InterpreterWindow extends JFrame implements IO.IInput
     
         pane.setEditable(editable);
     }
-    
     private void setStatus(InterpreterStatus status)
     {
         statusDisplay.setText(status.status);
